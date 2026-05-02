@@ -73,6 +73,16 @@ class QuizController extends Controller
             }
         }
 
+        // Notify students in the batch
+        if ($quiz->batch_id) {
+            $students = \App\Models\Student::where('batch_id', $quiz->batch_id)->with('user')->get();
+            foreach ($students as $student) {
+                if ($student->user) {
+                    $student->user->notify(new \App\Notifications\NewQuizAvailable($quiz));
+                }
+            }
+        }
+
         return redirect()->route('quizzes.index')->with('success', 'Quiz created successfully!');
     }
 

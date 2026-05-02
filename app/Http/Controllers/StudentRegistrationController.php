@@ -54,6 +54,12 @@ class StudentRegistrationController extends Controller
             'joined_date' => now(),
         ]);
 
+        // Notify Institute Admin
+        $admin = User::where('institute_id', $institute->id)->where('role', 'admin')->first();
+        if ($admin) {
+            $admin->notify(new \App\Notifications\StudentRegistered($user));
+        }
+
         event(new Registered($user));
 
         Auth::login($user);

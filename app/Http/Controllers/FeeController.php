@@ -47,7 +47,12 @@ class FeeController extends Controller
             'month_year' => 'required|string|max:7', // e.g. 2026-05
             'status' => 'required|string|in:paid,pending',
         ]);
-        \App\Models\Fee::create($validated);
+        $fee = \App\Models\Fee::create($validated);
+
+        if ($fee->status === 'paid' && $fee->student && $fee->student->user) {
+            $fee->student->user->notify(new \App\Notifications\FeeReceipt($fee));
+        }
+
         return redirect()->route('fees.index')->with('success', 'Fee record created successfully.');
     }
 
@@ -71,7 +76,13 @@ class FeeController extends Controller
             'month_year' => 'required|string|max:7',
             'status' => 'required|string|in:paid,pending',
         ]);
+        $oldStatus = $fee->status;
         $fee->update($validated);
+
+        if ($fee->status === 'paid' && $oldStatus !== 'paid' && $fee->student && $fee->student->user) {
+            $fee->student->user->notify(new \App\Notifications\FeeReceipt($fee));
+        }
+
         return redirect()->route('fees.index')->with('success', 'Fee record updated successfully.');
     }
 

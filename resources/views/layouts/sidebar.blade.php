@@ -11,6 +11,18 @@
                 {{ __('Dashboard') }}
             </x-sidebar-link>
 
+            <a href="{{ route('notifications.index') }}" class="flex items-center justify-between px-3 py-2.5 text-sm font-semibold rounded-xl transition-all duration-200 {{ request()->routeIs('notifications.*') ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-indigo-600' }}">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                    <span>{{ __('Notifications') }}</span>
+                </div>
+                @if(auth()->user()->unreadNotifications->count() > 0)
+                    <span class="flex items-center justify-center min-w-[20px] h-5 px-1 text-[10px] font-black bg-red-500 text-white rounded-full">
+                        {{ auth()->user()->unreadNotifications->count() }}
+                    </span>
+                @endif
+            </a>
+
             @if(auth()->user()->role === 'admin' || auth()->user()->role === 'teacher')
                 <x-sidebar-link :href="route('batches.index')" :active="request()->routeIs('batches.*')" icon="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
                     {{ __('Batches') }}
