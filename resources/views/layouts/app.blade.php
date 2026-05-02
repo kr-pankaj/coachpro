@@ -30,7 +30,15 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script>
+            // Force unregister all service workers once to fix navigation issues
             if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for(let registration of registrations) {
+                        registration.unregister();
+                    }
+                });
+
+                // Re-register the new one
                 window.addEventListener('load', () => {
                     navigator.serviceWorker.register('/sw.js').catch(err => {
                         console.log('ServiceWorker registration failed: ', err);
@@ -147,6 +155,7 @@
                             
                             if (auth()->user()->role === 'admin') {
                                 $links[] = ['Fees', 'fees.*', 'fees.index', 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z'];
+                                $links[] = ['Billing', 'subscription.*', 'subscription.index', 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z'];
                             }
                         @endphp
                         <a href="{{ route('dashboard') }}" class="flex-1 flex flex-col items-center py-2 {{ request()->routeIs('dashboard') ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700' }}">

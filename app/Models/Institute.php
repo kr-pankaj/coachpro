@@ -15,7 +15,17 @@ class Institute extends Model
         'is_lifetime_free',
         'razorpay_customer_id',
         'razorpay_subscription_id',
+        'subscription_expires_at',
+        'plan_name',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'subscription_expires_at' => 'datetime',
+            'is_lifetime_free' => 'boolean',
+        ];
+    }
 
     /** Returns a 0–100 profile completion percentage */
     public function profileCompletion(): int
@@ -38,5 +48,10 @@ class Institute extends Model
     public function announcements()
     {
         return $this->hasMany(\App\Models\Announcement::class)->orderByDesc('created_at');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(\App\Models\SubscriptionPayment::class)->orderByDesc('created_at');
     }
 }

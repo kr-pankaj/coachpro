@@ -80,6 +80,23 @@ class SuperAdminController extends Controller
         return back()->with('success', 'Global broadcast sent successfully to all institutes.');
     }
 
+    public function updateSettings(Request $request)
+    {
+        if (auth()->user()->role !== 'superadmin') {
+            abort(403);
+        }
+
+        $request->validate([
+            'settings' => 'required|array',
+        ]);
+
+        foreach ($request->settings as $key => $value) {
+            \App\Models\Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+        }
+
+        return back()->with('success', 'Platform settings updated successfully.');
+    }
+
     public function stopImpersonating()
     {
         if (!session()->has('impersonated_by')) {

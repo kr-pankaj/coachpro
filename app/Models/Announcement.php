@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Announcement extends Model
 {
     use \App\Traits\BelongsToInstitute;
+    use \App\Traits\LogsActivity;
 
     protected $fillable = ['title', 'content', 'type', 'expires_on'];
 

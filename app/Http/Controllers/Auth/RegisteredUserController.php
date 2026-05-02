@@ -32,6 +32,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'institute_name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', 'alpha_dash', 'unique:institutes,slug'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -39,7 +40,7 @@ class RegisteredUserController extends Controller
 
         $institute = \App\Models\Institute::create([
             'name' => $request->institute_name,
-            'slug' => \Illuminate\Support\Str::slug($request->institute_name) . '-' . uniqid(),
+            'slug' => $request->slug,
             'allow_student_self_registration' => false,
         ]);
 

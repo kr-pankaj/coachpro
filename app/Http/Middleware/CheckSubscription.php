@@ -15,6 +15,7 @@ class CheckSubscription
         'subscription.index',
         'subscription.create',
         'subscription.verify',
+        'subscription.invoice',
         'institute.settings',
         'institute.settings.update',
         'profile.edit',
@@ -40,8 +41,8 @@ class CheckSubscription
             return $next($request);
         }
 
-        // Active subscription — always allowed
-        if (!empty($institute->razorpay_subscription_id)) {
+        // Active subscription check (Strictly by expiry date)
+        if ($institute->subscription_expires_at && $institute->subscription_expires_at->isFuture()) {
             return $next($request);
         }
 

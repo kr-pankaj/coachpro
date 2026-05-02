@@ -79,10 +79,17 @@ class DashboardController extends Controller
     {
         $days = [];
         $counts = [];
+        
+        $enrollments = Student::where('created_at', '>=', today()->subDays(6))
+            ->selectRaw('DATE(created_at) as date, count(*) as count')
+            ->groupBy('date')
+            ->pluck('count', 'date');
+
         for ($i = 6; $i >= 0; $i--) {
             $date = Carbon::today()->subDays($i);
+            $dateStr = $date->toDateString();
             $days[] = $date->format('D');
-            $counts[] = Student::whereDate('created_at', $date)->count();
+            $counts[] = $enrollments[$dateStr] ?? 0;
         }
         return ['days' => $days, 'counts' => $counts];
     }
@@ -91,12 +98,19 @@ class DashboardController extends Controller
     {
         $months = [];
         $amounts = [];
+
+        $revenues = Fee::where('status', 'paid')
+            ->where('created_at', '>=', today()->subMonths(5)->startOfMonth())
+            ->selectRaw("month_year, sum(amount) as total")
+            ->groupBy('month_year')
+            ->get()
+            ->pluck('total', 'month_year');
+
         for ($i = 5; $i >= 0; $i--) {
             $date = Carbon::today()->subMonths($i);
+            $monthYear = $date->format('F Y');
             $months[] = $date->format('M');
-            $amounts[] = Fee::where('status', 'paid')
-                ->where('month_year', $date->format('F Y'))
-                ->sum('amount');
+            $amounts[] = (float) ($revenues[$monthYear] ?? 0);
         }
         return ['months' => $months, 'amounts' => $amounts];
     }

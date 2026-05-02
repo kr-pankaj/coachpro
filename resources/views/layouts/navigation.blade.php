@@ -27,6 +27,18 @@
                     <x-nav-link :href="route('quizzes.index')" :active="request()->routeIs('quizzes.*')">
                         {{ __('Quizzes') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('study_materials.index')" :active="request()->routeIs('study_materials.*')">
+                        {{ __('Materials') }}
+                    </x-nav-link>
+                @endif
+                
+                @if(auth()->user()->role === 'student')
+                    <x-nav-link :href="route('student.quizzes.index')" :active="request()->routeIs('student.quizzes.*')">
+                        {{ __('My Tests') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('study_materials.index')" :active="request()->routeIs('study_materials.*')">
+                        {{ __('Materials') }}
+                    </x-nav-link>
                 @endif
                 
                 @if(auth()->user()->role === 'admin')
@@ -114,6 +126,18 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('attendances.index')" :active="request()->routeIs('attendances.*')">
                     {{ __('Attendance') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('study_materials.index')" :active="request()->routeIs('study_materials.*')">
+                    {{ __('Materials') }}
+                </x-responsive-nav-link>
+            @endif
+
+            @if(auth()->user()->role === 'student')
+                <x-responsive-nav-link :href="route('student.quizzes.index')" :active="request()->routeIs('student.quizzes.*')">
+                    {{ __('My Tests') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('study_materials.index')" :active="request()->routeIs('study_materials.*')">
+                    {{ __('Materials') }}
                 </x-responsive-nav-link>
             @endif
             

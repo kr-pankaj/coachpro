@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Enquiry extends Model
 {
     use \App\Traits\BelongsToInstitute;
+    use \App\Traits\LogsActivity;
 
     protected $fillable = [
         'institute_id',

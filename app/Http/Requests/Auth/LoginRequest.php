@@ -42,7 +42,18 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $credentials = $this->only('email', 'password');
+        $institute = $this->get('resolved_institute');
+
+        if ($institute) {
+            // For subdomain login, user MUST belong to this institute
+            // AND they must NOT be a student (unless we want students logging in too)
+            // Wait, students should login too.
+            // So just add institute_id to credentials.
+            $credentials['institute_id'] = $institute->id;
+        }
+
+        if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

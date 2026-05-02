@@ -15,19 +15,28 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
+  // Only handle GET requests
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        return fetch(event.request).catch(() => {
-          // Fallback if offline and request fails
-          return caches.match('/offline');
+        // If we have a valid response, maybe cache it (optional)
+        // For now, just return it
+        return response;
+      })
+      .catch(() => {
+        // If network fails, try cache
+        return caches.match(event.request).then(cachedResponse => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          // Final fallback
+          if (event.request.mode === 'navigate') {
+            return caches.match('/offline');
+          }
         });
-      }
-    )
+      })
   );
 });
 

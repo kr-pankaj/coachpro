@@ -17,9 +17,25 @@
                 <span class="input-icon">
                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </span>
-                <input id="institute_name" class="input-field" type="text" name="institute_name" value="{{ old('institute_name') }}" required autofocus placeholder="e.g. Sharma Coaching Classes" />
+                <input id="institute_name" class="input-field" type="text" name="institute_name" value="{{ old('institute_name') }}" required autofocus placeholder="e.g. Sharma Coaching Classes" oninput="generateSlug(this.value)" />
             </div>
             @error('institute_name')
+                <p style="color:#dc2626;font-size:0.8rem;margin-top:0.375rem;">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <!-- Portal Slug -->
+        <div>
+            <label for="slug" style="display:block;font-size:0.8125rem;font-weight:600;color:#374151;margin-bottom:0.375rem;">Your Unique Portal URL</label>
+            <div class="input-group">
+                <span class="input-icon">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <input id="slug" class="input-field" type="text" name="slug" value="{{ old('slug') }}" required placeholder="your-institute-name" style="padding-right:11rem;" />
+                <span style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);font-size:0.75rem;font-weight:700;color:#94a3b8;">.{{ trim(str_replace(['http://', 'https://', '/'], '', config('app.url')), '/') }}</span>
+            </div>
+            <p style="font-size:0.7rem;color:#64748b;margin-top:0.3rem;">Letters, numbers, and dashes only.</p>
+            @error('slug')
                 <p style="color:#dc2626;font-size:0.8rem;margin-top:0.375rem;">{{ $message }}</p>
             @enderror
         </div>
@@ -104,4 +120,13 @@
             <p style="font-size:0.75rem;color:#4b5563;">You'll be prompted to choose a plan after registration. Cancel anytime.</p>
         </div>
     </div>
+    <script>
+        function generateSlug(name) {
+            const slug = name.toLowerCase()
+                .replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+                .replace(/\s+/g, '-')       // collapse whitespace and replace by -
+                .replace(/-+/g, '-');       // collapse dashes
+            document.getElementById('slug').value = slug;
+        }
+    </script>
 </x-guest-layout>

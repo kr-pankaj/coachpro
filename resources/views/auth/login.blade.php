@@ -2,8 +2,20 @@
     <x-slot name="pageTitle">Sign In</x-slot>
 
     <div style="margin-bottom:2rem;">
-        <h2 style="font-size:1.75rem;font-weight:800;color:#0f172a;letter-spacing:-0.03em;margin-bottom:0.4rem;">Welcome back</h2>
-        <p style="color:#64748b;font-size:0.9rem;">Sign in to your {{ config('app.name') }} account to continue.</p>
+        <h2 style="font-size:1.75rem;font-weight:800;color:#0f172a;letter-spacing:-0.03em;margin-bottom:0.4rem;">
+            @if(request('resolved_institute'))
+                {{ request('resolved_institute')->name }}
+            @else
+                Welcome back
+            @endif
+        </h2>
+        <p style="color:#64748b;font-size:0.9rem;">
+            @if(request('resolved_institute'))
+                Sign in to your institute portal to continue.
+            @else
+                Sign in to your {{ config('app.name') }} account to continue.
+            @endif
+        </p>
     </div>
 
     <!-- Session Status -->
@@ -70,10 +82,12 @@
         </button>
     </form>
 
+    @if(!request('resolved_institute'))
     <p style="text-align:center;margin-top:1.5rem;font-size:0.875rem;color:#64748b;">
         New to {{ config('app.name') }}? 
         <a href="{{ route('register') }}" style="color:#4f46e5;font-weight:600;text-decoration:none;">Create an account</a>
     </p>
+    @endif
 
     <!-- <div style="margin-top:1.5rem;padding:1rem;background:#f0f9ff;border:1px solid #bae6fd;border-radius:0.625rem;">
         <p style="font-size:0.75rem;color:#0369a1;font-weight:600;margin-bottom:0.375rem;">ℹ How login works</p>
