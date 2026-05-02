@@ -15,6 +15,7 @@ Institutes subscribe via Razorpay, and you (the SaaS owner) manage everything fr
 ## ✨ Features
 
 ### 🏫 Institute (Admin) Portal
+- **Enquiry & Lead Management (CRM)** — mobile-first swipeable cards, one-tap WhatsApp/Call actions, status tracking, auto-convert to student
 - **Multi-tenant architecture** — each institute sees only their own data (Eloquent Global Scopes)
 - **Rich Admin Dashboard** — 4 KPI cards (students, batches, today's attendance %, pending fees), quick actions, recent students, batch overview, announcements widget
 - **Profile completion tracker** — circular progress indicator; prompts admins to complete missing info

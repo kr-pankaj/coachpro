@@ -101,6 +101,7 @@ Route::middleware(['auth', 'verified', 'check.subscription'])->group(function ()
 
     Route::resource('batches', App\Http\Controllers\BatchController::class);
     Route::resource('students', App\Http\Controllers\StudentController::class);
+    Route::resource('enquiries', App\Http\Controllers\EnquiryController::class);
     Route::resource('attendances', App\Http\Controllers\AttendanceController::class)->only(['index', 'create', 'store']);
     Route::resource('fees', App\Http\Controllers\FeeController::class);
     Route::get('fees/{fee}/receipt', [App\Http\Controllers\FeeController::class, 'receipt'])->name('fees.receipt');
