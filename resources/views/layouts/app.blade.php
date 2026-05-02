@@ -31,8 +31,14 @@
         </script>
     </head>
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
+        <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col sm:flex-row">
+            {{-- Desktop Sidebar --}}
+            @auth
+                @include('layouts.sidebar')
+            @endauth
+
+            <div class="flex-1 flex flex-col sm:ml-64 transition-all duration-300">
+                @include('layouts.navigation')
 
             {{-- Trial / Subscription Banner --}}
             @auth
@@ -114,6 +120,7 @@
                     </div>
                 @endif
             @endauth
+            </div>
         </div>
     </body>
 </html>
