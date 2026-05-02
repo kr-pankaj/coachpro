@@ -118,7 +118,7 @@
 
                 <div>
                     <div style="margin-bottom:3rem;">
-                        <x-application-logo style="height:2.5rem; width:auto;" />
+                        <x-application-logo style="height:3.5rem; width:auto;" />
                     </div>
 
                     <h1 style="color:white;font-size:2.25rem;font-weight:800;line-height:1.2;letter-spacing:-0.03em;margin-bottom:1rem;">
@@ -170,7 +170,7 @@
             <div class="flex-1 flex flex-col justify-center items-center p-6 lg:p-16" style="background:#f8fafc;">
                 <!-- Mobile logo -->
                 <div class="lg:hidden mb-8">
-                    <x-application-logo class="h-8 w-auto" />
+                    <x-application-logo class="h-10 w-auto" />
                 </div>
 
                 <div class="w-full max-w-md fade-in-up">

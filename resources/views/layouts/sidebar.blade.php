@@ -1,7 +1,7 @@
 <div class="hidden sm:flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 fixed h-full z-40 transition-all duration-300">
-    <div class="flex items-center px-6 h-20">
+    <div class="flex items-center px-6 h-24">
         <a href="{{ route('dashboard') }}" class="group">
-            <x-application-logo class="h-10 w-auto transition-transform duration-300 group-hover:scale-105" />
+            <x-application-logo class="h-14 w-auto transition-transform duration-300 group-hover:scale-105" />
         </a>
     </div>
 
