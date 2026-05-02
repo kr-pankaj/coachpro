@@ -1,10 +1,7 @@
 <div class="hidden sm:flex flex-col w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 fixed h-full z-40 transition-all duration-300">
     <div class="flex items-center px-6 h-20">
-        <a href="{{ route('dashboard') }}" class="flex items-center gap-3 group">
-            <div class="p-2 bg-indigo-600 rounded-xl shadow-lg shadow-indigo-200 dark:shadow-none group-hover:rotate-12 transition-transform duration-300">
-                <x-application-logo class="w-7 h-7 fill-current text-white" />
-            </div>
-            <span class="text-xl font-black tracking-tight text-gray-900 dark:text-white">{{ config('app.name') }}</span>
+        <a href="{{ route('dashboard') }}" class="group">
+            <x-application-logo class="h-10 w-auto transition-transform duration-300 group-hover:scale-105" />
         </a>
     </div>
 

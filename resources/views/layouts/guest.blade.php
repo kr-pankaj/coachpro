@@ -116,11 +116,8 @@
                 <div style="position:absolute;top:40%;left:60%;width:150px;height:150px;background:rgba(255,255,255,0.04);border-radius:50%;"></div>
 
                 <div>
-                    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:3rem;">
-                        <div style="width:2.5rem;height:2.5rem;background:rgba(255,255,255,0.25);border-radius:0.75rem;display:flex;align-items:center;justify-content:center;">
-                            <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-                        </div>
-                        <span style="color:white;font-weight:700;font-size:1.25rem;letter-spacing:-0.02em;">CoachPro</span>
+                    <div style="margin-bottom:3rem;">
+                        <x-application-logo style="height:2.5rem; width:auto;" />
                     </div>
 
                     <h1 style="color:white;font-size:2.25rem;font-weight:800;line-height:1.2;letter-spacing:-0.03em;margin-bottom:1rem;">
@@ -171,11 +168,8 @@
             <!-- Right Panel: Auth Form -->
             <div class="flex-1 flex flex-col justify-center items-center p-6 lg:p-16" style="background:#f8fafc;">
                 <!-- Mobile logo -->
-                <div class="lg:hidden mb-8 flex items-center gap-2">
-                    <div style="width:2rem;height:2rem;background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;">
-                        <svg width="16" height="16" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round"/></svg>
-                    </div>
-                    <span style="font-weight:700;font-size:1.125rem;color:#1e293b;">CoachPro</span>
+                <div class="lg:hidden mb-8">
+                    <x-application-logo class="h-8 w-auto" />
                 </div>
 
                 <div class="w-full max-w-md fade-in-up">
