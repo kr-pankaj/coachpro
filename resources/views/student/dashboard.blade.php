@@ -36,13 +36,24 @@
                                             <p class="text-xs text-gray-500 dark:text-gray-400">Paid on: {{ $fee->payment_date ?? '-' }}</p>
                                         </div>
                                         <div class="text-right">
-                                            <p class="font-bold mb-1">₹{{ number_format($fee->amount, 2) }}</p>
-                                            @if($fee->status == 'paid')
-                                                <span class="px-2 py-1 mr-2 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">Paid</span>
-                                                <a href="{{ route('fees.receipt', $fee) }}" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800">⬇ Receipt</a>
-                                            @else
-                                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">Pending</span>
+                                            <p class="font-bold mb-1 text-sm">₹{{ number_format($fee->paid_amount, 0) }}</p>
+                                            @if($fee->due_amount > 0)
+                                                <p class="text-[9px] text-rose-500 font-bold uppercase mb-1">Due: ₹{{ number_format($fee->due_amount, 0) }}</p>
                                             @endif
+
+                                            <div class="flex items-center justify-end gap-2">
+                                                @if($fee->status == 'paid')
+                                                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-100 text-emerald-800 uppercase tracking-tighter">Paid</span>
+                                                @elseif($fee->status == 'partial')
+                                                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-100 text-indigo-800 uppercase tracking-tighter">Partial</span>
+                                                @else
+                                                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-rose-100 text-rose-800 uppercase tracking-tighter">Unpaid</span>
+                                                @endif
+
+                                                @if($fee->status !== 'pending')
+                                                    <a href="{{ route('fees.receipt', $fee) }}" class="text-[10px] font-black text-indigo-600 hover:text-indigo-800 uppercase">Receipt</a>
+                                                @endif
+                                            </div>
                                         </div>
                                     </li>
                                 @endforeach

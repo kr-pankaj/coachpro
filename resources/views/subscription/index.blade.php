@@ -28,43 +28,53 @@
             @endphp
 
             @if($institute->is_lifetime_free)
-                <div class="p-6 rounded-2xl" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);color:white;">
-                    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
-                        <div style="font-size:2rem;">🎉</div>
-                        <h3 style="font-size:1.25rem;font-weight:700;">Lifetime Free Access</h3>
+                <div class="p-6 rounded-2xl flex items-center gap-6" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);color:white;">
+                    <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.143-7.714L1 12l7.714-2.143L11 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
                     </div>
-                    <p style="opacity:0.85;font-size:0.9rem;">You have been granted permanent free access to CoachPro. No subscription required!</p>
+                    <div>
+                        <h3 style="font-size:1.25rem;font-weight:700;">Lifetime Free Access</h3>
+                        <p style="opacity:0.85;font-size:0.9rem;">You have been granted permanent free access to CoachPro. No subscription required!</p>
+                    </div>
                 </div>
 
             @elseif($institute->subscription_expires_at && $institute->subscription_expires_at->isFuture())
-                <div class="p-6 rounded-2xl" style="background:linear-gradient(135deg,#059669,#10b981);color:white;">
-                    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
-                        <div style="font-size:2rem;">✅</div>
-                        <h3 style="font-size:1.25rem;font-weight:700;">Manual Plan Active</h3>
+                <div class="p-6 rounded-2xl flex items-center gap-6" style="background:linear-gradient(135deg,#059669,#10b981);color:white;">
+                    <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
                     </div>
-                    <p style="opacity:0.85;font-size:0.9rem;">Your account is fully active until <strong>{{ $institute->subscription_expires_at->format('M d, Y') }}</strong>.</p>
-                    <p style="opacity:0.7;font-size:0.75rem;margin-top:0.5rem;">Days remaining: {{ (int) ceil(now()->floatDiffInDays($institute->subscription_expires_at)) }}</p>
+                    <div>
+                        <h3 style="font-size:1.25rem;font-weight:700;">Manual Plan Active</h3>
+                        <p style="opacity:0.85;font-size:0.9rem;">Your account is fully active until <strong>{{ $institute->subscription_expires_at->format('M d, Y') }}</strong>.</p>
+                        <p style="opacity:0.7;font-size:0.75rem;margin-top:0.5rem;">Days remaining: {{ (int) ceil(now()->floatDiffInDays($institute->subscription_expires_at)) }}</p>
+                    </div>
                 </div>
 
             @elseif($isInTrial)
                 <div class="p-6 rounded-2xl" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:white;">
-                    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
-                        <div style="font-size:2rem;">⏳</div>
-                        <h3 style="font-size:1.25rem;font-weight:700;">Free Trial Active — {{ $daysLeft }} day{{ $daysLeft == 1 ? '' : 's' }} remaining</h3>
-                    </div>
-                    <p style="opacity:0.85;font-size:0.9rem;">Trial expires on {{ $trialEnds->format('M d, Y') }}. Subscribe to extend access.</p>
-                    <div style="background:rgba(255,255,255,0.2);border-radius:999px;height:6px;margin-top:1rem;overflow:hidden;">
-                        <div style="height:100%;background:white;border-radius:999px;width:{{ ($daysLeft / 14) * 100 }}%;transition:width 1s;"></div>
+                    <div class="flex items-center gap-6">
+                        <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 style="font-size:1.25rem;font-weight:700;">Free Trial Active — {{ $daysLeft }} day{{ $daysLeft == 1 ? '' : 's' }} remaining</h3>
+                            <p style="opacity:0.85;font-size:0.9rem;">Trial expires on {{ $trialEnds->format('M d, Y') }}. Subscribe to extend access.</p>
+                            <div style="background:rgba(255,255,255,0.2);border-radius:999px;height:6px;margin-top:1rem;overflow:hidden;">
+                                <div style="height:100%;background:white;border-radius:999px;width:{{ ($daysLeft / 14) * 100 }}%;transition:width 1s;"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
             @else
-                <div class="p-6 rounded-2xl" style="background:linear-gradient(135deg,#dc2626,#b91c1c);color:white;">
-                    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.5rem;">
-                        <div style="font-size:2rem;">🔒</div>
-                        <h3 style="font-size:1.25rem;font-weight:700;">Subscription Expired — Read-Only Mode</h3>
+                <div class="p-6 rounded-2xl flex items-center gap-6" style="background:linear-gradient(135deg,#dc2626,#b91c1c);color:white;">
+                    <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center shrink-0">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
                     </div>
-                    <p style="opacity:0.85;font-size:0.9rem;">Please make a one-time payment to renew your 30-day access.</p>
+                    <div>
+                        <h3 style="font-size:1.25rem;font-weight:700;">Subscription Expired — Read-Only Mode</h3>
+                        <p style="opacity:0.85;font-size:0.9rem;">Please make a one-time payment to renew your 30-day access.</p>
+                    </div>
                 </div>
             @endif
 

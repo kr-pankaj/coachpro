@@ -12,11 +12,10 @@
                     <form method="POST" action="{{ route('fees.update', $fee) }}">
                         @csrf
                         @method('PUT')
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="sm:col-span-2">
                                 <x-input-label for="student_id" :value="__('Student')" />
-                                <select id="student_id" name="student_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required autofocus>
-                                    <option value="">Select Student</option>
+                                <select id="student_id" name="student_id" class="block mt-1 w-full" required autofocus>
                                     @foreach($students as $student)
                                         <option value="{{ $student->id }}" {{ old('student_id', $fee->student_id) == $student->id ? 'selected' : '' }}>{{ $student->name }} ({{ $student->batch ? $student->batch->name : 'No Batch' }})</option>
                                     @endforeach
@@ -25,9 +24,15 @@
                             </div>
 
                             <div>
-                                <x-input-label for="amount" :value="__('Amount (₹)')" />
-                                <x-text-input id="amount" class="block mt-1 w-full" type="number" step="0.01" name="amount" :value="old('amount', $fee->amount)" required />
-                                <x-input-error :messages="$errors->get('amount')" class="mt-2" />
+                                <x-input-label for="total_amount" :value="__('Total Course Fee (₹)')" />
+                                <x-text-input id="total_amount" class="block mt-1 w-full" type="number" step="0.01" name="total_amount" :value="old('total_amount', $fee->total_amount)" required />
+                                <x-input-error :messages="$errors->get('total_amount')" class="mt-2" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="discount_amount" :value="__('Discount Given (₹)')" />
+                                <x-text-input id="discount_amount" class="block mt-1 w-full" type="number" step="0.01" name="discount_amount" :value="old('discount_amount', $fee->discount_amount)" />
+                                <x-input-error :messages="$errors->get('discount_amount')" class="mt-2" />
                             </div>
 
                             <div>
@@ -37,24 +42,21 @@
                             </div>
 
                             <div>
-                                <x-input-label for="status" :value="__('Status')" />
-                                <select id="status" name="status" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required>
-                                    <option value="pending" {{ old('status', $fee->status) == 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="paid" {{ old('status', $fee->status) == 'paid' ? 'selected' : '' }}>Paid</option>
-                                </select>
-                                <x-input-error :messages="$errors->get('status')" class="mt-2" />
-                            </div>
-
-                            <div>
-                                <x-input-label for="payment_date" :value="__('Payment Date')" />
+                                <x-input-label for="payment_date" :value="__('Original Date')" />
                                 <x-text-input id="payment_date" class="block mt-1 w-full" type="date" name="payment_date" :value="old('payment_date', $fee->payment_date)" />
                                 <x-input-error :messages="$errors->get('payment_date')" class="mt-2" />
                             </div>
+
+                            <div class="sm:col-span-2">
+                                <x-input-label for="remarks" :value="__('Internal Remarks')" />
+                                <textarea id="remarks" name="remarks" rows="2" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">{{ old('remarks', $fee->remarks) }}</textarea>
+                                <x-input-error :messages="$errors->get('remarks')" class="mt-2" />
+                            </div>
                         </div>
 
-                        <div class="flex items-center justify-end mt-4">
-                            <x-primary-button class="ms-4">
-                                {{ __('Update Fee Record') }}
+                        <div class="flex items-center justify-end mt-8 pt-6 border-t border-gray-100">
+                            <x-primary-button class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700">
+                                {{ __('Update Base Fee Record') }}
                             </x-primary-button>
                         </div>
                     </form>

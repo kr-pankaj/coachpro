@@ -142,10 +142,54 @@
             <td><span class="status-badge">{{ $fee->status }}</span></td>
         </tr>
         <tr class="amount-row">
-            <th>Total Amount Paid</th>
-            <td class="amount-value">Rs. {{ number_format($fee->amount, 2) }}</td>
+            <th>Total Course Fee</th>
+            <td style="font-weight: bold;">Rs. {{ number_format($fee->total_amount, 2) }}</td>
         </tr>
+        @if($fee->discount_amount > 0)
+        <tr>
+            <th>Discount Given</th>
+            <td style="color: #dc2626;">- Rs. {{ number_format($fee->discount_amount, 2) }}</td>
+        </tr>
+        @endif
+        <tr>
+            <th>Net Payable</th>
+            <td style="font-weight: bold;">Rs. {{ number_format($fee->total_amount - $fee->discount_amount, 2) }}</td>
+        </tr>
+        <tr class="amount-row">
+            <th>Total Amount Paid</th>
+            <td class="amount-value">Rs. {{ number_format($fee->paid_amount, 2) }}</td>
+        </tr>
+        @if($fee->due_amount > 0)
+        <tr>
+            <th style="color: #dc2626;">Balance Remaining</th>
+            <td style="color: #dc2626; font-weight: bold;">Rs. {{ number_format($fee->due_amount, 2) }}</td>
+        </tr>
+        @endif
     </table>
+
+    @if(count($fee->payments) > 0)
+    <h3 style="font-size: 14px; text-transform: uppercase; margin-bottom: 10px; color: #4b5563;">Payment History (Installments)</h3>
+    <table class="details-table" style="font-size: 12px;">
+        <thead>
+            <tr>
+                <th style="width: 25%;">Date</th>
+                <th style="width: 25%;">Method</th>
+                <th style="width: 25%;">Amount</th>
+                <th style="width: 25%;">Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($fee->payments as $payment)
+            <tr>
+                <td>{{ \Carbon\Carbon::parse($payment->payment_date)->format('d-M-Y') }}</td>
+                <td>{{ $payment->payment_method }}</td>
+                <td><strong>Rs. {{ number_format($payment->amount, 2) }}</strong></td>
+                <td>{{ $payment->remarks ?? '-' }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+    @endif
 
     <div class="signatures">
         <div class="sig-box">

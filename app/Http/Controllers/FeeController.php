@@ -42,23 +42,69 @@ class FeeController extends Controller
     {
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
-            'amount' => 'required|numeric|min:0',
+            'total_amount' => 'required|numeric|min:0',
+            'amount_paid' => 'nullable|numeric|min:0',
+            'discount_amount' => 'nullable|numeric|min:0',
             'payment_date' => 'nullable|date',
-            'month_year' => 'required|string|max:7', // e.g. 2026-05
-            'status' => 'required|string|in:paid,pending',
+            'month_year' => 'required|string|max:7',
+            'payment_method' => 'nullable|string',
+            'remarks' => 'nullable|string',
         ]);
-        $fee = \App\Models\Fee::create($validated);
+
+        $feeData = [
+            'student_id' => $validated['student_id'],
+            'total_amount' => $validated['total_amount'],
+            'discount_amount' => $validated['discount_amount'] ?? 0,
+            'paid_amount' => 0, // Will be updated by FeePayment booted event
+            'payment_date' => $validated['payment_date'] ?? now()->toDateString(),
+            'month_year' => $validated['month_year'],
+            'remarks' => $validated['remarks'],
+        ];
+
+        $fee = \App\Models\Fee::create($feeData);
+
+        if (($validated['amount_paid'] ?? 0) > 0) {
+            $fee->payments()->create([
+                'amount' => $validated['amount_paid'],
+                'payment_date' => $feeData['payment_date'],
+                'payment_method' => $validated['payment_method'],
+                'remarks' => 'Initial payment',
+            ]);
+        }
 
         if ($fee->status === 'paid' && $fee->student && $fee->student->user) {
             $fee->student->user->notify(new \App\Notifications\FeeReceipt($fee));
         }
 
-        return redirect()->route('fees.index')->with('success', 'Fee record created successfully.');
+        return redirect()->route('fees.show', $fee)->with('success', 'Fee record created successfully.');
     }
 
-    public function show(string $id)
+    public function show(\App\Models\Fee $fee)
     {
-        //
+        $fee->load(['student.institute', 'payments']);
+        return view('fees.show', compact('fee'));
+    }
+
+    public function addPayment(Request $request, \App\Models\Fee $fee)
+    {
+        $validated = $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'payment_date' => 'required|date',
+            'payment_method' => 'nullable|string',
+            'remarks' => 'nullable|string',
+        ]);
+
+        if ($validated['amount'] > $fee->due_amount) {
+            return back()->with('error', 'Payment amount cannot exceed the due balance.');
+        }
+
+        $fee->payments()->create($validated);
+
+        if ($fee->fresh()->status === 'paid' && $fee->student && $fee->student->user) {
+            $fee->student->user->notify(new \App\Notifications\FeeReceipt($fee));
+        }
+
+        return back()->with('success', 'Payment recorded successfully.');
     }
 
     public function edit(\App\Models\Fee $fee)
@@ -71,19 +117,16 @@ class FeeController extends Controller
     {
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
-            'amount' => 'required|numeric|min:0',
+            'total_amount' => 'required|numeric|min:0',
+            'discount_amount' => 'nullable|numeric|min:0',
             'payment_date' => 'nullable|date',
             'month_year' => 'required|string|max:7',
-            'status' => 'required|string|in:paid,pending',
+            'remarks' => 'nullable|string',
         ]);
-        $oldStatus = $fee->status;
+
         $fee->update($validated);
 
-        if ($fee->status === 'paid' && $oldStatus !== 'paid' && $fee->student && $fee->student->user) {
-            $fee->student->user->notify(new \App\Notifications\FeeReceipt($fee));
-        }
-
-        return redirect()->route('fees.index')->with('success', 'Fee record updated successfully.');
+        return redirect()->route('fees.show', $fee)->with('success', 'Fee record updated successfully.');
     }
 
     public function destroy(\App\Models\Fee $fee)
@@ -95,8 +138,8 @@ class FeeController extends Controller
     public function receipt(\App\Models\Fee $fee)
     {
         // Ensure only Paid fees can have receipts
-        if ($fee->status !== 'paid') {
-            abort(403, 'Receipts are only available for paid fees.');
+        if ($fee->status === 'pending') {
+            abort(403, 'Receipts are only available for partial or full payments.');
         }
 
         // Security check
@@ -119,5 +162,20 @@ class FeeController extends Controller
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('fees.receipt', compact('fee', 'institute'));
         
         return $pdf->download('Receipt-' . str_pad($fee->id, 6, '0', STR_PAD_LEFT) . '.pdf');
+    }
+
+    public function share(string $token)
+    {
+        $fee = \App\Models\Fee::where('share_token', $token)->firstOrFail();
+
+        if ($fee->status === 'pending') {
+            abort(403, 'Receipts are only available for partial or full payments.');
+        }
+
+        $institute = $fee->student->institute;
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('fees.receipt', compact('fee', 'institute'));
+        
+        return $pdf->stream('Receipt-' . str_pad($fee->id, 6, '0', STR_PAD_LEFT) . '.pdf');
     }
 }

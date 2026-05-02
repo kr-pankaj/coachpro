@@ -114,27 +114,31 @@
                     <p class="text-gray-500 max-w-2xl mx-auto">Focus on teaching, we'll handle the rest. Powerful tools built for modern educators.</p>
                 </div>
 
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     @php
                         $features = [
-                            ['title' => 'Student Management', 'desc' => 'Centralized database for all student profiles, batches, and personal details.', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'],
-                            ['title' => 'Academic Library', 'desc' => 'Digital vault for Study Materials. Upload PDFs, share video lectures, and links with specific batches.', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'],
-                            ['title' => 'Branded Portals', 'desc' => 'Get a professional URL (e.g., ica.coachpro.com) to provide a premium experience to your students.', 'icon' => 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9'],
-                            ['title' => 'Attendance Tracking', 'desc' => 'Smart attendance system with real-time notifications for parents.', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'],
-                            ['title' => 'Audit Activity Logs', 'desc' => 'Complete accountability. Track every addition, update, and deletion across your institute.', 'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'],
-                            ['title' => 'Fee Records', 'desc' => 'Track pending and collected fees. Generate automated PDF receipts instantly.', 'icon' => 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z'],
-                            ['title' => 'Online Quizzes', 'desc' => 'Create and conduct online tests. Automated grading and detailed result analytics.', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'],
-                            ['title' => 'Mobile First', 'desc' => 'Completely responsive and installable as a PWA. Manage your institute on the go.', 'icon' => 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z'],
-                            ['title' => 'Lead Tracking', 'desc' => 'Don\'t lose a single inquiry. Manage follow-ups and convert leads efficiently.', 'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0'],
+                            ['title' => 'Student Management', 'desc' => 'Centralized database for all student profiles, batches, and personal details.', 'icon' => 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m9-10a4 4 0 100-8 4 4 0 000 8zm8-7a4 4 0 00-3 3.5M16 11a4 4 0 013 3.5m0 0V19m0-8a4 4 0 013 3.5', 'color' => 'indigo'],
+                            ['title' => 'Academic Library', 'desc' => 'Digital vault for Study Materials. Upload PDFs, share video lectures, and links.', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', 'color' => 'violet'],
+                            ['title' => 'Branded Portals', 'desc' => 'Get a professional URL (e.g., ica.coachpro.com) to provide a premium experience.', 'icon' => 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9', 'color' => 'emerald'],
+                            ['title' => 'Attendance Tracking', 'desc' => 'Smart attendance system with real-time notifications for parents.', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M10 16h.01', 'color' => 'rose'],
+                            ['title' => 'Audit Activity Logs', 'desc' => 'Complete accountability. Track every addition, update, and deletion across your institute.', 'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'color' => 'amber'],
+                            ['title' => 'Fee Records', 'desc' => 'Track pending fees. Generate automated PDF receipts and share via WhatsApp.', 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'color' => 'blue'],
+                            ['title' => 'Online Quizzes', 'desc' => 'Create and conduct online tests. Automated grading and detailed result analytics.', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4', 'color' => 'indigo'],
+                            ['title' => 'Mobile First', 'desc' => 'Completely responsive and installable as a PWA. Manage your institute on the go.', 'icon' => 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z', 'color' => 'violet'],
+                            ['title' => 'Lead Tracking', 'desc' => 'Don\'t lose a single inquiry. Manage follow-ups and convert leads efficiently.', 'icon' => 'M13 10V3L4 14h7v7l9-11h-7z', 'color' => 'rose'],
                         ];
                     @endphp
-
+ 
                     @foreach($features as $f)
-                        <div class="p-8 rounded-[2.5rem] bg-white/5 border border-white/5 hover:border-indigo-500/50 transition-all hover:-translate-y-2 group">
-                            <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="{{ $f['icon'] }}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                        <div class="p-8 rounded-[2rem] bg-white/5 border border-white/5 hover:border-{{ $f['color'] }}-500/50 transition-all duration-500 hover:-translate-y-2 group relative overflow-hidden">
+                            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-{{ $f['color'] }}-500/10 rounded-full blur-2xl group-hover:bg-{{ $f['color'] }}-500/20 transition-all"></div>
+                            
+                            <div class="w-12 h-12 rounded-xl bg-{{ $f['color'] }}-500/10 text-{{ $f['color'] }}-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="{{ $f['icon'] }}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
                             </div>
-                            <h3 class="text-xl font-black mb-3">{{ $f['title'] }}</h3>
-                            <p class="text-gray-500 leading-relaxed">{{ $f['desc'] }}</p>
+                            
+                            <h3 class="text-lg font-black mb-3 tracking-tight group-hover:text-{{ $f['color'] }}-400 transition-colors">{{ $f['title'] }}</h3>
+                            <p class="text-sm text-gray-500 leading-relaxed font-medium">{{ $f['desc'] }}</p>
                         </div>
                     @endforeach
                 </div>

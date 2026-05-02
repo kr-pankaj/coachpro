@@ -29,7 +29,10 @@
             </div>
 
             @if(session('success'))
-                <div class="p-6 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/50 rounded-3xl text-emerald-800 dark:text-emerald-400 text-xs font-black uppercase tracking-widest">✅ {{ session('success') }}</div>
+                <div class="p-6 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/50 rounded-3xl text-emerald-800 dark:text-emerald-400 text-xs font-black uppercase tracking-widest flex items-center gap-3">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                    {{ session('success') }}
+                </div>
             @endif
 
             {{-- Profile Completion --}}
@@ -47,7 +50,7 @@
                     <p class="text-sm text-gray-500">
                         @if($profilePct < 50) Fill in more details to make your profile stand out to students.
                         @elseif($profilePct < 100) Almost there! A complete profile builds trust with students.
-                        @else Great job! Your profile is 100% complete. 🎉
+                        @else Great job! Your profile is 100% complete.
                         @endif
                     </p>
                 </div>
@@ -58,7 +61,10 @@
 
                 {{-- Basic Info --}}
                 <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h3 class="font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100">🏫 Basic Information</h3>
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                        <h3 class="font-semibold text-gray-800">Basic Information</h3>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Institute Name <span class="text-red-500">*</span></label>
@@ -89,7 +95,10 @@
 
                 {{-- Description --}}
                 <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h3 class="font-semibold text-gray-800 mb-1">📝 Institute Description</h3>
+                    <div class="flex items-center gap-2 mb-1">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                        <h3 class="font-semibold text-gray-800">Institute Description</h3>
+                    </div>
                     <p class="text-xs text-gray-400 mb-3">This appears on your student registration page. Describe your teaching approach, subjects offered, achievements, and what makes your institute unique. Example: <em>"We specialise in Science and Maths for classes 9–12, with a 95% board exam success rate since 2015."</em></p>
                     <textarea name="description" rows="4" placeholder="Tell students about your institute — subjects, teaching style, achievements, batch sizes..." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-400 resize-none">{{ old('description', $institute->description) }}</textarea>
                     @error('description')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
@@ -98,7 +107,10 @@
 
                 {{-- Contact Info --}}
                 <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h3 class="font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100">📞 Contact Information</h3>
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                        <h3 class="font-semibold text-gray-800">Contact Information</h3>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
@@ -117,7 +129,10 @@
 
                 {{-- Address --}}
                 <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h3 class="font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100">📍 Address</h3>
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                        <h3 class="font-semibold text-gray-800">Address</h3>
+                    </div>
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
@@ -147,7 +162,10 @@
 
                 {{-- Branding --}}
                 <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h3 class="font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100">🎨 Branding</h3>
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a1 1 0 01.894.553L10.236 4H14a2 2 0 012 2v3m-2 11a2 2 0 01-2-2v-5a2 2 0 012-2h3a2 2 0 012 2v5a2 2 0 01-2 2h-3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                        <h3 class="font-semibold text-gray-800">Branding</h3>
+                    </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Logo URL</label>
                         <input type="url" name="logo_url" value="{{ old('logo_url', $institute->logo_url) }}" placeholder="https://yourinstitute.com/logo.png" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
@@ -160,7 +178,10 @@
 
                 {{-- Onboarding Config --}}
                 <div class="bg-white rounded-2xl shadow-sm p-6">
-                    <h3 class="font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-100">⚙️ Configuration</h3>
+                    <div class="flex items-center gap-2 mb-4 pb-2 border-b border-gray-100">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                        <h3 class="font-semibold text-gray-800">Configuration</h3>
+                    </div>
                     <label class="flex items-start gap-3 cursor-pointer group">
                         <input type="checkbox" name="allow_student_self_registration" class="mt-0.5 w-4 h-4 accent-indigo-600" {{ $institute->allow_student_self_registration ? 'checked' : '' }}>
                         <div>

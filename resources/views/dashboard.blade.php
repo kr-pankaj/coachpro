@@ -62,35 +62,35 @@
                         [
                             'label' => 'Total Students',
                             'value' => $totalStudents,
-                            'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z',
+                            'icon' => 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m9-10a4 4 0 100-8 4 4 0 000 8zm8-7a4 4 0 00-3 3.5M16 11a4 4 0 013 3.5m0 0V19m0-8a4 4 0 013 3.5',
                             'color' => 'indigo',
                             'trend' => '+12% Growth'
                         ],
                         [
                             'label' => "Attendance",
                             'value' => $todayTotal > 0 ? round(($todayAttended/$todayTotal)*100).'%' : '0%',
-                            'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4',
+                            'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M10 16h.01',
                             'color' => 'emerald',
                             'trend' => $todayAttended . ' present'
                         ],
                         [
                             'label' => 'Revenue',
                             'value' => '₹' . number_format($collectedFees),
-                            'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2',
+                            'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
                             'color' => 'rose',
                             'trend' => 'This Month'
                         ],
                         [
                             'label' => 'Active Batches',
                             'value' => $totalBatches,
-                            'icon' => 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2',
+                            'icon' => 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10',
                             'color' => 'cyan',
                             'trend' => 'Live Now'
                         ],
                         [
                             'label' => 'Pending Fees',
                             'value' => '₹' . number_format($pendingFees),
-                            'icon' => 'M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+                            'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
                             'color' => 'amber',
                             'trend' => 'Outstanding'
                         ],
@@ -137,28 +137,28 @@
                         <div class="grid grid-cols-2 gap-3">
                             <a href="{{ route('students.create') }}" class="group flex flex-col items-center justify-center p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-all border border-white/5 shadow-lg text-center">
                                 <div class="w-10 h-10 mb-2 rounded-xl bg-white text-gray-950 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
                                 </div>
                                 <span class="text-[8px] font-black uppercase tracking-widest">Enroll</span>
                             </a>
-
+ 
                             <a href="{{ route('attendances.create') }}" class="group flex flex-col items-center justify-center p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-all border border-white/5 shadow-lg text-center">
                                 <div class="w-10 h-10 mb-2 rounded-xl bg-indigo-500 text-white flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M10 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
                                 </div>
                                 <span class="text-[8px] font-black uppercase tracking-widest">Attendance</span>
                             </a>
-
+ 
                             <a href="{{ route('fees.create') }}" class="group flex flex-col items-center justify-center p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-all border border-white/5 shadow-lg text-center">
                                 <div class="w-10 h-10 mb-2 rounded-xl bg-emerald-500 text-white flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
                                 </div>
                                 <span class="text-[8px] font-black uppercase tracking-widest">Fees</span>
                             </a>
-
+ 
                             <a href="{{ route('enquiries.create') }}" class="group flex flex-col items-center justify-center p-4 bg-gradient-to-br from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 rounded-2xl transition-all shadow-lg text-center">
                                 <div class="w-10 h-10 mb-2 rounded-xl bg-white/20 text-white flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
                                 </div>
                                 <span class="text-[8px] font-black uppercase tracking-widest">Lead</span>
                             </a>
@@ -302,7 +302,9 @@
                                     <span class="text-[8px] font-black uppercase tracking-widest {{ $ann->type === 'warning' ? 'text-amber-400' : 'text-indigo-300' }}">{{ $ann->type }}</span>
                                     <form method="POST" action="{{ route('announcements.destroy', $ann) }}">
                                         @csrf @method('DELETE')
-                                        <button class="text-white/20 hover:text-red-400 transition-colors">✕</button>
+                                        <button class="text-white/20 hover:text-red-400 transition-colors">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                                        </button>
                                     </form>
                                 </div>
                                 <p class="text-xs font-black leading-tight">{{ $ann->title }}</p>

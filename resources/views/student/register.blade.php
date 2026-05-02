@@ -32,7 +32,10 @@
                 <div>
                     <h1 class="text-white font-bold text-xl leading-tight">{{ $institute->name }}</h1>
                     @if($institute->city)
-                        <p class="text-white/70 text-sm">📍 {{ $institute->city }}{{ $institute->state ? ', '.$institute->state : '' }}</p>
+                        <p class="text-white/70 text-sm flex items-center gap-1">
+                            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                            {{ $institute->city }}{{ $institute->state ? ', '.$institute->state : '' }}
+                        </p>
                     @endif
                 </div>
             </div>

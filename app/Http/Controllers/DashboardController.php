@@ -34,8 +34,8 @@ class DashboardController extends Controller
         $todayAttended = Attendance::whereDate('date', today())->where('status', 'present')->count();
         $todayTotal    = Attendance::whereDate('date', today())->count();
 
-        $pendingFees   = Fee::where('status', 'pending')->sum('amount');
-        $collectedFees = Fee::where('status', 'paid')->sum('amount');
+        $pendingFees   = Fee::sum('due_amount');
+        $collectedFees = Fee::sum('paid_amount');
 
         $recentStudents = Student::with('batch')->latest()->take(5)->get();
         $batches        = Batch::withCount('students')->get();
@@ -99,9 +99,9 @@ class DashboardController extends Controller
         $months = [];
         $amounts = [];
 
-        $revenues = Fee::where('status', 'paid')
+        $revenues = Fee::where('paid_amount', '>', 0)
             ->where('created_at', '>=', today()->subMonths(5)->startOfMonth())
-            ->selectRaw("month_year, sum(amount) as total")
+            ->selectRaw("month_year, sum(paid_amount) as total")
             ->groupBy('month_year')
             ->get()
             ->pluck('total', 'month_year');

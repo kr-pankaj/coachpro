@@ -98,6 +98,7 @@ Route::middleware(['auth', 'verified', 'check.subscription'])->group(function ()
         Route::resource('students', App\Http\Controllers\StudentController::class);
         Route::resource('enquiries', App\Http\Controllers\EnquiryController::class);
         Route::resource('attendances', App\Http\Controllers\AttendanceController::class)->only(['index', 'create', 'store']);
+        Route::post('/fees/{fee}/payments', [App\Http\Controllers\FeeController::class, 'addPayment'])->name('fees.payments.store');
         Route::resource('fees', App\Http\Controllers\FeeController::class);
         Route::get('fees/{fee}/receipt', [App\Http\Controllers\FeeController::class, 'receipt'])->name('fees.receipt');
         
@@ -154,3 +155,6 @@ Route::middleware(['auth', 'verified', 'superadmin'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Public Fee Receipt Sharing
+Route::get('/receipt/{token}', [App\Http\Controllers\FeeController::class, 'share'])->name('fees.share');
