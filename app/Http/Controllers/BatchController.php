@@ -21,7 +21,7 @@ class BatchController extends Controller
             });
         }
 
-        $batches = $query->get();
+        $batches = $query->paginate(10)->withQueryString();
         return view('batches.index', compact('batches'));
     }
 

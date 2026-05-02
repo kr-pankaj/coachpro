@@ -129,7 +129,9 @@
                     </div>
                 @endforelse
             </div>
-            
+            <div class="mt-8">
+                {{ $enquiries->links() }}
+            </div>
         </div>
     </div>
     <script>

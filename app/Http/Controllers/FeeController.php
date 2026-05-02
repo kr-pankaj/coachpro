@@ -28,7 +28,7 @@ class FeeController extends Controller
             $query->where('month_year', $request->month_year);
         }
 
-        $fees = $query->latest('payment_date')->get();
+        $fees = $query->latest('payment_date')->paginate(10)->withQueryString();
         return view('fees.index', compact('fees'));
     }
 

@@ -18,7 +18,7 @@ class QuizController extends Controller
             $query->where('batch_id', $request->batch_id);
         }
 
-        $quizzes = $query->latest()->get();
+        $quizzes = $query->latest()->paginate(12)->withQueryString();
         $batches = \App\Models\Batch::all();
         
         return view('quizzes.index', compact('quizzes', 'batches'));

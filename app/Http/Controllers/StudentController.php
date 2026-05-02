@@ -25,7 +25,7 @@ class StudentController extends Controller
             $query->where('batch_id', $request->batch_id);
         }
 
-        $students = $query->latest()->get();
+        $students = $query->latest()->paginate(10)->withQueryString();
         $batches = \App\Models\Batch::all();
 
         return view('students.index', compact('students', 'batches'));

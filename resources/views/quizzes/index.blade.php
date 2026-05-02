@@ -72,6 +72,10 @@
                     </div>
                 @endforelse
             </div>
+            <div class="mt-8">
+                {{ $quizzes->links() }}
+            </div>
+        </div>
         </div>
     </div>
     <script>

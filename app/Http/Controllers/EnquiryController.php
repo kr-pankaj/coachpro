@@ -31,7 +31,7 @@ class EnquiryController extends Controller
                 WHEN 'converted' THEN 4
                 WHEN 'lost' THEN 5
             END
-        ")->orderBy('next_follow_up_date', 'asc')->get();
+        ")->orderBy('next_follow_up_date', 'asc')->paginate(12)->withQueryString();
 
         return view('enquiries.index', compact('enquiries'));
     }

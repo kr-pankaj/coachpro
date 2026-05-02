@@ -71,6 +71,9 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <div class="mt-4">
+                        {{ $batches->links() }}
+                    </div>
                 </div>
             </div>
         </div>
