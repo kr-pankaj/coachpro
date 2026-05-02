@@ -61,4 +61,16 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new TomSelect('#student_id', {
+                create: false,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                },
+                placeholder: "Search for a student...",
+            });
+        });
+    </script>
 </x-app-layout>
