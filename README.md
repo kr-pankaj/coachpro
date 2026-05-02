@@ -190,7 +190,7 @@ app/
 - [x] Fee receipt PDF generation
 - [ ] Student photo upload (file storage)
 - [ ] Attendance bulk import (CSV)
-- [ ] Mobile-responsive PWA for students
+- [x] Mobile-responsive PWA for students
 - [ ] SMS notifications via Fast2SMS
 - [ ] Test result / marks entry module
 - [ ] Parent portal (read-only view of child's progress)
