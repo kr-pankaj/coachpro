@@ -117,7 +117,7 @@
 
                 <div>
                     <div style="margin-bottom:3rem;">
-                        <x-application-logo style="height:2.5rem; width:auto;" />
+                        <x-application-logo light="true" style="height:2.5rem; width:auto;" />
                     </div>
 
                     <h1 style="color:white;font-size:2.25rem;font-weight:800;line-height:1.2;letter-spacing:-0.03em;margin-bottom:1rem;">

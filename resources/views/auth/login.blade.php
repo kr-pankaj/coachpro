@@ -3,7 +3,7 @@
 
     <div style="margin-bottom:2rem;">
         <h2 style="font-size:1.75rem;font-weight:800;color:#0f172a;letter-spacing:-0.03em;margin-bottom:0.4rem;">Welcome back</h2>
-        <p style="color:#64748b;font-size:0.9rem;">Sign in to your CoachPro account to continue.</p>
+        <p style="color:#64748b;font-size:0.9rem;">Sign in to your {{ config('app.name') }} account to continue.</p>
     </div>
 
     <!-- Session Status -->
@@ -71,7 +71,7 @@
     </form>
 
     <p style="text-align:center;margin-top:1.5rem;font-size:0.875rem;color:#64748b;">
-        New to CoachPro? 
+        New to {{ config('app.name') }}? 
         <a href="{{ route('register') }}" style="color:#4f46e5;font-weight:600;text-decoration:none;">Create an account</a>
     </p>
 
