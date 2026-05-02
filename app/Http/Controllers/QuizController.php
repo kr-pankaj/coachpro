@@ -6,10 +6,22 @@ use Illuminate\Http\Request;
 
 class QuizController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $quizzes = \App\Models\Quiz::withCount('questions')->with('batch')->latest()->get();
-        return view('quizzes.index', compact('quizzes'));
+        $query = \App\Models\Quiz::withCount('questions')->with('batch');
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('batch_id')) {
+            $query->where('batch_id', $request->batch_id);
+        }
+
+        $quizzes = $query->latest()->get();
+        $batches = \App\Models\Batch::all();
+        
+        return view('quizzes.index', compact('quizzes', 'batches'));
     }
 
     public function create()

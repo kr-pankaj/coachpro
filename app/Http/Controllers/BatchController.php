@@ -9,9 +9,19 @@ class BatchController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $batches = \App\Models\Batch::withCount('students')->get();
+        $query = \App\Models\Batch::withCount('students');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('subject', 'like', "%{$search}%");
+            });
+        }
+
+        $batches = $query->get();
         return view('batches.index', compact('batches'));
     }
 

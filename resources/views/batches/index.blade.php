@@ -13,7 +13,25 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100 overflow-x-auto">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <form method="GET" action="{{ route('batches.index') }}" class="flex flex-col md:flex-row gap-4 mb-6">
+                        <div class="flex-1">
+                            <x-input-label for="search" :value="__('Search Batch')" class="sr-only" />
+                            <x-text-input id="search" name="search" type="text" class="block w-full" placeholder="Search by batch name or subject..." :value="request('search')" />
+                        </div>
+                        <div class="flex gap-2">
+                            <x-primary-button type="submit">
+                                {{ __('Search') }}
+                            </x-primary-button>
+                            @if(request()->filled('search'))
+                                <a href="{{ route('batches.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-200 dark:hover:bg-gray-600 transition ease-in-out duration-150">
+                                    {{ __('Clear') }}
+                                </a>
+                            @endif
+                        </div>
+                    </form>
+
+                    <div class="overflow-x-auto">
                     @if (session('success'))
                         <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
                             {{ session('success') }}
