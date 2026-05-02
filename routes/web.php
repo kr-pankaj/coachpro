@@ -103,9 +103,15 @@ Route::middleware(['auth', 'verified', 'check.subscription'])->group(function ()
     Route::post('/notifications/{id}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.read_all');
 
-    // Super Admin
+});
+
+// Super Admin (Always accessible for maintenance)
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/superadmin/institutes', [App\Http\Controllers\SuperAdminController::class, 'index'])->name('superadmin.index');
     Route::post('/superadmin/institutes/{institute}/toggle-lifetime-free', [App\Http\Controllers\SuperAdminController::class, 'toggleLifetimeFree'])->name('superadmin.toggle_lifetime_free');
+    Route::get('/superadmin/impersonate/{institute}', [App\Http\Controllers\SuperAdminController::class, 'impersonate'])->name('superadmin.impersonate');
+    Route::get('/superadmin/stop-impersonate', [App\Http\Controllers\SuperAdminController::class, 'stopImpersonating'])->name('superadmin.stop_impersonate');
+    Route::post('/superadmin/broadcast', [App\Http\Controllers\SuperAdminController::class, 'broadcast'])->name('superadmin.broadcast');
 });
 
 require __DIR__.'/auth.php';

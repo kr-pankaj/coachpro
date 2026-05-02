@@ -9,7 +9,7 @@
             </div>
         </div>
 
-        <div class="flex flex-col flex-1 overflow-y-auto custom-scrollbar px-4 pb-4">
+        <div id="sidebar-scroll" class="flex flex-col flex-1 overflow-y-auto custom-scrollbar px-4 pb-4">
             <nav class="space-y-1">
                 <div class="px-4 pb-2">
                     <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Main Menu</span>
@@ -68,6 +68,19 @@
                 @endif
             </nav>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const sidebar = document.getElementById('sidebar-scroll');
+                const scrollPos = localStorage.getItem('sidebarScrollPos');
+                if (scrollPos) {
+                    sidebar.scrollTop = scrollPos;
+                }
+                sidebar.addEventListener('scroll', function() {
+                    localStorage.setItem('sidebarScrollPos', sidebar.scrollTop);
+                });
+            });
+        </script>
 
         <div class="p-6 shrink-0 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-100 dark:border-gray-800">
             <div class="flex items-center gap-4 mb-6">

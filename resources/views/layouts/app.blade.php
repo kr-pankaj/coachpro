@@ -69,6 +69,17 @@
             @endauth
 
             <div class="flex-1 flex flex-col sm:ml-72 transition-all duration-300">
+                @if(session()->has('impersonated_by'))
+                    <div class="sticky top-0 z-[60] bg-gray-900 text-white px-8 py-3 flex items-center justify-between shadow-2xl">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-rose-500 rounded-full animate-ping"></div>
+                            <span class="text-[10px] font-black uppercase tracking-[0.2em]">Impersonation Mode: <span class="text-indigo-400">{{ auth()->user()->name }}</span> ({{ auth()->user()->institute?->name }})</span>
+                        </div>
+                        <a href="{{ route('superadmin.stop_impersonate') }}" class="px-4 py-1.5 bg-white text-gray-900 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-rose-500 hover:text-white transition-all shadow-lg">
+                            Return to Command Center
+                        </a>
+                    </div>
+                @endif
                 @include('layouts.navigation')
 
             {{-- Trial / Subscription Banner --}}

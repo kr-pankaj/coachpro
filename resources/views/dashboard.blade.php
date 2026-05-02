@@ -146,7 +146,7 @@
                                 <div class="w-10 h-10 mb-2 rounded-xl bg-indigo-500 text-white flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
                                 </div>
-                                <span class="text-[8px] font-black uppercase tracking-widest">Mark</span>
+                                <span class="text-[8px] font-black uppercase tracking-widest">Attendance</span>
                             </a>
 
                             <a href="{{ route('fees.create') }}" class="group flex flex-col items-center justify-center p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-all border border-white/5 shadow-lg text-center">

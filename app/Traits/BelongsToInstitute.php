@@ -10,8 +10,15 @@ trait BelongsToInstitute
     protected static function bootBelongsToInstitute()
     {
         static::addGlobalScope('institute', function (Builder $builder) {
-            if (auth()->check() && auth()->user()->institute_id) {
-                $builder->where('institute_id', auth()->user()->institute_id);
+            if (auth()->check()) {
+                if (auth()->user()->role === 'superadmin') {
+                    return;
+                }
+                
+                $builder->where(function($q) {
+                    $q->where('institute_id', auth()->user()->institute_id)
+                      ->orWhereNull('institute_id');
+                });
             }
         });
 
