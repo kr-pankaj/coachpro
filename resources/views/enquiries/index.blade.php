@@ -20,6 +20,32 @@
                 </div>
             @endif
 
+            <form method="GET" action="{{ route('enquiries.index') }}" class="flex flex-col md:flex-row gap-4 mb-8">
+                <div class="flex-1">
+                    <x-text-input id="search" name="search" type="text" class="block w-full border-gray-100 shadow-sm" placeholder="Search by name, phone or course..." :value="request('search')" />
+                </div>
+                <div class="w-full md:w-64">
+                    <select id="status" name="status" class="block w-full border-gray-100 dark:bg-gray-800 dark:text-gray-300 focus:border-indigo-500 rounded-xl shadow-sm">
+                        <option value="">All Statuses</option>
+                        <option value="new" {{ request('status') == 'new' ? 'selected' : '' }}>New</option>
+                        <option value="contacted" {{ request('status') == 'contacted' ? 'selected' : '' }}>Contacted</option>
+                        <option value="demo_scheduled" {{ request('status') == 'demo_scheduled' ? 'selected' : '' }}>Demo Scheduled</option>
+                        <option value="converted" {{ request('status') == 'converted' ? 'selected' : '' }}>Converted</option>
+                        <option value="lost" {{ request('status') == 'lost' ? 'selected' : '' }}>Lost</option>
+                    </select>
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" class="px-6 py-2.5 bg-gray-900 text-white font-bold rounded-xl hover:bg-gray-800 transition-colors">
+                        Filter
+                    </button>
+                    @if(request()->anyFilled(['search', 'status']))
+                        <a href="{{ route('enquiries.index') }}" class="px-6 py-2.5 bg-white border border-gray-200 text-gray-600 font-bold rounded-xl hover:bg-gray-50 transition-colors">
+                            Clear
+                        </a>
+                    @endif
+                </div>
+            </form>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 @forelse($enquiries as $enquiry)
                     @php
@@ -106,4 +132,13 @@
             
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new TomSelect('#status', {
+                create: false,
+                placeholder: "Filter by status...",
+                dropdownParent: 'body'
+            });
+        });
+    </script>
 </x-app-layout>

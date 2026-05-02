@@ -9,10 +9,26 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $students = \App\Models\Student::with('batch')->get();
-        return view('students.index', compact('students'));
+        $query = \App\Models\Student::with('batch');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('batch_id')) {
+            $query->where('batch_id', $request->batch_id);
+        }
+
+        $students = $query->latest()->get();
+        $batches = \App\Models\Batch::all();
+
+        return view('students.index', compact('students', 'batches'));
     }
 
     public function create()

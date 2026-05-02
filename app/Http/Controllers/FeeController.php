@@ -9,9 +9,26 @@ class FeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $fees = \App\Models\Fee::with('student')->latest('payment_date')->get();
+        $query = \App\Models\Fee::with('student');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('student', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('month_year')) {
+            $query->where('month_year', $request->month_year);
+        }
+
+        $fees = $query->latest('payment_date')->get();
         return view('fees.index', compact('fees'));
     }
 

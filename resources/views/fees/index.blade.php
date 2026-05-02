@@ -13,7 +13,35 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100 overflow-x-auto">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <form method="GET" action="{{ route('fees.index') }}" class="flex flex-col md:flex-row gap-4 mb-6">
+                        <div class="flex-1">
+                            <x-input-label for="search" :value="__('Search Student')" class="sr-only" />
+                            <x-text-input id="search" name="search" type="text" class="block w-full" placeholder="Search by student name..." :value="request('search')" />
+                        </div>
+                        <div class="w-full md:w-48">
+                            <select id="status" name="status" class="block w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                <option value="">All Status</option>
+                                <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Paid</option>
+                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            </select>
+                        </div>
+                        <div class="w-full md:w-48">
+                            <x-text-input id="month_year" name="month_year" type="month" class="block w-full" :value="request('month_year')" />
+                        </div>
+                        <div class="flex gap-2">
+                            <x-primary-button type="submit">
+                                {{ __('Filter') }}
+                            </x-primary-button>
+                            @if(request()->anyFilled(['search', 'status', 'month_year']))
+                                <a href="{{ route('fees.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-700 border border-transparent rounded-md font-semibold text-xs text-gray-700 dark:text-gray-300 uppercase tracking-widest hover:bg-gray-200 dark:hover:bg-gray-600 transition ease-in-out duration-150">
+                                    {{ __('Clear') }}
+                                </a>
+                            @endif
+                        </div>
+                    </form>
+
+                    <div class="overflow-x-auto">
                     @if (session('success'))
                         <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
                             {{ session('success') }}

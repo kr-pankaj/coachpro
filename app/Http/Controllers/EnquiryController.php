@@ -6,9 +6,24 @@ use Illuminate\Http\Request;
 
 class EnquiryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $enquiries = \App\Models\Enquiry::orderByRaw("
+        $query = \App\Models\Enquiry::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('student_name', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('course_interested', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $enquiries = $query->orderByRaw("
             CASE status
                 WHEN 'new' THEN 1
                 WHEN 'contacted' THEN 2
