@@ -103,6 +103,7 @@ Route::middleware(['auth', 'verified', 'check.subscription'])->group(function ()
     Route::resource('students', App\Http\Controllers\StudentController::class);
     Route::resource('attendances', App\Http\Controllers\AttendanceController::class)->only(['index', 'create', 'store']);
     Route::resource('fees', App\Http\Controllers\FeeController::class);
+    Route::get('fees/{fee}/receipt', [App\Http\Controllers\FeeController::class, 'receipt'])->name('fees.receipt');
 
     // Profile Requests
     Route::get('/profile-requests', [App\Http\Controllers\ProfileUpdateRequestController::class, 'index'])->name('profile_requests.index');

@@ -36,9 +36,10 @@
                                             <p class="text-xs text-gray-500 dark:text-gray-400">Paid on: {{ $fee->payment_date ?? '-' }}</p>
                                         </div>
                                         <div class="text-right">
-                                            <p class="font-bold">₹{{ number_format($fee->amount, 2) }}</p>
+                                            <p class="font-bold mb-1">₹{{ number_format($fee->amount, 2) }}</p>
                                             @if($fee->status == 'paid')
-                                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">Paid</span>
+                                                <span class="px-2 py-1 mr-2 text-xs font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">Paid</span>
+                                                <a href="{{ route('fees.receipt', $fee) }}" class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800">⬇ Receipt</a>
                                             @else
                                                 <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-100">Pending</span>
                                             @endif

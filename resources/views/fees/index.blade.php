@@ -46,6 +46,9 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $fee->payment_date ? \Carbon\Carbon::parse($fee->payment_date)->format('M d, Y') : '-' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        @if($fee->status == 'paid')
+                                            <a href="{{ route('fees.receipt', $fee) }}" class="text-green-600 dark:text-green-400 hover:text-green-900 mr-3" title="Download Receipt">⬇ PDF</a>
+                                        @endif
                                         <a href="{{ route('fees.edit', $fee) }}" class="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 mr-3">Edit</a>
                                         <form action="{{ route('fees.destroy', $fee) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure?');">
                                             @csrf

@@ -186,7 +186,7 @@ app/
 - [ ] Recurring Razorpay subscriptions (auto-debit monthly)
 - [ ] Email notifications (fee reminders, trial expiry warnings, welcome email)
 - [ ] Attendance reports (CSV/PDF export)
-- [ ] Fee receipt PDF generation
+- [x] Fee receipt PDF generation
 - [ ] Student photo upload (file storage)
 - [ ] Attendance bulk import (CSV)
 - [ ] Mobile-responsive PWA for students
