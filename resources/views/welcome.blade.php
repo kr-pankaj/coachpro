@@ -114,11 +114,13 @@
                     <p class="text-gray-500 max-w-2xl mx-auto">Focus on teaching, we'll handle the rest. Powerful tools built for modern educators.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     @php
                         $features = [
                             ['title' => 'Student Management', 'desc' => 'Centralized database for all student profiles, batches, and personal details.', 'icon' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'],
+                            ['title' => 'Academic Library', 'desc' => 'Digital vault for Study Materials. Upload PDFs, share video lectures, and links with specific batches.', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'],
+                            ['title' => 'Branded Portals', 'desc' => 'Get a professional URL (e.g., ica.coachpro.com) to provide a premium experience to your students.', 'icon' => 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9'],
                             ['title' => 'Attendance Tracking', 'desc' => 'Smart attendance system with real-time notifications for parents.', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'],
+                            ['title' => 'Audit Activity Logs', 'desc' => 'Complete accountability. Track every addition, update, and deletion across your institute.', 'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'],
                             ['title' => 'Fee Records', 'desc' => 'Track pending and collected fees. Generate automated PDF receipts instantly.', 'icon' => 'M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z'],
                             ['title' => 'Online Quizzes', 'desc' => 'Create and conduct online tests. Automated grading and detailed result analytics.', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4'],
                             ['title' => 'Mobile First', 'desc' => 'Completely responsive and installable as a PWA. Manage your institute on the go.', 'icon' => 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z'],
@@ -135,6 +137,94 @@
                             <p class="text-gray-500 leading-relaxed">{{ $f['desc'] }}</p>
                         </div>
                     @endforeach
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-32 bg-[#0f172a]">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-20 space-y-4">
+                    <h2 class="text-4xl lg:text-6xl font-black tracking-tighter">Simple, <span class="text-gradient">Transparent</span> Pricing.</h2>
+                    <p class="text-gray-500 max-w-2xl mx-auto">Choose a plan that scales with your growth. No hidden fees, no credit card required.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {{-- Starter --}}
+                    <div class="p-10 rounded-[3rem] bg-white/5 border border-white/10 hover:border-indigo-500/50 transition-all flex flex-col">
+                        <h3 class="text-2xl font-black mb-2">Monthly</h3>
+                        <p class="text-gray-500 text-sm mb-8">Perfect for small coaching centers starting out.</p>
+                        <div class="mb-8">
+                            <span class="text-5xl font-black">₹{{ \App\Models\Setting::get('monthly_price', 999) }}</span>
+                            <span class="text-gray-500 text-sm">/ month</span>
+                        </div>
+                        <ul class="space-y-4 mb-10 flex-1">
+                            <li class="flex items-center gap-3 text-sm text-gray-300">
+                                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                                Unlimited Students & Batches
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-gray-300">
+                                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                                All Core Modules Included
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-gray-300">
+                                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                                Basic Analytics
+                            </li>
+                        </ul>
+                        <a href="{{ route('register') }}" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-center font-black hover:bg-white/10 transition-all">Start Trial</a>
+                    </div>
+
+                    {{-- Pro --}}
+                    <div class="p-10 rounded-[3rem] bg-indigo-600 relative overflow-hidden flex flex-col shadow-2xl shadow-indigo-500/20 scale-110 z-10">
+                        <div class="absolute top-6 right-6 bg-white/20 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">Most Popular</div>
+                        <h3 class="text-2xl font-black mb-2 text-white">6-Month Plan</h3>
+                        <p class="text-indigo-100 text-sm mb-8">Advanced features for growing institutes.</p>
+                        <div class="mb-8">
+                            <span class="text-5xl font-black text-white">₹{{ \App\Models\Setting::get('six_month_price', 4999) }}</span>
+                            <span class="text-indigo-200 text-sm">/ 6 months</span>
+                        </div>
+                        <ul class="space-y-4 mb-10 flex-1">
+                            <li class="flex items-center gap-3 text-sm text-white">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                                <strong>Significant Savings</strong> Included
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-white">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                                Branded Subdomains
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-white">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                                Priority Support
+                            </li>
+                        </ul>
+                        <a href="{{ route('register') }}" class="w-full py-4 rounded-2xl bg-white text-indigo-600 text-center font-black hover:scale-105 transition-all shadow-lg shadow-indigo-900/20">Get Started</a>
+                    </div>
+
+                    {{-- Enterprise --}}
+                    <div class="p-10 rounded-[3rem] bg-white/5 border border-white/10 hover:border-violet-500/50 transition-all flex flex-col">
+                        <h3 class="text-2xl font-black mb-2">Custom</h3>
+                        <p class="text-gray-500 text-sm mb-8">Flexible plans for large-scale operations.</p>
+                        <div class="mb-8">
+                            <span class="text-4xl font-black">Flexible</span>
+                            <span class="text-gray-500 text-sm"> Pricing</span>
+                        </div>
+                        <ul class="space-y-4 mb-10 flex-1">
+                            <li class="flex items-center gap-3 text-sm text-gray-300">
+                                <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                                Select Your Months
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-gray-300">
+                                <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                                <strong>Up to {{ \App\Models\Setting::get('bulk_discount_percentage', 30) }}% Discount</strong>
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-gray-300">
+                                <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                                Dedicated Account Manager
+                            </li>
+                        </ul>
+                        <a href="{{ route('register') }}" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-center font-black hover:bg-white/10 transition-all">Contact Sales</a>
+                    </div>
                 </div>
             </div>
         </section>

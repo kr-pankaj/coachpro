@@ -35,7 +35,9 @@ class SuperAdminController extends Controller
             $growth['data'][]   = Institute::whereMonth('created_at', $date->month)->whereYear('created_at', $date->year)->count();
         }
 
-        return view('superadmin.index', compact('institutes', 'stats', 'growth'));
+        $settings = \App\Models\Setting::pluck('value', 'key');
+
+        return view('superadmin.index', compact('institutes', 'stats', 'growth', 'settings'));
     }
 
     public function impersonate(Institute $institute)
