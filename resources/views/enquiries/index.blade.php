@@ -68,17 +68,16 @@
                                 <span class="px-2.5 py-1 text-xs font-bold uppercase tracking-wider rounded-full {{ $color['bg'] }} {{ $color['text'] }}">
                                     {{ $color['label'] }}
                                 </span>
-                                <div class="relative" x-data="{ open: false }">
-                                    <button @click="open = !open" class="text-gray-400 hover:text-gray-600 focus:outline-none">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
-                                    </button>
-                                    <div x-show="open" @click.away="open = false" class="absolute right-0 mt-1 w-32 bg-white rounded-xl shadow-lg border border-gray-100 z-10 py-1" style="display:none;">
-                                        <a href="{{ route('enquiries.edit', $enquiry) }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Edit</a>
-                                        <form action="{{ route('enquiries.destroy', $enquiry) }}" method="POST">
-                                            @csrf @method('DELETE')
-                                            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50" onclick="return confirm('Delete this lead?');">Delete</button>
-                                        </form>
-                                    </div>
+                                <div class="flex items-center gap-1">
+                                    <a href="{{ route('enquiries.edit', $enquiry) }}" class="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all" title="Edit Lead">
+                                        <x-icons.edit class="w-4 h-4" />
+                                    </a>
+                                    <form action="{{ route('enquiries.destroy', $enquiry) }}" method="POST" onsubmit="return confirm('Delete this lead?');" class="inline-block">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all" title="Delete Lead">
+                                            <x-icons.delete class="w-4 h-4" />
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
 

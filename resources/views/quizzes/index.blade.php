@@ -58,10 +58,16 @@
                             <p class="text-xs text-gray-500 mt-1">⏱ {{ $quiz->time_limit_minutes }} min time limit</p>
                         </div>
                         <div class="grid grid-cols-2 divide-x divide-gray-100 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-700">
-                            <a href="{{ route('quizzes.show', $quiz) }}" class="flex items-center justify-center gap-1.5 py-3 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 transition-colors">View Results</a>
+                            <a href="{{ route('quizzes.show', $quiz) }}" class="flex items-center justify-center gap-1.5 py-3 text-sm font-semibold text-indigo-600 hover:bg-indigo-100 transition-colors" title="View Results">
+                                <x-icons.view class="w-4 h-4" />
+                                <span>Results</span>
+                            </a>
                             <form action="{{ route('quizzes.destroy', $quiz) }}" method="POST" onsubmit="return confirm('Delete this quiz?');">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="w-full h-full flex items-center justify-center gap-1.5 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors">Delete</button>
+                                <button type="submit" class="w-full h-full flex items-center justify-center gap-1.5 py-3 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors" title="Delete Quiz">
+                                    <x-icons.delete class="w-4 h-4" />
+                                    <span>Delete</span>
+                                </button>
                             </form>
                         </div>
                     </div>

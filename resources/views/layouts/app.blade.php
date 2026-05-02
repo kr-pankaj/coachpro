@@ -92,7 +92,7 @@
             @endisset
 
             <!-- Page Content -->
-            <main class="pb-16 sm:pb-0">
+            <main class="pb-16 sm:pb-0 page-enter">
                 {{ $slot }}
             </main>
 
