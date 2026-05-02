@@ -9,8 +9,9 @@
         <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 
         <!-- PWA Meta Tags -->
         <link rel="manifest" href="/manifest.json">
@@ -37,12 +38,30 @@
                 });
             }
         </script>
+        <style>
+            body { font-family: 'Outfit', sans-serif !important; }
+            .mesh-bg {
+                position: fixed;
+                top: 0; left: 0; width: 100%; height: 100%;
+                z-index: -1;
+                background-color: #ffffff;
+                background-image: 
+                    radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.03) 0, transparent 50%), 
+                    radial-gradient(at 50% 0%, rgba(139, 92, 246, 0.03) 0, transparent 50%), 
+                    radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.03) 0, transparent 50%);
+            }
+            .dark .mesh-bg {
+                background-color: #030712;
+                background-image: 
+                    radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.1) 0, transparent 50%), 
+                    radial-gradient(at 50% 0%, rgba(139, 92, 246, 0.1) 0, transparent 50%), 
+                    radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.1) 0, transparent 50%);
+            }
+        </style>
     </head>
-    <body class="font-sans antialiased text-gray-900 selection:bg-indigo-500 selection:text-white">
-        <div class="min-h-screen bg-white dark:bg-gray-950 flex flex-col sm:flex-row relative overflow-x-hidden">
-            {{-- Background blobs for aesthetic --}}
-            <div class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none"></div>
-            <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-96 h-96 bg-violet-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+    <body class="antialiased text-gray-900 selection:bg-indigo-500 selection:text-white">
+        <div class="mesh-bg"></div>
+        <div class="min-h-screen flex flex-col sm:flex-row relative overflow-x-hidden">
 
             {{-- Desktop Sidebar --}}
             @auth

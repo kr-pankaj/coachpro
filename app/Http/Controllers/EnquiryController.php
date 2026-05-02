@@ -53,7 +53,16 @@ class EnquiryController extends Controller
             'notes' => 'nullable|string',
         ]);
 
-        \App\Models\Enquiry::create($validated);
+        $enquiry = \App\Models\Enquiry::create($validated);
+
+        // Notify Admin
+        $admin = \App\Models\User::where('institute_id', auth()->user()->institute_id)
+            ->where('role', 'admin')
+            ->first();
+            
+        if ($admin) {
+            $admin->notify(new \App\Notifications\NewLead($enquiry));
+        }
 
         return redirect()->route('enquiries.index')->with('success', 'Lead added successfully.');
     }

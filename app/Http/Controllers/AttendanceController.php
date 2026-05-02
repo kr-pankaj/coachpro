@@ -43,7 +43,7 @@ class AttendanceController extends Controller
         ]);
 
         foreach ($validated['attendance'] as $student_id => $status) {
-            \App\Models\Attendance::updateOrCreate(
+            $attendance = \App\Models\Attendance::updateOrCreate(
                 [
                     'student_id' => $student_id,
                     'batch_id' => $validated['batch_id'],
@@ -51,8 +51,15 @@ class AttendanceController extends Controller
                 ],
                 ['status' => $status]
             );
+
+            // Notify Student if user account exists
+            if ($attendance->wasRecentlyCreated || $attendance->wasChanged('status')) {
+                if ($attendance->student && $attendance->student->user) {
+                    $attendance->student->user->notify(new \App\Notifications\AttendanceMarked($attendance));
+                }
+            }
         }
 
-        return back()->with('success', 'Attendance saved successfully.');
+        return back()->with('success', 'Attendance saved successfully and notifications sent.');
     }
 }

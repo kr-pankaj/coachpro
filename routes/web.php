@@ -51,45 +51,7 @@ Route::get('/manifest.json', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    if (auth()->user()->role === 'superadmin') {
-        return redirect()->route('superadmin.index');
-    }
-
-    if (auth()->user()->role === 'student') {
-        $student = \App\Models\Student::where('user_id', auth()->id())->first();
-        if (!$student) return view('dashboard');
-        $fees        = \App\Models\Fee::where('student_id', $student->id)->orderBy('month_year', 'desc')->get();
-        $attendances = \App\Models\Attendance::where('student_id', $student->id)->orderBy('date', 'desc')->take(30)->get();
-        return view('student.dashboard', compact('student', 'fees', 'attendances'));
-    }
-
-    // Admin dashboard
-    $institute    = auth()->user()->institute;
-    $totalStudents = \App\Models\Student::count();
-    $totalBatches  = \App\Models\Batch::count();
-
-    $todayAttended = \App\Models\Attendance::whereDate('date', today())->where('status', 'present')->count();
-    $todayTotal    = \App\Models\Attendance::whereDate('date', today())->count();
-
-    $pendingFees   = \App\Models\Fee::where('status', 'pending')->sum('amount');
-    $collectedFees = \App\Models\Fee::where('status', 'paid')->sum('amount');
-
-    $recentStudents = \App\Models\Student::with('batch')->latest()->take(5)->get();
-    $batches        = \App\Models\Batch::withCount('students')->get();
-
-    $announcements = \App\Models\Announcement::where('institute_id', $institute->id)
-        ->where(fn($q) => $q->whereNull('expires_on')->orWhere('expires_on', '>=', today()))
-        ->orderByDesc('created_at')->take(5)->get();
-
-    $profilePct    = $institute->profileCompletion();
-
-    return view('dashboard', compact(
-        'institute', 'totalStudents', 'totalBatches',
-        'todayAttended', 'todayTotal', 'pendingFees', 'collectedFees',
-        'recentStudents', 'batches', 'announcements', 'profilePct'
-    ));
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/register/student/{slug}', [App\Http\Controllers\StudentRegistrationController::class, 'create'])->name('student.register');
 Route::post('/register/student/{slug}', [App\Http\Controllers\StudentRegistrationController::class, 'store'])->name('student.register.store');
