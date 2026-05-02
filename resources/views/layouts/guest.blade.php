@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>{{ config('app.name', 'CoachPro') }} — {{ $pageTitle ?? 'Welcome' }}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+        
+        <!-- PWA Meta Tags -->
+        <link rel="manifest" href="/manifest.json">
+        <meta name="theme-color" content="#4f46e5">
+        <link rel="apple-touch-icon" href="/icon-192.png">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js').catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+                });
+            }
+        </script>
+        <style>
+            body { font-family: 'Inter', sans-serif; }
+            .auth-gradient {
+                background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #9333ea 100%);
+            }
+            .glass-card {
+                background: rgba(255,255,255,0.95);
+                backdrop-filter: blur(20px);
+            }
+            .input-field {
+                width: 100%;
+                padding: 0.75rem 1rem;
+                border: 1.5px solid #e5e7eb;
+                border-radius: 0.625rem;
+                font-size: 0.875rem;
+                transition: all 0.2s ease;
+                outline: none;
+                color: #111827;
+                background: #fafafa;
+            }
+            .input-field:focus {
+                border-color: #4f46e5;
+                background: #fff;
+                box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+            }
+            .input-field::placeholder { color: #9ca3af; }
+            .btn-primary {
+                width: 100%;
+                padding: 0.75rem 1.5rem;
+                background: linear-gradient(135deg, #4f46e5, #7c3aed);
+                color: white;
+                font-weight: 600;
+                font-size: 0.9rem;
+                border-radius: 0.625rem;
+                border: none;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                letter-spacing: 0.01em;
+            }
+            .btn-primary:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 25px rgba(79,70,229,0.4);
+            }
+            .btn-primary:active { transform: translateY(0); }
+            .feature-item {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                margin-bottom: 1.25rem;
+                color: rgba(255,255,255,0.9);
+                font-size: 0.9rem;
+            }
+            .feature-icon {
+                width: 2rem; height: 2rem;
+                background: rgba(255,255,255,0.2);
+                border-radius: 50%;
+                display: flex; align-items: center; justify-content: center;
+                flex-shrink: 0;
+            }
+            @keyframes float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+            }
+            .float-anim { animation: float 4s ease-in-out infinite; }
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .fade-in-up { animation: fadeInUp 0.5s ease forwards; }
+            .input-group { position: relative; }
+            .input-icon {
+                position: absolute; left: 0.875rem; top: 50%;
+                transform: translateY(-50%);
+                color: #9ca3af;
+                pointer-events: none;
+                transition: color 0.2s;
+            }
+            .input-group:focus-within .input-icon { color: #4f46e5; }
+            .input-group .input-field { padding-left: 2.75rem; }
+        </style>
+    </head>
+    <body class="antialiased" style="background: #f1f5f9;">
+        <div class="min-h-screen flex">
+            <!-- Left Panel: Branding -->
+            <div class="hidden lg:flex lg:w-5/12 auth-gradient flex-col justify-between p-12 relative overflow-hidden">
+                <!-- Decorative circles -->
+                <div style="position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:rgba(255,255,255,0.06);border-radius:50%;"></div>
+                <div style="position:absolute;bottom:-60px;left:-60px;width:250px;height:250px;background:rgba(255,255,255,0.06);border-radius:50%;"></div>
+                <div style="position:absolute;top:40%;left:60%;width:150px;height:150px;background:rgba(255,255,255,0.04);border-radius:50%;"></div>
+
+                <div>
+                    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:3rem;">
+                        <div style="width:2.5rem;height:2.5rem;background:rgba(255,255,255,0.25);border-radius:0.75rem;display:flex;align-items:center;justify-content:center;">
+                            <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                        </div>
+                        <span style="color:white;font-weight:700;font-size:1.25rem;letter-spacing:-0.02em;">CoachPro</span>
+                    </div>
+
+                    <h1 style="color:white;font-size:2.25rem;font-weight:800;line-height:1.2;letter-spacing:-0.03em;margin-bottom:1rem;">
+                        Manage your coaching centre effortlessly.
+                    </h1>
+                    <p style="color:rgba(255,255,255,0.75);font-size:0.95rem;line-height:1.7;margin-bottom:2.5rem;">
+                        The all-in-one platform for tutors and coaching institutes across India.
+                    </p>
+
+                    <div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <svg width="14" height="14" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </div>
+                            <span>Student & batch management</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <svg width="14" height="14" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </div>
+                            <span>Daily attendance tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <svg width="14" height="14" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </div>
+                            <span>Fee collection & payment tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">
+                                <svg width="14" height="14" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" stroke-linecap="round" stroke-linejoin="round"/><path d="M14.828 14.828a4 4 0 015.656 0l4-4a4 4 0 01-5.656-5.656l-1.102 1.101" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </div>
+                            <span>Student self-registration portal</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <div style="display:flex;">
+                        @foreach(['A','B','C','D'] as $i)
+                        <div style="width:2rem;height:2rem;border-radius:50%;background:rgba(255,255,255,0.3);border:2px solid rgba(255,255,255,0.6);margin-left:-0.5rem;display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:white;font-weight:600;">{{ $i }}</div>
+                        @endforeach
+                    </div>
+                    <span style="color:rgba(255,255,255,0.8);font-size:0.8rem;">Trusted by 100+ institutes</span>
+                </div>
+            </div>
+
+            <!-- Right Panel: Auth Form -->
+            <div class="flex-1 flex flex-col justify-center items-center p-6 lg:p-16" style="background:#f8fafc;">
+                <!-- Mobile logo -->
+                <div class="lg:hidden mb-8 flex items-center gap-2">
+                    <div style="width:2rem;height:2rem;background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:0.625rem;display:flex;align-items:center;justify-content:center;">
+                        <svg width="16" height="16" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round"/></svg>
+                    </div>
+                    <span style="font-weight:700;font-size:1.125rem;color:#1e293b;">CoachPro</span>
+                </div>
+
+                <div class="w-full max-w-md fade-in-up">
+                    {{ $slot }}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
