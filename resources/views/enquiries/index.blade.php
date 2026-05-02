@@ -75,6 +75,9 @@
                                     {{ ucfirst(str_replace('_', ' ', $enquiry->status)) }}
                                 </span>
                                 <div class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button onclick="openFollowUpModal({{ $enquiry->id }})" class="p-1.5 text-violet-500 hover:bg-violet-50 dark:hover:bg-violet-900/20 rounded-lg transition-all" title="AI Assist ✨">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                                    </button>
                                     <a href="{{ route('enquiries.edit', $enquiry) }}" class="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-lg transition-all">
                                         <x-icons.edit class="w-4 h-4" />
                                     </a>
@@ -90,6 +93,15 @@
                                     </div>
                                     <span class="truncate">{{ $enquiry->course_interested ?? 'General Inquiry' }}</span>
                                 </div>
+
+                                @if($enquiry->phone)
+                                <div class="flex items-center gap-3 text-xs text-gray-400 font-bold">
+                                    <div class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-900 flex items-center justify-center text-gray-400">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                                    </div>
+                                    <span>{{ $enquiry->phone }}</span>
+                                </div>
+                                @endif
 
                                 @if($enquiry->next_follow_up_date)
                                     @php 
@@ -137,25 +149,94 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            if(document.getElementById('status')) {
-                new TomSelect('#status', {
-                    create: false,
-                    placeholder: "Filter by pipeline stage...",
-                    dropdownParent: 'body'
-                });
-            }
-        });
-    </script>
+    <!-- AI Follow-up Modal -->
+    <div id="aiFollowUpModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-500/75 backdrop-blur-sm" onclick="closeFollowUpModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            
+            <div class="relative inline-block px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-2xl sm:my-8 sm:align-middle sm:max-w-xl sm:w-full sm:p-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center text-violet-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                        </div>
+                        <h3 class="text-xl font-black text-gray-900 dark:text-white tracking-tight">AI Smart Follow-up</h3>
+                    </div>
+                    <button type="button" onclick="closeFollowUpModal()" class="text-gray-400 hover:text-gray-500">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+
+                <div id="aiLoading" class="py-12 text-center">
+                    <div class="inline-block w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p class="mt-4 text-sm font-bold text-gray-500 italic">Gemini is crafting a personalized message...</p>
+                </div>
+
+                <div id="aiContent" class="hidden space-y-6">
+                    <div class="bg-gray-50 dark:bg-gray-900/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+                        <p id="aiSuggestion" class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap"></p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button onclick="copyToClipboard()" class="flex-1 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl font-black text-[10px] uppercase tracking-widest text-gray-700 dark:text-gray-300 hover:bg-gray-50 transition-all flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M10 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                            Copy Message
+                        </button>
+                        <a id="waBtn" target="_blank" class="flex-1 py-4 bg-emerald-500 hover:bg-emerald-600 rounded-2xl font-black text-[10px] uppercase tracking-widest text-white shadow-lg shadow-emerald-100 transition-all flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.414 0 .01 5.403.006 12.039a11.81 11.81 0 001.578 5.925L0 24l6.135-1.612a11.771 11.771 0 005.911 1.577h.005c6.637 0 12.042-5.405 12.046-12.041a11.82 11.82 0 00-3.533-8.527"/></svg>
+                            WhatsApp Suggestion
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            new TomSelect('#status', {
-                create: false,
-                placeholder: "Filter by status...",
-                dropdownParent: 'body'
+    function openFollowUpModal(enquiryId) {
+        const modal = document.getElementById('aiFollowUpModal');
+        const loading = document.getElementById('aiLoading');
+        const content = document.getElementById('aiContent');
+        const suggestion = document.getElementById('aiSuggestion');
+        const waBtn = document.getElementById('waBtn');
+
+        modal.classList.remove('hidden');
+        loading.classList.remove('hidden');
+        content.classList.add('hidden');
+
+        fetch(`/ai/enquiries/${enquiryId}/followup`)
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    suggestion.innerText = data.suggestion;
+                    
+                    const cleanPhone = data.phone.replace(/[^0-9]/g, '');
+                    const waPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+                    waBtn.href = `https://wa.me/${waPhone}?text=${encodeURIComponent(data.suggestion)}`;
+                    
+                    loading.classList.add('hidden');
+                    content.classList.remove('hidden');
+                } else {
+                    alert('AI Error: ' + data.message);
+                    closeFollowUpModal();
+                }
+            })
+            .catch(err => {
+                alert('Error connecting to AI service.');
+                closeFollowUpModal();
             });
+    }
+
+    function closeFollowUpModal() {
+        document.getElementById('aiFollowUpModal').classList.add('hidden');
+    }
+
+    function copyToClipboard() {
+        const text = document.getElementById('aiSuggestion').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Copied to clipboard!');
         });
+    }
     </script>
 </x-app-layout>

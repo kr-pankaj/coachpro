@@ -93,6 +93,33 @@ class QuizController extends Controller
         return view('quizzes.show', compact('quiz', 'attempts'));
     }
 
+    public function edit(\App\Models\Quiz $quiz)
+    {
+        $batches = \App\Models\Batch::all();
+        return view('quizzes.edit', compact('quiz', 'batches'));
+    }
+
+    public function update(Request $request, \App\Models\Quiz $quiz)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'batch_id' => 'nullable|exists:batches,id',
+            'time_limit_minutes' => 'required|integer|min:1',
+            'is_active' => 'boolean',
+        ]);
+
+        $quiz->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'batch_id' => $validated['batch_id'] ?? null,
+            'time_limit_minutes' => $validated['time_limit_minutes'],
+            'is_active' => $request->boolean('is_active'),
+        ]);
+
+        return redirect()->route('quizzes.index')->with('success', 'Quiz updated successfully!');
+    }
+
     public function destroy(\App\Models\Quiz $quiz)
     {
         $quiz->delete();

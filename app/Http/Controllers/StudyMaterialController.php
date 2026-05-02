@@ -16,7 +16,10 @@ class StudyMaterialController extends Controller
         if ($user->role === 'student') {
             $student = $user->student;
             $materials = StudyMaterial::where(function($q) use ($student) {
-                $q->whereNull('batch_id')->orWhere('batch_id', $student->batch_id);
+                $q->whereNull('batch_id');
+                if ($student) {
+                    $q->orWhere('batch_id', $student->batch_id);
+                }
             })->latest()->get();
             return view('study_materials.index', compact('materials'));
         }
@@ -33,7 +36,7 @@ class StudyMaterialController extends Controller
             'type'        => 'required|in:pdf,video,link,document',
             'batch_id'    => 'nullable|exists:batches,id',
             'description' => 'nullable|string',
-            'file'        => 'required_without:external_url|file|max:10240', // 10MB
+            'file'        => 'required_without:external_url|file|mimes:pdf,doc,docx,zip,ppt,pptx|max:10240', // 10MB
             'external_url'=> 'required_without:file|nullable|url',
         ]);
 

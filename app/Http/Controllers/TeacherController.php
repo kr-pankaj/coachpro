@@ -8,7 +8,9 @@ class TeacherController extends Controller
 {
     public function index()
     {
-        $teachers = \App\Models\User::where('role', 'teacher')->get();
+        $teachers = \App\Models\User::where('role', 'teacher')
+            ->where('institute_id', auth()->user()->institute_id)
+            ->get();
         return view('teachers.index', compact('teachers'));
     }
 
@@ -38,13 +40,13 @@ class TeacherController extends Controller
 
     public function edit(\App\Models\User $teacher)
     {
-        if ($teacher->role !== 'teacher') abort(403);
+        if ($teacher->role !== 'teacher' || $teacher->institute_id !== auth()->user()->institute_id) abort(403);
         return view('teachers.edit', compact('teacher'));
     }
 
     public function update(Request $request, \App\Models\User $teacher)
     {
-        if ($teacher->role !== 'teacher') abort(403);
+        if ($teacher->role !== 'teacher' || $teacher->institute_id !== auth()->user()->institute_id) abort(403);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -64,7 +66,7 @@ class TeacherController extends Controller
 
     public function destroy(\App\Models\User $teacher)
     {
-        if ($teacher->role !== 'teacher') abort(403);
+        if ($teacher->role !== 'teacher' || $teacher->institute_id !== auth()->user()->institute_id) abort(403);
         $teacher->delete();
         return redirect()->route('teachers.index')->with('success', 'Teacher removed.');
     }

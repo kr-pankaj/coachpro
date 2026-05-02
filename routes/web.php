@@ -101,9 +101,13 @@ Route::middleware(['auth', 'verified', 'check.subscription'])->group(function ()
         Route::post('/fees/{fee}/payments', [App\Http\Controllers\FeeController::class, 'addPayment'])->name('fees.payments.store');
         Route::resource('fees', App\Http\Controllers\FeeController::class);
         Route::get('fees/{fee}/receipt', [App\Http\Controllers\FeeController::class, 'receipt'])->name('fees.receipt');
+
+        // AI Features
+        Route::post('/ai/generate-questions', [App\Http\Controllers\AIController::class, 'generateQuestions'])->name('ai.generate-questions');
+        Route::get('/ai/enquiries/{enquiry}/followup', [App\Http\Controllers\AIController::class, 'suggestFollowUp'])->name('ai.enquiries.followup');
         
         // Quizzes (Admin/Teacher)
-        Route::resource('quizzes', App\Http\Controllers\QuizController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
+        Route::resource('quizzes', App\Http\Controllers\QuizController::class);
 
         // Profile Requests (Approval side)
         Route::get('/profile-requests', [App\Http\Controllers\ProfileUpdateRequestController::class, 'index'])->name('profile_requests.index');

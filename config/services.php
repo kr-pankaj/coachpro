@@ -41,4 +41,8 @@ return [
         'plan_id'    => env('RAZORPAY_PLAN_ID'),
     ],
 
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+    ],
+
 ];

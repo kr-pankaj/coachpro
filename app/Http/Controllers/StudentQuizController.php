@@ -9,14 +9,22 @@ class StudentQuizController extends Controller
     public function index()
     {
         $student = \App\Models\Student::where('user_id', auth()->id())->firstOrFail();
-        $quizzes = \App\Models\Quiz::where('is_active', true)
-            ->where(function ($q) use ($student) {
-                $q->whereNull('batch_id')->orWhere('batch_id', $student->batch_id);
+        
+        // Quizzes eligible for the student (Active or already attempted)
+        $quizzes = \App\Models\Quiz::where(function($q) use ($student) {
+                $q->where('is_active', true)
+                  ->where(function ($sq) use ($student) {
+                      $sq->whereNull('batch_id')->orWhere('batch_id', $student->batch_id);
+                  });
+            })
+            ->orWhereHas('attempts', function($q) use ($student) {
+                $q->where('student_id', $student->id);
             })
             ->withCount(['attempts as my_attempts' => fn($q) => $q->where('student_id', $student->id)->whereNotNull('completed_at')])
             ->with(['attempts' => fn($q) => $q->where('student_id', $student->id)->whereNotNull('completed_at')])
             ->latest()
             ->get();
+            
         return view('student.quizzes.index', compact('quizzes', 'student'));
     }
 

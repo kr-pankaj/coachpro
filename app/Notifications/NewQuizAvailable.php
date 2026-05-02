@@ -26,11 +26,11 @@ class NewQuizAvailable extends Notification
     {
         return (new MailMessage)
                     ->subject('New Quiz Assigned: ' . $this->quiz->title)
-                    ->greeting('Hi Student,')
+                    ->greeting('Hi ' . $notifiable->name . ',')
                     ->line('A new online quiz has been assigned to your batch.')
                     ->line('Title: ' . $this->quiz->title)
                     ->line('Time Limit: ' . $this->quiz->time_limit_minutes . ' minutes')
-                    ->action('Start Quiz', url('/student/quizzes'))
+                    ->action('Start Quiz', route('student.quizzes.index'))
                     ->line('Good luck with your test!');
     }
 
@@ -39,7 +39,7 @@ class NewQuizAvailable extends Notification
         return [
             'title' => 'New Quiz Assigned',
             'message' => 'The quiz "' . $this->quiz->title . '" is now available for you to take.',
-            'link' => url('/student/quizzes'),
+            'link' => route('student.quizzes.index'),
             'type' => 'new_quiz'
         ];
     }

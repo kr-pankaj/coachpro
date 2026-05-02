@@ -27,7 +27,9 @@ class BatchController extends Controller
 
     public function create()
     {
-        $teachers = \App\Models\User::where('role', 'teacher')->get();
+        $teachers = \App\Models\User::where('role', 'teacher')
+            ->where('institute_id', auth()->user()->institute_id)
+            ->get();
         return view('batches.create', compact('teachers'));
     }
 
@@ -50,7 +52,9 @@ class BatchController extends Controller
 
     public function edit(\App\Models\Batch $batch)
     {
-        $teachers = \App\Models\User::where('role', 'teacher')->get();
+        $teachers = \App\Models\User::where('role', 'teacher')
+            ->where('institute_id', auth()->user()->institute_id)
+            ->get();
         return view('batches.edit', compact('batch', 'teachers'));
     }
 

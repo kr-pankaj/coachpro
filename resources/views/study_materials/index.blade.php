@@ -1,21 +1,24 @@
 <x-app-layout>
-    <div class="py-12 bg-[#f8fafc] dark:bg-gray-950 min-h-screen">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            {{-- Header --}}
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-                <div>
-                    <h2 class="text-4xl font-black text-gray-900 dark:text-white uppercase tracking-tighter italic">Study Material Library</h2>
-                    <p class="text-sm font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mt-1">Knowledge Hub & Resource Sharing</p>
-                </div>
-
-                @if(auth()->user()->role !== 'student')
-                <button onclick="document.getElementById('uploadModal').classList.remove('hidden')" class="px-8 py-4 bg-gray-900 dark:bg-white dark:text-gray-900 text-white rounded-[2rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white transition-all shadow-2xl flex items-center gap-3">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                    Upload New Material
-                </button>
-                @endif
+    <x-slot name="header">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+                <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                    {{ __('Study Material Library') }}
+                </h2>
+                <p class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em] mt-1">Knowledge Hub & Resource Sharing</p>
             </div>
+
+            @if(auth()->user()->role !== 'student')
+            <button onclick="document.getElementById('uploadModal').classList.remove('hidden')" class="px-6 py-2.5 bg-gray-900 dark:bg-white dark:text-gray-900 text-white rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-indigo-600 dark:hover:bg-indigo-500 hover:text-white transition-all shadow-sm flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                Upload New Material
+            </button>
+            @endif
+        </div>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
             {{-- Grid --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -92,6 +95,16 @@
                         </button>
                     </div>
 
+                    @if ($errors->any())
+                        <div class="mb-8 p-4 bg-rose-50 border border-rose-100 rounded-2xl">
+                            <ul class="list-disc list-inside text-[10px] font-bold text-rose-600 uppercase tracking-widest space-y-1">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form action="{{ route('study_materials.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                         @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -133,8 +146,11 @@
                         </div>
 
                         <div id="fileInputSection">
-                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">Choose File (Max 10MB)</label>
-                            <input type="file" name="file" class="w-full bg-gray-50 dark:bg-gray-900 border-dashed border-2 border-gray-200 dark:border-gray-700 rounded-2xl p-8 text-xs font-bold text-gray-500 cursor-pointer hover:bg-gray-100 transition-all">
+                            <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 block">
+                                Choose File 
+                                <span class="text-indigo-500 ml-2">(Max 10MB | PDF, DOCX, ZIP supported)</span>
+                            </label>
+                            <input type="file" name="file" accept=".pdf,.doc,.docx,.zip,.ppt,.pptx" class="w-full bg-gray-50 dark:bg-gray-900 border-dashed border-2 border-gray-200 dark:border-gray-700 rounded-2xl p-8 text-xs font-bold text-gray-500 cursor-pointer hover:bg-gray-100 transition-all">
                         </div>
 
                         <div id="urlInputSection" class="hidden">
@@ -166,6 +182,13 @@
                 document.getElementById('urlInputSection').classList.remove('hidden');
             }
         }
+
+        // Auto-open modal if there are validation errors
+        @if($errors->any())
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('uploadModal').classList.remove('hidden');
+            });
+        @endif
     </script>
     @endif
 </x-app-layout>

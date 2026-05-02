@@ -84,9 +84,12 @@
                                 </a>
                                 
                                 <div class="flex items-center gap-1">
+                                    <a href="{{ route('quizzes.edit', $quiz) }}" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl transition-all" title="Edit Quiz">
+                                        <x-icons.edit class="w-4 h-4" />
+                                    </a>
                                     <form action="{{ route('quizzes.destroy', $quiz) }}" method="POST" onsubmit="return confirm('Archive this assessment?');">
                                         @csrf @method('DELETE')
-                                        <button type="submit" class="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition-all">
+                                        <button type="submit" class="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition-all" title="Delete Quiz">
                                             <x-icons.delete class="w-4 h-4" />
                                         </button>
                                     </form>
