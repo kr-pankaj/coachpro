@@ -30,6 +30,17 @@
                             <x-input-error :messages="$errors->get('time_slot')" class="mt-2" />
                         </div>
 
+                        <div class="mt-4">
+                            <x-input-label for="teacher_id" :value="__('Assign Teacher')" />
+                            <select id="teacher_id" name="teacher_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                <option value="">-- No Teacher Assigned --</option>
+                                @foreach($teachers as $teacher)
+                                    <option value="{{ $teacher->id }}" {{ old('teacher_id', $batch->teacher_id) == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('teacher_id')" class="mt-2" />
+                        </div>
+
                         <div class="flex items-center justify-end mt-4">
                             <x-primary-button class="ms-4">
                                 {{ __('Update Batch') }}

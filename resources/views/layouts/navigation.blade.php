@@ -15,18 +15,27 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    @if(auth()->user()->role === 'admin')
+                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'teacher')
                         <x-nav-link :href="route('batches.index')" :active="request()->routeIs('batches.*')">
                             {{ __('Batches') }}
                         </x-nav-link>
                         <x-nav-link :href="route('students.index')" :active="request()->routeIs('students.*')">
                             {{ __('Students') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('enquiries.index')" :active="request()->routeIs('enquiries.*')">
-                            {{ __('Leads') }}
-                        </x-nav-link>
                         <x-nav-link :href="route('attendances.index')" :active="request()->routeIs('attendances.*')">
                             {{ __('Attendance') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('quizzes.index')" :active="request()->routeIs('quizzes.*')">
+                            {{ __('Quizzes') }}
+                        </x-nav-link>
+                    @endif
+                    
+                    @if(auth()->user()->role === 'admin')
+                        <x-nav-link :href="route('teachers.index')" :active="request()->routeIs('teachers.*')">
+                            {{ __('Teachers') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('enquiries.index')" :active="request()->routeIs('enquiries.*')">
+                            {{ __('Leads') }}
                         </x-nav-link>
                         <x-nav-link :href="route('fees.index')" :active="request()->routeIs('fees.*')">
                             {{ __('Fees') }}
@@ -106,26 +115,32 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @if(auth()->user()->role === 'admin' || auth()->user()->role === 'teacher')
+                <x-responsive-nav-link :href="route('batches.index')" :active="request()->routeIs('batches.*')">
+                    {{ __('Batches') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('students.index')" :active="request()->routeIs('students.*')">
+                    {{ __('Students') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('attendances.index')" :active="request()->routeIs('attendances.*')">
+                    {{ __('Attendance') }}
+                </x-responsive-nav-link>
+            @endif
+            
             @if(auth()->user()->role === 'admin')
-            <x-responsive-nav-link :href="route('batches.index')" :active="request()->routeIs('batches.*')">
-                {{ __('Batches') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('students.index')" :active="request()->routeIs('students.*')">
-                {{ __('Students') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('enquiries.index')" :active="request()->routeIs('enquiries.*')">
-                {{ __('Leads') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('attendances.index')" :active="request()->routeIs('attendances.*')">
-                {{ __('Attendance') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('fees.index')" :active="request()->routeIs('fees.*')">
-                {{ __('Fees') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('profile_requests.index')" :active="request()->routeIs('profile_requests.*')">
-                {{ __('Profile Requests') }}
-            </x-responsive-nav-link>
-        @endif
+                <x-responsive-nav-link :href="route('teachers.index')" :active="request()->routeIs('teachers.*')">
+                    {{ __('Teachers') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('enquiries.index')" :active="request()->routeIs('enquiries.*')">
+                    {{ __('Leads') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('fees.index')" :active="request()->routeIs('fees.*')">
+                    {{ __('Fees') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('profile_requests.index')" :active="request()->routeIs('profile_requests.*')">
+                    {{ __('Profile Requests') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

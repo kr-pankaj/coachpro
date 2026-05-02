@@ -17,7 +17,8 @@ class BatchController extends Controller
 
     public function create()
     {
-        return view('batches.create');
+        $teachers = \App\Models\User::where('role', 'teacher')->get();
+        return view('batches.create', compact('teachers'));
     }
 
     public function store(Request $request)
@@ -25,7 +26,8 @@ class BatchController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'subject' => 'nullable|string|max:255',
-            'time_slot' => 'nullable|string|max:255'
+            'time_slot' => 'nullable|string|max:255',
+            'teacher_id' => 'nullable|exists:users,id',
         ]);
         \App\Models\Batch::create($validated);
         return redirect()->route('batches.index')->with('success', 'Batch created successfully.');
@@ -38,7 +40,8 @@ class BatchController extends Controller
 
     public function edit(\App\Models\Batch $batch)
     {
-        return view('batches.edit', compact('batch'));
+        $teachers = \App\Models\User::where('role', 'teacher')->get();
+        return view('batches.edit', compact('batch', 'teachers'));
     }
 
     public function update(Request $request, \App\Models\Batch $batch)
@@ -46,7 +49,8 @@ class BatchController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'subject' => 'nullable|string|max:255',
-            'time_slot' => 'nullable|string|max:255'
+            'time_slot' => 'nullable|string|max:255',
+            'teacher_id' => 'nullable|exists:users,id',
         ]);
         $batch->update($validated);
         return redirect()->route('batches.index')->with('success', 'Batch updated successfully.');

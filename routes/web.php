@@ -100,11 +100,23 @@ Route::middleware(['auth', 'verified', 'check.subscription'])->group(function ()
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('batches', App\Http\Controllers\BatchController::class);
+    Route::resource('teachers', App\Http\Controllers\TeacherController::class);
     Route::resource('students', App\Http\Controllers\StudentController::class);
     Route::resource('enquiries', App\Http\Controllers\EnquiryController::class);
     Route::resource('attendances', App\Http\Controllers\AttendanceController::class)->only(['index', 'create', 'store']);
     Route::resource('fees', App\Http\Controllers\FeeController::class);
     Route::get('fees/{fee}/receipt', [App\Http\Controllers\FeeController::class, 'receipt'])->name('fees.receipt');
+
+    // Quizzes (Admin/Teacher)
+    Route::resource('quizzes', App\Http\Controllers\QuizController::class)->only(['index', 'create', 'store', 'show', 'destroy']);
+
+    // Student Quiz Portal
+    Route::prefix('my-tests')->name('student.quizzes.')->group(function () {
+        Route::get('/', [App\Http\Controllers\StudentQuizController::class, 'index'])->name('index');
+        Route::get('/{quiz}/take', [App\Http\Controllers\StudentQuizController::class, 'take'])->name('take');
+        Route::post('/{quiz}/submit', [App\Http\Controllers\StudentQuizController::class, 'submit'])->name('submit');
+        Route::get('/result/{attempt}', [App\Http\Controllers\StudentQuizController::class, 'result'])->name('result');
+    });
 
     // Profile Requests
     Route::get('/profile-requests', [App\Http\Controllers\ProfileUpdateRequestController::class, 'index'])->name('profile_requests.index');

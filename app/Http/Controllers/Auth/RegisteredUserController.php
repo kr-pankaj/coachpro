@@ -52,8 +52,14 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-
         Auth::login($user);
+
+        // Send welcome email (logs to storage/logs in local env)
+        try {
+            \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\WelcomeInstituteMail($institute, $request->name));
+        } catch (\Exception $e) {
+            // Silently fail — don't block registration if email fails
+        }
 
         return redirect()->route('dashboard')
             ->with('success', 'Welcome to CoachPro! Your 14-day free trial has started. Explore all features freely.');
