@@ -122,6 +122,7 @@
             new TomSelect('#batch_id', {
                 create: false,
                 placeholder: "Search for a batch...",
+                dropdownParent: 'body'
             });
         });
 

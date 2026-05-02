@@ -70,6 +70,7 @@
                     direction: "asc"
                 },
                 placeholder: "Search for a student...",
+                dropdownParent: 'body'
             });
         });
     </script>
