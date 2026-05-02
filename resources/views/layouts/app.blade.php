@@ -23,6 +23,9 @@
         <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 
+        <!-- ApexCharts -->
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script>
@@ -35,14 +38,18 @@
             }
         </script>
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col sm:flex-row">
+    <body class="font-sans antialiased text-gray-900 selection:bg-indigo-500 selection:text-white">
+        <div class="min-h-screen bg-white dark:bg-gray-950 flex flex-col sm:flex-row relative overflow-x-hidden">
+            {{-- Background blobs for aesthetic --}}
+            <div class="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-96 h-96 bg-violet-500/5 blur-[120px] rounded-full pointer-events-none"></div>
+
             {{-- Desktop Sidebar --}}
             @auth
                 @include('layouts.sidebar')
             @endauth
 
-            <div class="flex-1 flex flex-col sm:ml-64 transition-all duration-300">
+            <div class="flex-1 flex flex-col sm:ml-72 transition-all duration-300">
                 @include('layouts.navigation')
 
             {{-- Trial / Subscription Banner --}}
@@ -84,8 +91,8 @@
 
             {{-- Page Heading --}}
             @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <header class="sticky top-0 z-30 bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border-b border-gray-100 dark:border-gray-800">
+                    <div class="max-w-7xl mx-auto py-8 px-8 sm:px-10 lg:px-12">
                         {{ $header }}
                     </div>
                 </header>

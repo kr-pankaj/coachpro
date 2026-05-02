@@ -75,10 +75,13 @@
         <a href="{{ route('register') }}" style="color:#4f46e5;font-weight:600;text-decoration:none;">Create an account</a>
     </p>
 
-    <div style="margin-top:1.5rem;padding:1rem;background:#f0f9ff;border:1px solid #bae6fd;border-radius:0.625rem;">
+    <!-- <div style="margin-top:1.5rem;padding:1rem;background:#f0f9ff;border:1px solid #bae6fd;border-radius:0.625rem;">
         <p style="font-size:0.75rem;color:#0369a1;font-weight:600;margin-bottom:0.375rem;">ℹ How login works</p>
         <p style="font-size:0.75rem;color:#0c4a6e;line-height:1.5;">
             The same login form is used by everyone. Your role (Institute Admin, Student, or Super Admin) is automatically detected from your account type.
         </p>
+    </div> -->
+    <div style="margin-top:2rem;text-align:center;">
+        <span style="font-size:0.75rem;font-weight:900;color:#94a3b8;text-transform:uppercase;letter-spacing:0.1em;background:#f8fafc;padding:0.25rem 0.75rem;border-radius:999px;border:1px solid #f1f5f9;">Version {{ config('app.version') }}</span>
     </div>
 </x-guest-layout>

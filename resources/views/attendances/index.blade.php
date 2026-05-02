@@ -6,131 +6,145 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form method="GET" action="{{ route('attendances.index') }}" class="flex flex-col sm:flex-row gap-4 items-end">
-                        <div class="w-full sm:w-1/3">
-                            <x-input-label for="batch_id" :value="__('Select Batch')" />
-                            <select id="batch_id" name="batch_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required>
-                                <option value="">-- Choose --</option>
-                                @foreach($batches as $batch)
-                                    <option value="{{ $batch->id }}" {{ $batch_id == $batch->id ? 'selected' : '' }}>{{ $batch->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="w-full sm:w-1/3">
-                            <x-input-label for="date" :value="__('Date')" />
-                            <x-text-input id="date" class="block mt-1 w-full" type="date" name="date" :value="$date" required />
-                        </div>
-                        <div class="w-full sm:w-auto">
-                            <x-primary-button>
-                                {{ __('Fetch Students') }}
-                            </x-primary-button>
-                        </div>
-                    </form>
-                </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            
+            {{-- Premium Filter Section --}}
+            <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-8 shadow-sm border border-gray-100 dark:border-gray-700">
+                <form method="GET" action="{{ route('attendances.index') }}" class="flex flex-col md:flex-row gap-6 items-end">
+                    <div class="flex-1 w-full space-y-2">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Select Batch</label>
+                        <select id="batch_id" name="batch_id" class="block w-full !rounded-2xl !py-3 border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 focus:ring-indigo-500 shadow-sm" required>
+                            <option value="">-- Choose Batch --</option>
+                            @foreach($batches as $batch)
+                                <option value="{{ $batch->id }}" {{ $batch_id == $batch->id ? 'selected' : '' }}>{{ $batch->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="w-full md:w-64 space-y-2">
+                        <label class="text-[10px] font-black text-gray-400 uppercase tracking-widest px-1">Attendance Date</label>
+                        <x-text-input id="date" class="block w-full !rounded-2xl !py-3" type="date" name="date" :value="$date" required />
+                    </div>
+                    <div class="w-full md:w-auto">
+                        <button type="submit" class="btn-gradient-indigo w-full px-8 py-4">
+                            Fetch Students
+                        </button>
+                    </div>
+                </form>
             </div>
 
             @if($batch_id && $students->count() > 0)
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @if (session('success'))
-                        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    <form method="POST" action="{{ route('attendances.store') }}">
-                        @csrf
-                        <input type="hidden" name="batch_id" value="{{ $batch_id }}">
-                        <input type="hidden" name="date" value="{{ $date }}">
-                        
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">Marking for: <span class="text-indigo-600 font-bold">{{ \Carbon\Carbon::parse($date)->format('M d, Y') }}</span></h3>
-                            <button type="button" onclick="markAllPresent()" class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg border border-indigo-100 hover:bg-indigo-100 transition-colors font-semibold">
-                                Mark All as Present
-                            </button>
-                        </div>
-                        
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-700">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Student Name</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    @foreach($students as $student)
-                                        @php
-                                            $isMarked = isset($attendances[$student->id]);
-                                            $currentStatus = $attendances[$student->id] ?? 'present';
-                                        @endphp
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100 flex items-center gap-2">
-                                                {{ $student->name }}
-                                                @if(!$isMarked)
-                                                    <span class="px-2 py-0.5 text-[10px] bg-gray-100 text-gray-500 rounded-full font-bold uppercase tracking-wider">Not Marked</span>
-                                                @endif
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                                <div class="flex items-center space-x-4">
-                                                    <label class="inline-flex items-center">
-                                                        <input type="radio" name="attendance[{{ $student->id }}]" value="present" class="text-green-600 focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ ($isMarked && $currentStatus == 'present') ? 'checked' : '' }}>
-                                                        <span class="ml-2 text-green-600 dark:text-green-400 font-semibold">Present</span>
-                                                    </label>
-                                                    <label class="inline-flex items-center">
-                                                        <input type="radio" name="attendance[{{ $student->id }}]" value="absent" class="text-red-600 focus:ring-red-500 dark:focus:ring-red-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ ($isMarked && $currentStatus == 'absent') ? 'checked' : '' }}>
-                                                        <span class="ml-2 text-red-600 dark:text-red-400 font-semibold">Absent</span>
-                                                    </label>
-                                                    <label class="inline-flex items-center">
-                                                        <input type="radio" name="attendance[{{ $student->id }}]" value="late" class="text-yellow-600 focus:ring-yellow-500 dark:focus:ring-yellow-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" {{ ($isMarked && $currentStatus == 'late') ? 'checked' : '' }}>
-                                                        <span class="ml-2 text-yellow-600 dark:text-yellow-400 font-semibold">Late</span>
-                                                    </label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="flex items-center justify-end mt-6">
-                            <x-primary-button>
-                                {{ __('Save Attendance') }}
-                            </x-primary-button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            @elseif($batch_id && $students->count() == 0)
-                <div class="bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-400 p-4 mb-6">
-                    <div class="flex">
-                        <div class="ml-3">
-                            <p class="text-sm text-yellow-700 dark:text-yellow-200">
-                                No students found in this batch.
-                            </p>
-                        </div>
+                @if (session('success'))
+                    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-sm font-bold flex items-center gap-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        {{ session('success') }}
                     </div>
+                @endif
+
+                <form method="POST" action="{{ route('attendances.store') }}" class="space-y-6">
+                    @csrf
+                    <input type="hidden" name="batch_id" value="{{ $batch_id }}">
+                    <input type="hidden" name="date" value="{{ $date }}">
+                    
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-xl p-6 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-sm">
+                        <div>
+                            <h3 class="text-sm font-black text-gray-900 dark:text-white uppercase tracking-widest">Marking Attendance</h3>
+                            <p class="text-xs text-gray-400 font-bold mt-1">Session Date: <span class="text-indigo-600 dark:text-indigo-400">{{ \Carbon\Carbon::parse($date)->format('l, M d, Y') }}</span></p>
+                        </div>
+                        <button type="button" onclick="markAllPresent()" class="px-6 py-3 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-100 transition-all border border-indigo-100 dark:border-indigo-800/30">
+                            Quick Mark: All Present
+                        </button>
+                    </div>
+                    
+                    <div class="table-container overflow-x-auto">
+                        <table class="table-premium">
+                            <thead>
+                                <tr>
+                                    <th>Student Profile</th>
+                                    <th>Attendance Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($students as $student)
+                                    @php
+                                        $isMarked = isset($attendances[$student->id]);
+                                        $currentStatus = $attendances[$student->id] ?? 'present';
+                                    @endphp
+                                    <tr class="group">
+                                        <td>
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-10 h-10 rounded-xl bg-gray-50 dark:bg-gray-900 text-gray-400 font-black flex items-center justify-center border border-gray-100 dark:border-gray-700 group-hover:border-indigo-200 transition-colors">
+                                                    {{ substr($student->name, 0, 1) }}
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-black text-gray-900 dark:text-white">{{ $student->name }}</p>
+                                                    @if(!$isMarked)
+                                                        <span class="text-[10px] text-amber-500 font-black uppercase tracking-tighter">● Not Marked Today</span>
+                                                    @else
+                                                        <span class="text-[10px] text-emerald-500 font-black uppercase tracking-tighter">● Updated</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="flex items-center gap-6">
+                                                <label class="flex items-center cursor-pointer group/label">
+                                                    <input type="radio" name="attendance[{{ $student->id }}]" value="present" class="hidden peer" {{ ($isMarked && $currentStatus == 'present') ? 'checked' : '' }}>
+                                                    <span class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-gray-100 dark:border-gray-700 text-gray-400 peer-checked:bg-emerald-50 peer-checked:text-emerald-600 peer-checked:border-emerald-200 dark:peer-checked:bg-emerald-900/20 dark:peer-checked:border-emerald-800 transition-all">Present</span>
+                                                </label>
+                                                <label class="flex items-center cursor-pointer group/label">
+                                                    <input type="radio" name="attendance[{{ $student->id }}]" value="absent" class="hidden peer" {{ ($isMarked && $currentStatus == 'absent') ? 'checked' : '' }}>
+                                                    <span class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-gray-100 dark:border-gray-700 text-gray-400 peer-checked:bg-rose-50 peer-checked:text-rose-600 peer-checked:border-rose-200 dark:peer-checked:bg-rose-900/20 dark:peer-checked:border-rose-800 transition-all">Absent</span>
+                                                </label>
+                                                <label class="flex items-center cursor-pointer group/label">
+                                                    <input type="radio" name="attendance[{{ $student->id }}]" value="late" class="hidden peer" {{ ($isMarked && $currentStatus == 'late') ? 'checked' : '' }}>
+                                                    <span class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-gray-100 dark:border-gray-700 text-gray-400 peer-checked:bg-amber-50 peer-checked:text-amber-600 peer-checked:border-amber-200 dark:peer-checked:bg-amber-900/20 dark:peer-checked:border-amber-800 transition-all">Late</span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="flex items-center justify-end">
+                        <button type="submit" class="btn-gradient-indigo px-12 py-4">
+                            Save Attendance Records
+                        </button>
+                    </div>
+                </form>
+
+            @elseif($batch_id && $students->count() == 0)
+                <div class="p-12 text-center bg-white dark:bg-gray-800 rounded-[2.5rem] border border-gray-100 dark:border-gray-700">
+                    <div class="w-16 h-16 bg-amber-50 dark:bg-amber-900/20 rounded-full flex items-center justify-center mx-auto mb-4 text-amber-600">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    </div>
+                    <h3 class="text-lg font-black text-gray-900 dark:text-white">No Students Found</h3>
+                    <p class="text-sm text-gray-400 font-bold mt-1">This batch doesn't have any students enrolled yet.</p>
                 </div>
             @endif
         </div>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            new TomSelect('#batch_id', {
-                create: false,
-                placeholder: "Search for a batch...",
-                dropdownParent: 'body'
-            });
+            if(document.getElementById('batch_id')) {
+                new TomSelect('#batch_id', {
+                    create: false,
+                    placeholder: "Search for a batch...",
+                    dropdownParent: 'body'
+                });
+            }
         });
 
         function markAllPresent() {
             const radios = document.querySelectorAll('input[type="radio"][value="present"]');
             radios.forEach(radio => {
                 radio.checked = true;
+                // Trigger change event if needed for reactive UI
+                radio.dispatchEvent(new Event('change'));
             });
         }
     </script>
+
 </x-app-layout>

@@ -4,51 +4,125 @@
 
 @layer components {
     .glass {
-        @apply bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-white/20 dark:border-gray-700/30;
+        @apply bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-white/20 dark:border-gray-700/30;
+    }
+
+    .glass-dark {
+        @apply bg-black/40 backdrop-blur-2xl border border-white/10;
     }
     
     .card-premium {
-        @apply bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-xl shadow-gray-200/50 dark:shadow-none border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1;
+        @apply bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-2xl shadow-indigo-100/50 dark:shadow-none border border-gray-100 dark:border-gray-700 transition-all duration-500 hover:shadow-indigo-200/50 hover:-translate-y-2;
     }
 
     .btn-gradient-indigo {
-        @apply bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-bold rounded-2xl px-6 py-3 shadow-lg shadow-indigo-200 dark:shadow-none transition-all hover:scale-[1.02] active:scale-[0.98] hover:shadow-indigo-300;
+        @apply bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-800 text-white font-black rounded-2xl px-8 py-4 shadow-xl shadow-indigo-200 dark:shadow-none transition-all hover:scale-105 active:scale-95 hover:shadow-indigo-300 tracking-tight uppercase text-xs;
+    }
+
+    .mesh-gradient {
+        background-color: #ffffff;
+        background-image: 
+            radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+            radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+            radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+        background-attachment: fixed;
     }
 }
 
 /* Smooth Page Transitions */
 .page-enter {
-    animation: fadeIn 0.4s ease-out;
+    animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Floating Animation */
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
 }
 ::-webkit-scrollbar-track {
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    @apply bg-gray-200 dark:bg-gray-700 rounded-full;
+    @apply bg-indigo-100 dark:bg-gray-700 rounded-full border-4 border-transparent bg-clip-content;
 }
 ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-300 dark:bg-gray-600;
+    @apply bg-indigo-200 dark:bg-gray-600;
+}
+/* TomSelect Premium Styling */
+.ts-control {
+    @apply !bg-gray-50 dark:!bg-gray-900/50 !border-gray-200 dark:!border-gray-700 !rounded-xl !p-3 !text-sm !transition-all;
+}
+.ts-control:focus {
+    @apply !border-indigo-500 !ring-4 !ring-indigo-500/10;
+}
+.ts-dropdown {
+    @apply !rounded-2xl !mt-2 !border-gray-100 dark:!border-gray-700 !shadow-2xl !bg-white dark:!bg-gray-800;
+}
+.ts-dropdown .active {
+    @apply !bg-indigo-600 !text-white;
+}
+.ts-dropdown .option {
+    @apply !px-4 !py-3 !text-sm !font-bold;
 }
 
-/* Shimmer Effect for Loading (can be used on components) */
-.shimmer {
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
+/* Extra Aesthetics */
+.text-glow {
+    text-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+}
+/* Premium Table Design System */
+.table-container {
+    @apply overflow-hidden bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 shadow-xl shadow-gray-100/50 dark:shadow-none;
 }
 
-@keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+.table-premium {
+    @apply min-w-full divide-y divide-gray-100 dark:divide-gray-700;
 }
 
+.table-premium thead {
+    @apply bg-gray-50/50 dark:bg-gray-900/30;
+}
+
+.table-premium th {
+    @apply px-8 py-5 text-left text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] border-none;
+}
+
+.table-premium tbody {
+    @apply divide-y divide-gray-50 dark:divide-gray-700/50;
+}
+
+.table-premium td {
+    @apply px-8 py-6 text-sm text-gray-600 dark:text-gray-300 font-bold whitespace-nowrap transition-all;
+}
+
+.table-premium tr {
+    @apply transition-colors duration-200 hover:bg-indigo-50/30 dark:hover:bg-indigo-900/10;
+}
+
+.table-premium tr:last-child td {
+    @apply border-none;
+}
+
+/* Status Pill Modernization */
+.badge-premium {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest;
+}
+
+.badge-indigo { @apply bg-indigo-50 text-indigo-600 border border-indigo-100 dark:bg-indigo-900/20 dark:border-indigo-800/30; }
+.badge-emerald { @apply bg-emerald-50 text-emerald-600 border border-emerald-100 dark:bg-emerald-900/20 dark:border-emerald-800/30; }
+.badge-rose { @apply bg-rose-50 text-rose-600 border border-rose-100 dark:bg-rose-900/20 dark:border-rose-800/30; }
+.badge-amber { @apply bg-amber-50 text-amber-600 border border-amber-100 dark:bg-amber-900/20 dark:border-amber-800/30; }

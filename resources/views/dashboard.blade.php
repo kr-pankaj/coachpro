@@ -148,36 +148,100 @@
                         </div>
                     </div>
 
-                    {{-- Recent Students List --}}
+                    {{-- Recent Enrollments List --}}
                     <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 p-8">
-                        <div class="flex items-center justify-between mb-8">
-                            <h3 class="text-xl font-black text-gray-900 dark:text-white">Recent Enrollments</h3>
-                            <a href="{{ route('students.index') }}" class="text-xs font-bold text-indigo-600 hover:underline">View All Students</a>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+                            <div>
+                                <h3 class="text-xl font-black text-gray-900 dark:text-white">Enrollment Growth</h3>
+                                <p class="text-xs text-gray-400 font-bold uppercase tracking-widest mt-1">Activity Tracking</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+                                <span class="text-xs font-bold text-gray-500">New Students</span>
+                            </div>
                         </div>
-                        <div class="space-y-4">
-                            @forelse($recentStudents as $s)
-                            <div class="group flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-300 border border-transparent hover:border-gray-100">
-                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-100">
-                                    {{ strtoupper(substr($s->name,0,1)) }}
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-black text-gray-900 dark:text-white truncate group-hover:text-indigo-600 transition-colors">{{ $s->name }}</p>
-                                    <p class="text-xs text-gray-400 font-medium">{{ $s->batch?->name ?? 'Unassigned' }} · <span class="text-gray-300 italic">{{ $s->created_at->diffForHumans() }}</span></p>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <a href="{{ route('students.edit', $s) }}" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-white rounded-lg shadow-sm transition-all opacity-0 group-hover:opacity-100">
-                                        <x-icons.edit class="w-4 h-4" />
-                                    </a>
-                                </div>
+                        
+                        <div id="enrollmentChart" class="w-full h-64"></div>
+
+                        <div class="mt-12">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-lg font-black text-gray-900 dark:text-white">Latest Students</h3>
+                                <a href="{{ route('students.index') }}" class="text-xs font-black text-indigo-600 hover:underline uppercase tracking-widest">Full List →</a>
                             </div>
-                            @empty
-                            <div class="text-center py-12">
-                                <p class="text-sm text-gray-400 font-bold">No students found.</p>
+                            <div class="space-y-4">
+                                @forelse($recentStudents as $s)
+                                <div class="group flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all duration-300 border border-transparent hover:border-gray-100">
+                                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-indigo-100">
+                                        {{ strtoupper(substr($s->name,0,1)) }}
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-black text-gray-900 dark:text-white truncate group-hover:text-indigo-600 transition-colors">{{ $s->name }}</p>
+                                        <p class="text-xs text-gray-400 font-medium">{{ $s->batch?->name ?? 'Unassigned' }} · <span class="text-gray-300 italic">{{ $s->created_at->diffForHumans() }}</span></p>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <a href="{{ route('students.edit', $s) }}" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-white rounded-lg shadow-sm transition-all opacity-0 group-hover:opacity-100">
+                                            <x-icons.edit class="w-4 h-4" />
+                                        </a>
+                                    </div>
+                                </div>
+                                @empty
+                                <div class="text-center py-12">
+                                    <p class="text-sm text-gray-400 font-bold italic">No students yet.</p>
+                                </div>
+                                @endforelse
                             </div>
-                            @endforelse
                         </div>
                     </div>
                 </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var options = {
+                            series: [{
+                                name: 'New Students',
+                                data: [31, 40, 28, 51, 42, 109, 100]
+                            }],
+                            chart: {
+                                height: 260,
+                                type: 'area',
+                                toolbar: { show: false },
+                                sparkline: { enabled: false },
+                                animations: { enabled: true, easing: 'easeinout', speed: 800 }
+                            },
+                            dataLabels: { enabled: false },
+                            stroke: { curve: 'smooth', width: 3, colors: ['#4f46e5'] },
+                            fill: {
+                                type: 'gradient',
+                                gradient: {
+                                    shadeIntensity: 1,
+                                    opacityFrom: 0.45,
+                                    opacityTo: 0.05,
+                                    stops: [20, 100, 100, 100],
+                                    colorStops: [
+                                        { offset: 0, color: '#4f46e5', opacity: 0.4 },
+                                        { offset: 100, color: '#4f46e5', opacity: 0 }
+                                    ]
+                                }
+                            },
+                            grid: { show: false },
+                            xaxis: {
+                                categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                                axisBorder: { show: false },
+                                axisTicks: { show: false },
+                                labels: { style: { colors: '#94a3b8', fontWeight: 700, fontSize: '10px' } }
+                            },
+                            yaxis: { show: false },
+                            tooltip: {
+                                theme: 'dark',
+                                x: { show: false },
+                                y: { title: { formatter: () => 'Students:' } }
+                            }
+                        };
+
+                        var chart = new ApexCharts(document.querySelector("#enrollmentChart"), options);
+                        chart.render();
+                    });
+                </script>
 
                 {{-- Right Column: Batches & Announcements --}}
                 <div class="space-y-8">
