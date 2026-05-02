@@ -6,22 +6,6 @@
         <p style="color:#64748b;font-size:0.9rem;">14 days free, no credit card required to get started.</p>
     </div>
 
-    <!-- Progress steps -->
-    <div style="display:flex;align-items:center;gap:0;margin-bottom:2rem;">
-        <div style="display:flex;align-items:center;gap:0.5rem;flex:1;">
-            <div style="width:1.75rem;height:1.75rem;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;">
-                <svg width="12" height="12" fill="white" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-            </div>
-            <span style="font-size:0.75rem;color:#4f46e5;font-weight:600;">Institute Info</span>
-        </div>
-        <div style="height:2px;flex:1;background:#e2e8f0;margin:0 0.5rem;"></div>
-        <div style="display:flex;align-items:center;gap:0.5rem;flex:1;">
-            <div style="width:1.75rem;height:1.75rem;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;">
-                <span style="font-size:0.7rem;color:#94a3b8;font-weight:700;">2</span>
-            </div>
-            <span style="font-size:0.75rem;color:#94a3b8;font-weight:500;">Subscribe</span>
-        </div>
-    </div>
 
     <form method="POST" action="{{ route('register') }}" style="display:flex;flex-direction:column;gap:1rem;">
         @csrf
