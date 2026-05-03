@@ -10,7 +10,13 @@ class AttendanceController extends Controller
     {
         $date     = $request->get('date', now()->toDateString());
         $batch_id = $request->get('batch_id');
-        $batches  = \App\Models\Batch::all();
+        
+        // Show all active batches, PLUS the current one even if it's inactive (for history)
+        $batches = \App\Models\Batch::where('is_active', true)
+                    ->when($batch_id, function($q) use ($batch_id) {
+                        return $q->orWhere('id', $batch_id);
+                    })
+                    ->get();
 
         $students   = collect();
         $attendances = [];

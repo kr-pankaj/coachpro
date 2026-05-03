@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Fee extends Model
 {
     use \App\Traits\BelongsToInstitute;
-    use \App\Traits\LogsActivity;
+    use \App\Traits\LogsActivity, \Illuminate\Database\Eloquent\SoftDeletes;
 
     protected $fillable = [
         'student_id', 

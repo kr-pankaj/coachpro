@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Batch extends Model
 {
     use \App\Traits\BelongsToInstitute;
-    use \App\Traits\LogsActivity;
+    use \App\Traits\LogsActivity, \Illuminate\Database\Eloquent\SoftDeletes;
 
-    protected $fillable = ['name', 'subject', 'time_slot'];
+    protected $fillable = ['name', 'subject', 'time_slot', 'is_active'];
 
     public function students()
     {

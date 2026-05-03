@@ -40,6 +40,12 @@
                             <x-input-error :messages="$errors->get('teacher_id')" class="mt-2" />
                         </div>
 
+                        <div class="mt-4 flex items-center gap-2">
+                            <input type="hidden" name="is_active" value="0">
+                            <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', '1') == '1' ? 'checked' : '' }} class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500">
+                            <x-input-label for="is_active" :value="__('This batch is currently active')" />
+                        </div>
+
                         <div class="flex items-center justify-end mt-4">
                             <x-primary-button class="ms-4">
                                 {{ __('Create Batch') }}

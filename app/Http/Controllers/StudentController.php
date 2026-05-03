@@ -36,7 +36,7 @@ class StudentController extends Controller
 
     public function create()
     {
-        $batches = Batch::all();
+        $batches = Batch::where('is_active', true)->get();
         return view('students.create', compact('batches'));
     }
 

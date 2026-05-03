@@ -48,6 +48,7 @@
                             <th>Batch Details</th>
                             <th>Academic Subject</th>
                             <th>Schedule Slot</th>
+                            <th>Status</th>
                             <th>Enrolled</th>
                             <th class="text-right">Actions</th>
                         </tr>
@@ -73,6 +74,17 @@
                                 </td>
                                 <td class="text-xs font-black text-gray-500 uppercase">
                                     {{ $batch->time_slot }}
+                                </td>
+                                <td>
+                                    @if($batch->is_active)
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                            Active
+                                        </span>
+                                    @else
+                                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-100 text-gray-500 border border-gray-200">
+                                            Inactive
+                                        </span>
+                                    @endif
                                 </td>
                                 <td>
                                     <div class="flex items-center gap-2">

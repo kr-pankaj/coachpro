@@ -40,6 +40,7 @@ class BatchController extends Controller
             'subject' => 'nullable|string|max:255',
             'time_slot' => 'nullable|string|max:255',
             'teacher_id' => 'nullable|exists:users,id',
+            'is_active' => 'boolean',
         ]);
         \App\Models\Batch::create($validated);
         return redirect()->route('batches.index')->with('success', 'Batch created successfully.');
@@ -65,6 +66,7 @@ class BatchController extends Controller
             'subject' => 'nullable|string|max:255',
             'time_slot' => 'nullable|string|max:255',
             'teacher_id' => 'nullable|exists:users,id',
+            'is_active' => 'boolean',
         ]);
         $batch->update($validated);
         return redirect()->route('batches.index')->with('success', 'Batch updated successfully.');
