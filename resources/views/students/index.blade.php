@@ -55,7 +55,7 @@
                         <tr>
                             <th>Student Details</th>
                             <th>Phone</th>
-                            <th>Current Batch</th>
+                            <th>Enrolled Batches</th>
                             <th>Joining Date</th>
                             <th class="text-right">Actions</th>
                         </tr>
@@ -92,9 +92,15 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <span class="badge-premium badge-indigo">
-                                        {{ $student->batch ? $student->batch->name : 'Unassigned' }}
-                                    </span>
+                                    <div class="flex flex-wrap gap-1">
+                                        @forelse($student->batches as $batch)
+                                            <span class="badge-premium badge-indigo">
+                                                {{ $batch->name }}
+                                            </span>
+                                        @empty
+                                            <span class="text-[10px] text-gray-400 font-bold italic">No Batch</span>
+                                        @endforelse
+                                    </div>
                                 </td>
                                 <td class="text-xs font-bold text-gray-400 italic">
                                     {{ \Carbon\Carbon::parse($student->joined_date)->format('M d, Y') }}

@@ -17,9 +17,31 @@ class Student extends Model
         'institute_id',
     ];
 
+    /**
+     * Many-to-many: a student can be in multiple batches.
+     */
+    public function batches()
+    {
+        return $this->belongsToMany(Batch::class)
+            ->withPivot('joined_at')
+            ->withTimestamps();
+    }
+
+    /**
+     * Legacy single-batch relation (kept for backward compat).
+     */
     public function batch()
     {
         return $this->belongsTo(Batch::class);
+    }
+
+    /**
+     * Returns the first active enrolled batch, falls back to legacy batch_id.
+     */
+    public function primaryBatch()
+    {
+        return $this->batches()->where('is_active', true)->first()
+            ?? $this->batch;
     }
 
     public function user()

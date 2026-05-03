@@ -182,7 +182,13 @@
     <!-- Name Block -->
     <div class="name-block">
         <div class="student-name">{{ $student->name }}</div>
-        <div class="batch-name">{{ $student->batch->name ?? 'General Batch' }}</div>
+        <div class="batch-name">
+            @if($student->batches->count() > 0)
+                {{ $student->batches->pluck('name')->implode(' • ') }}
+            @else
+                {{ $student->batch->name ?? 'General Batch' }}
+            @endif
+        </div>
     </div>
 
     <!-- Teal Stripe Divider -->

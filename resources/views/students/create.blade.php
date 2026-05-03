@@ -37,15 +37,34 @@
                             </div>
 
                             <div>
-                                <x-input-label for="batch_id" :value="__('Batch *')" />
-                                <select id="batch_id" name="batch_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required>
-                                    <option value="">Select Batch</option>
+                                <x-input-label for="batch_ids" :value="__('Enrolled Batches *')" />
+                                <select id="batch_ids" name="batch_ids[]" class="block mt-1 w-full" multiple required>
                                     @foreach($batches as $batch)
-                                        <option value="{{ $batch->id }}" {{ old('batch_id') == $batch->id ? 'selected' : '' }}>{{ $batch->name }}</option>
+                                        <option value="{{ $batch->id }}" {{ (is_array(old('batch_ids')) && in_array($batch->id, old('batch_ids'))) ? 'selected' : '' }}>
+                                            {{ $batch->name }} ({{ $batch->subject }})
+                                        </option>
                                     @endforeach
                                 </select>
-                                <x-input-error :messages="$errors->get('batch_id')" class="mt-2" />
+                                <x-input-error :messages="$errors->get('batch_ids')" class="mt-2" />
                             </div>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    new TomSelect('#batch_ids', {
+                                        plugins: ['remove_button'],
+                                        maxItems: 10,
+                                        placeholder: 'Select one or more batches...',
+                                        render: {
+                                            option: function(data, escape) {
+                                                return '<div><span class="font-bold">' + escape(data.text) + '</span></div>';
+                                            },
+                                            item: function(data, escape) {
+                                                return '<div>' + escape(data.text) + '</div>';
+                                            }
+                                        }
+                                    });
+                                });
+                            </script>
 
                             <div class="sm:col-span-2">
                                 <x-input-label for="address" :value="__('Address')" />
