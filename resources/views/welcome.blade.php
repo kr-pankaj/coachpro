@@ -75,7 +75,7 @@
                         Master Your <span class="text-gradient">Academics</span> with Ease.
                     </h1>
                     <p class="text-lg text-gray-400 max-w-lg leading-relaxed">
-                        The elite platform for modern coaching institutes. Enroll students in multiple batches, track every rupee, and generate professional ID cards automatically.
+                        The elite platform for modern coaching institutes. AI-driven insights to retain students, multi-batch enrollment, and automated financial tracking.
                     </p>
                     <div class="flex flex-wrap gap-4 pt-4">
                         <a href="{{ route('register') }}" class="btn-gradient-indigo text-base px-10 py-5">
@@ -89,17 +89,17 @@
                     <div class="flex flex-wrap items-center gap-6 pt-8 border-t border-white/5">
                         <div class="flex items-center gap-2">
                             <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Multi-Batch Enrollment Ready</p>
+                            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Multi-Batch Enrollment</p>
                         </div>
                         <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
                         <div class="flex items-center gap-2">
                             <div class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></div>
-                            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Automated ID Generator</p>
+                            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">AI Retention Guardian</p>
                         </div>
                         <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
                         <div class="flex items-center gap-2">
                             <div class="w-2 h-2 bg-rose-500 rounded-full animate-pulse"></div>
-                            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Student CRM Pro</p>
+                            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Smart Learning Analytics</p>
                         </div>
                     </div>
                 </div>
