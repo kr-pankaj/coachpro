@@ -169,7 +169,9 @@
                     </div>
                 @endif
             @endauth
-            </div>
+            </div> {{-- Closes Main Content Wrapper (line 77) --}}
+        </div> {{-- Closes Outer Flex Container (line 70) --}}
+
         {{-- Global Loader Overlay --}}
         <div id="global-loader" style="display:none; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); transition:opacity 0.3s ease;">
             <div style="display:flex; flex-direction:column; align-items:center;">
@@ -217,19 +219,13 @@
                 // 1. Unified Form Submission (Delegated)
                 document.addEventListener('submit', function(e) {
                     const form = e.target;
-                    
-                    // CRITICAL: Respect inline validations or 'confirm()' cancels
                     if (e.defaultPrevented) return;
-
                     if (form.getAttribute('data-submitting')) {
                         e.preventDefault();
                         return;
                     }
-
                     form.setAttribute('data-submitting', 'true');
                     showLoader();
-                    
-                    // Disable buttons inside the submitting form
                     form.querySelectorAll('button, input[type="submit"]').forEach(btn => {
                         btn.disabled = true;
                         if (btn.classList.contains('btn-gradient-indigo')) btn.innerText = 'Processing...';
@@ -240,11 +236,7 @@
                 document.addEventListener('click', function(e) {
                     const link = e.target.closest('a');
                     if (!link) return;
-
-                    // If the link has a 'confirm' or other logic that cancels the event
                     if (e.defaultPrevented) return;
-
-                    // Skip specific cases
                     if (link.target === '_blank' || 
                         link.href.includes('#') || 
                         !link.href.startsWith('http') || 
@@ -253,7 +245,6 @@
                         e.ctrlKey || e.metaKey || e.shiftKey) {
                         return;
                     }
-
                     showLoader();
                 });
             });
@@ -261,19 +252,7 @@
             // Reset on Back Button / bfcache
             window.addEventListener('pageshow', function(event) {
                 const loader = document.getElementById('global-loader');
-                if (event.persisted) {
-                    loader.style.display = 'none';
-                    document.body.classList.remove('loader-active');
-                    document.querySelectorAll('form').forEach(f => f.removeAttribute('data-submitting'));
-                    document.querySelectorAll('button').forEach(b => b.disabled = false);
-                }
-            });
-        </script>
-
-            // Reset on Back Button
-            window.addEventListener('pageshow', function(event) {
-                const loader = document.getElementById('global-loader');
-                if (event.persisted) {
+                if (loader && (event.persisted || (window.performance && window.performance.navigation.type === 2))) {
                     loader.style.display = 'none';
                     document.body.classList.remove('loader-active');
                     document.querySelectorAll('form').forEach(f => f.removeAttribute('data-submitting'));
