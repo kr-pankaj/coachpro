@@ -46,10 +46,13 @@ class FeeController extends Controller
             'amount_paid' => 'nullable|numeric|min:0|max:9999999',
             'discount_amount' => 'nullable|numeric|min:0|max:9999999',
             'payment_date' => 'nullable|date',
-            'month_year' => 'required|string|regex:/^[A-Za-z]+ [0-9]{4}$/', // e.g. May 2026
+            'month_year' => 'required|string|regex:/^([A-Za-z]+ [0-9]{4}|[0-9]{4}-[0-9]{2})$/', // Accepts "May 2026" OR "2026-05"
             'payment_method' => 'nullable|string|max:50',
             'remarks' => 'nullable|string|max:500',
         ]);
+
+        // Standardize to human-readable format (e.g., "April 2026")
+        $validated['month_year'] = \Carbon\Carbon::parse($validated['month_year'])->format('F Y');
 
         $feeData = [
             'student_id' => $validated['student_id'],
@@ -120,9 +123,11 @@ class FeeController extends Controller
             'total_amount' => 'required|numeric|min:0|max:9999999',
             'discount_amount' => 'nullable|numeric|min:0|max:9999999',
             'payment_date' => 'nullable|date',
-            'month_year' => 'required|string|regex:/^[A-Za-z]+ [0-9]{4}$/',
+            'month_year' => 'required|string|regex:/^([A-Za-z]+ [0-9]{4}|[0-9]{4}-[0-9]{2})$/',
             'remarks' => 'nullable|string|max:500',
         ]);
+
+        $validated['month_year'] = \Carbon\Carbon::parse($validated['month_year'])->format('F Y');
 
         $fee->update($validated);
 
