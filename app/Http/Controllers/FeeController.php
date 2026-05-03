@@ -46,7 +46,7 @@ class FeeController extends Controller
             'amount_paid' => 'nullable|numeric|min:0|max:9999999',
             'discount_amount' => 'nullable|numeric|min:0|max:9999999',
             'payment_date' => 'nullable|date',
-            'month_year' => 'required|string|regex:/^([A-Za-z]+ [0-9]{4}|[0-9]{4}-[0-9]{2})$/', // Accepts "May 2026" OR "2026-05"
+            'month_year' => ['required', 'string', 'regex:/^([A-Za-z]+ [0-9]{4}|[0-9]{4}-[0-9]{2})$/'], // Accepts "May 2026" OR "2026-05"
             'payment_method' => 'nullable|string|max:50',
             'remarks' => 'nullable|string|max:500',
         ]);
@@ -123,7 +123,7 @@ class FeeController extends Controller
             'total_amount' => 'required|numeric|min:0|max:9999999',
             'discount_amount' => 'nullable|numeric|min:0|max:9999999',
             'payment_date' => 'nullable|date',
-            'month_year' => 'required|string|regex:/^([A-Za-z]+ [0-9]{4}|[0-9]{4}-[0-9]{2})$/',
+            'month_year' => ['required', 'string', 'regex:/^([A-Za-z]+ [0-9]{4}|[0-9]{4}-[0-9]{2})$/'],
             'remarks' => 'nullable|string|max:500',
         ]);
 
