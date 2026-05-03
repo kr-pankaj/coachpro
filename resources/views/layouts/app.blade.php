@@ -236,11 +236,12 @@
                     const link = e.target.closest('a');
                     if (!link) return;
 
-                    // Skip if: new tab, same page hash, non-http, or download
+                    // Skip if: new tab, same page hash, non-http, download, OR has 'no-loader' class
                     if (link.target === '_blank' || 
                         link.href.includes('#') || 
                         !link.href.startsWith('http') || 
                         link.hasAttribute('download') ||
+                        link.classList.contains('no-loader') ||
                         e.ctrlKey || e.metaKey || e.shiftKey) {
                         return;
                     }

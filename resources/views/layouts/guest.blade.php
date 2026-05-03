@@ -249,6 +249,7 @@
                         link.href.includes('#') || 
                         !link.href.startsWith('http') || 
                         link.hasAttribute('download') ||
+                        link.classList.contains('no-loader') ||
                         e.ctrlKey || e.metaKey || e.shiftKey) {
                         return;
                     }
