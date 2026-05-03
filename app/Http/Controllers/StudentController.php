@@ -123,10 +123,14 @@ class StudentController extends Controller
 
     public function generateIdCard(Student $student)
     {
+        // Paper size in PDF points (1pt = 1/72 inch).
+        // Card is 85.6mm x 54mm (CR80 vertical) = ~243pt x 371pt
         $pdf = Pdf::loadView('students.id_card', compact('student'))
             ->setOption('isRemoteEnabled', true)
             ->setOption('isHtml5ParserEnabled', true)
-            ->setPaper([0, 0, 240, 380], 'portrait');
+            ->setOption('defaultPaperWidth', 243)
+            ->setOption('defaultPaperHeight', 371)
+            ->setPaper([0, 0, 243, 371], 'portrait');
 
         return $pdf->download("ID_Card_{$student->id}.pdf");
     }

@@ -3,180 +3,221 @@
 <head>
     <meta charset="utf-8">
     <style>
-        @page { margin: 0px; }
-        body {
-            font-family: 'Helvetica', sans-serif;
-            background-color: #ffffff;
-            color: #333333;
+        @page {
+            margin: 0;
+            size: 243pt 371pt;
+        }
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            width: 240px;
-            height: 380px;
         }
-        .card {
-            width: 240px;
-            height: 380px;
-            position: relative;
-            overflow: hidden;
+        body {
+            font-family: 'Helvetica', Arial, sans-serif;
+            width: 243pt;
+            height: 371pt;
             background: #ffffff;
-        }
-        .header {
-            background-color: #444444;
-            height: 180px;
-            text-align: center;
-            padding-top: 20px;
-            position: relative;
-            z-index: 1;
-        }
-        .logo-text {
-            font-size: 11px;
-            font-weight: bold;
-            color: #06b6d4;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-        .photo-container {
-            width: 90px;
-            height: 90px;
-            margin: 0 auto;
-            border-radius: 50%;
-            border: 3px solid #06b6d4;
             overflow: hidden;
-            background: #eeeeee;
         }
-        .photo-img {
+
+        /* ── HEADER ── */
+        .header {
+            background: #2d3748;
+            width: 100%;
+            padding: 18pt 0 20pt;
+            text-align: center;
+        }
+        .institute-name {
+            font-size: 8pt;
+            font-weight: bold;
+            color: #81e6d9;
+            text-transform: uppercase;
+            letter-spacing: 1.5pt;
+        }
+        .id-title {
+            font-size: 6pt;
+            color: #a0aec0;
+            margin-top: 2pt;
+            text-transform: uppercase;
+            letter-spacing: 1pt;
+        }
+
+        /* ── PHOTO ── */
+        .photo-wrap {
+            text-align: center;
+            margin-top: 12pt;
+        }
+        .photo-ring {
+            display: inline-block;
+            width: 76pt;
+            height: 76pt;
+            border-radius: 50%;
+            border: 2.5pt solid #38b2ac;
+            padding: 3pt;
+            background: #2d3748;
+        }
+        .photo-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #4a5568;
+        }
+        .photo-inner img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        .name-section {
-            margin-top: 10px;
-            color: #ffffff;
+
+        /* ── NAME ── */
+        .name-block {
+            text-align: center;
+            background: #2d3748;
+            padding-bottom: 14pt;
         }
         .student-name {
-            font-size: 16px;
+            font-size: 14pt;
             font-weight: bold;
+            color: #ffffff;
+            margin-top: 8pt;
             text-transform: uppercase;
         }
-        .student-batch {
-            font-size: 9px;
-            opacity: 0.8;
-            margin-top: 2px;
+        .batch-name {
+            font-size: 7pt;
+            color: #a0aec0;
+            margin-top: 3pt;
         }
-        .wave-container {
-            position: absolute;
-            top: 150px;
-            left: 0;
+
+        /* ── DIVIDER STRIPE ── */
+        .stripe {
+            height: 4pt;
+            background: linear-gradient(to right, #38b2ac, #2c7a7b);
+        }
+
+        /* ── INFO BODY ── */
+        .info-body {
+            background: #f7fafc;
+            padding: 14pt 20pt;
+        }
+        .info-row {
+            display: table;
             width: 100%;
-            z-index: 2;
+            padding: 4pt 0;
+            border-bottom: 0.5pt solid #e2e8f0;
         }
-        .content {
-            padding: 45px 20px 20px;
-            font-size: 10px;
+        .info-row:last-child {
+            border-bottom: none;
         }
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
+        .info-key {
+            display: table-cell;
+            font-size: 8pt;
+            color: #718096;
+            width: 55pt;
+            vertical-align: middle;
         }
-        .info-table td {
-            padding: 4px 0;
-            vertical-align: top;
+        .info-colon {
+            display: table-cell;
+            font-size: 8pt;
+            color: #cbd5e0;
+            width: 10pt;
+            vertical-align: middle;
         }
-        .label {
-            color: #666666;
-            width: 60px;
-            font-weight: normal;
-        }
-        .separator {
-            width: 10px;
-            color: #999999;
-        }
-        .value {
-            color: #333333;
+        .info-val {
+            display: table-cell;
+            font-size: 8pt;
             font-weight: bold;
+            color: #2d3748;
+            vertical-align: middle;
         }
-        .accent-label {
-            color: #06b6d4;
-            font-weight: bold;
+        .info-val.accent {
+            color: #2c7a7b;
         }
-        .footer {
-            position: absolute;
-            bottom: 15px;
-            width: 100%;
+
+        /* ── QR FOOTER ── */
+        .qr-footer {
+            background: #2d3748;
             text-align: center;
+            padding: 10pt 0 8pt;
         }
-        .qr-img {
-            width: 35px;
-            height: 35px;
-            border: 1px solid #eeeeee;
-            padding: 2px;
+        .qr-box {
+            display: inline-block;
+            background: #ffffff;
+            padding: 3pt;
+            border-radius: 3pt;
+        }
+        .qr-box img {
+            width: 36pt;
+            height: 36pt;
+            display: block;
+        }
+        .qr-label {
+            font-size: 5.5pt;
+            color: #81e6d9;
+            margin-top: 5pt;
+            letter-spacing: 0.8pt;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
-    <div class="card">
-        <!-- Header Section -->
-        <div class="header">
-            <div class="logo-text">{{ $student->institute->name }}</div>
-            <div class="photo-container">
+    <!-- Header -->
+    <div class="header">
+        <div class="institute-name">{{ $student->institute->name }}</div>
+        <div class="id-title">Student Identity Card</div>
+    </div>
+
+    <!-- Photo -->
+    <div class="photo-wrap" style="background:#2d3748;">
+        <div class="photo-ring">
+            <div class="photo-inner">
                 @if($student->photo_url)
-                    <img src="{{ public_path($student->photo_url) }}" class="photo-img">
+                    <img src="{{ public_path($student->photo_url) }}">
                 @else
-                    <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" class="photo-img" style="opacity: 0.6;">
+                    <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y">
                 @endif
             </div>
-            <div class="name-section">
-                <div class="student-name">{{ $student->name }}</div>
-                <div class="student-batch">{{ $student->batch->name ?? 'GENERAL BATCH' }}</div>
-            </div>
         </div>
+    </div>
 
-        <!-- Wave Decoration (SVG approach for PDF compatibility) -->
-        <div class="wave-container">
-            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 60px; width: 100%;">
-                <path d="M0.00,49.98 C149.99,150.00 349.20,-49.98 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #ffffff;"></path>
-                <path d="M0.00,49.98 C149.99,150.00 271.49,-49.98 500.00,49.98 L500.00,0.00 L0.00,0.00 Z" style="stroke: none; fill: #444444;"></path>
-                <path d="M0.00,49.98 C149.99,150.00 300.00,-49.98 500.00,49.98" style="stroke: #06b6d4; stroke-width: 4px; fill: none; opacity: 0.5;"></path>
-            </svg>
-        </div>
+    <!-- Name Block -->
+    <div class="name-block">
+        <div class="student-name">{{ $student->name }}</div>
+        <div class="batch-name">{{ $student->batch->name ?? 'General Batch' }}</div>
+    </div>
 
-        <!-- Body Section -->
-        <div class="content">
-            <table class="info-table">
-                <tr>
-                    <td class="label">ID</td>
-                    <td class="separator">:</td>
-                    <td class="value">#{{ str_pad($student->id, 5, '0', STR_PAD_LEFT) }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Phone</td>
-                    <td class="separator">:</td>
-                    <td class="value">{{ $student->phone ?? 'N/A' }}</td>
-                </tr>
-                <tr>
-                    <td class="label">Email</td>
-                    <td class="separator">:</td>
-                    <td class="value" style="font-size: 8px;">{{ $student->user->email ?? 'N/A' }}</td>
-                </tr>
-                <tr>
-                    <td class="accent-label">Join</td>
-                    <td class="separator">:</td>
-                    <td class="value">{{ $student->joined_date ? \Carbon\Carbon::parse($student->joined_date)->format('d-m-Y') : 'N/A' }}</td>
-                </tr>
-                <tr>
-                    <td class="accent-label">Status</td>
-                    <td class="separator">:</td>
-                    <td class="value" style="color: #059669;">ACTIVE</td>
-                </tr>
-            </table>
-        </div>
+    <!-- Teal Stripe Divider -->
+    <div class="stripe"></div>
 
-        <!-- Footer Section -->
-        <div class="footer">
-            <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode(route('dashboard')) }}">
-            <div style="font-size: 6px; color: #999999; margin-top: 4px; letter-spacing: 1px;">VERIFIED STUDENT ID</div>
+    <!-- Info Rows -->
+    <div class="info-body">
+        <div class="info-row">
+            <span class="info-key">Student ID</span>
+            <span class="info-colon">:</span>
+            <span class="info-val">#{{ str_pad($student->id, 5, '0', STR_PAD_LEFT) }}</span>
         </div>
+        <div class="info-row">
+            <span class="info-key">Phone</span>
+            <span class="info-colon">:</span>
+            <span class="info-val">{{ $student->phone ?? 'N/A' }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-key">Email</span>
+            <span class="info-colon">:</span>
+            <span class="info-val" style="font-size:7pt;">{{ $student->user->email ?? 'N/A' }}</span>
+        </div>
+        <div class="info-row">
+            <span class="info-key">Joined</span>
+            <span class="info-colon">:</span>
+            <span class="info-val accent">{{ $student->joined_date ? \Carbon\Carbon::parse($student->joined_date)->format('d-m-Y') : 'N/A' }}</span>
+        </div>
+    </div>
+
+    <!-- QR Footer -->
+    <div class="qr-footer">
+        <div class="qr-box">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode(route('dashboard')) }}">
+        </div>
+        <div class="qr-label">Scan to Verify</div>
     </div>
 </body>
 </html>
