@@ -49,8 +49,8 @@ class EnquiryController extends Controller
             'email' => 'nullable|email|max:255',
             'course_interested' => 'nullable|string|max:255',
             'status' => 'required|in:new,contacted,demo_scheduled,converted,lost',
-            'next_follow_up_date' => 'nullable|date',
-            'notes' => 'nullable|string',
+            'next_follow_up_date' => 'nullable|date|after_or_equal:today',
+            'notes' => 'nullable|string|max:1000',
         ]);
 
         $enquiry = \App\Models\Enquiry::create($validated);
@@ -87,8 +87,8 @@ class EnquiryController extends Controller
             'email' => 'nullable|email|max:255',
             'course_interested' => 'nullable|string|max:255',
             'status' => 'required|in:new,contacted,demo_scheduled,converted,lost',
-            'next_follow_up_date' => 'nullable|date',
-            'notes' => 'nullable|string',
+            'next_follow_up_date' => 'nullable|date|after_or_equal:today',
+            'notes' => 'nullable|string|max:1000',
         ]);
 
         $enquiry->update($validated);

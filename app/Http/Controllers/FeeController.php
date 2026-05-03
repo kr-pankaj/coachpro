@@ -42,13 +42,13 @@ class FeeController extends Controller
     {
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
-            'total_amount' => 'required|numeric|min:0',
-            'amount_paid' => 'nullable|numeric|min:0',
-            'discount_amount' => 'nullable|numeric|min:0',
+            'total_amount' => 'required|numeric|min:0|max:9999999',
+            'amount_paid' => 'nullable|numeric|min:0|max:9999999',
+            'discount_amount' => 'nullable|numeric|min:0|max:9999999',
             'payment_date' => 'nullable|date',
-            'month_year' => 'required|string|max:7',
-            'payment_method' => 'nullable|string',
-            'remarks' => 'nullable|string',
+            'month_year' => 'required|string|regex:/^[A-Za-z]+ [0-9]{4}$/', // e.g. May 2026
+            'payment_method' => 'nullable|string|max:50',
+            'remarks' => 'nullable|string|max:500',
         ]);
 
         $feeData = [
@@ -88,10 +88,10 @@ class FeeController extends Controller
     public function addPayment(Request $request, \App\Models\Fee $fee)
     {
         $validated = $request->validate([
-            'amount' => 'required|numeric|min:1',
+            'amount' => 'required|numeric|min:1|max:9999999',
             'payment_date' => 'required|date',
-            'payment_method' => 'nullable|string',
-            'remarks' => 'nullable|string',
+            'payment_method' => 'nullable|string|max:50',
+            'remarks' => 'nullable|string|max:500',
         ]);
 
         if ($validated['amount'] > $fee->due_amount) {
@@ -117,11 +117,11 @@ class FeeController extends Controller
     {
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
-            'total_amount' => 'required|numeric|min:0',
-            'discount_amount' => 'nullable|numeric|min:0',
+            'total_amount' => 'required|numeric|min:0|max:9999999',
+            'discount_amount' => 'nullable|numeric|min:0|max:9999999',
             'payment_date' => 'nullable|date',
-            'month_year' => 'required|string|max:7',
-            'remarks' => 'nullable|string',
+            'month_year' => 'required|string|regex:/^[A-Za-z]+ [0-9]{4}$/',
+            'remarks' => 'nullable|string|max:500',
         ]);
 
         $fee->update($validated);
