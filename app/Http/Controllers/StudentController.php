@@ -124,7 +124,9 @@ class StudentController extends Controller
     public function generateIdCard(Student $student)
     {
         $pdf = Pdf::loadView('students.id_card', compact('student'))
-            ->setPaper([0, 0, 240, 380], 'portrait'); // Custom ID card size
+            ->setOption('isRemoteEnabled', true)
+            ->setOption('isHtml5ParserEnabled', true)
+            ->setPaper([0, 0, 240, 380], 'portrait');
 
         return $pdf->download("ID_Card_{$student->id}.pdf");
     }

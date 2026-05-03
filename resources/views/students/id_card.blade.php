@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8">
     <style>
-        @page { margin: 0; }
+        @page { 
+            margin: 0px;
+        }
         body {
             font-family: 'Helvetica', sans-serif;
             background-color: #050514;
@@ -14,112 +16,106 @@
             height: 380px;
         }
         .card {
-            width: 100%;
-            height: 100%;
+            width: 240px;
+            height: 380px;
             position: relative;
             overflow: hidden;
-            border: 1px solid #1e1b4b;
+            background-color: #050514;
         }
         .header {
             background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            height: 120px;
+            height: 100px;
             text-align: center;
             padding-top: 20px;
             position: relative;
         }
         .logo-text {
-            font-size: 18px;
-            font-weight: 900;
+            font-size: 16px;
+            font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
+            padding: 0 10px;
         }
         .photo-container {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             background: white;
-            border-radius: 20px;
-            margin: -50px auto 0;
+            border-radius: 15px;
+            margin: -45px auto 0;
             position: relative;
             z-index: 10;
-            border: 4px solid #050514;
+            border: 3px solid #050514;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .initial {
+            width: 100%;
+            height: 100%;
+            display: block;
+            text-align: center;
+            line-height: 90px;
             font-size: 40px;
             font-weight: 900;
             color: #4f46e5;
         }
         .content {
-            padding: 20px;
+            padding: 15px;
             text-align: center;
         }
         .student-name {
-            font-size: 16px;
-            font-weight: 900;
-            margin-bottom: 5px;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 3px;
             color: #fff;
         }
         .student-batch {
-            font-size: 10px;
-            font-weight: 700;
+            font-size: 9px;
+            font-weight: bold;
             color: #818cf8;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         .info-grid {
-            margin-top: 20px;
+            margin-top: 10px;
             text-align: left;
             font-size: 9px;
-            padding: 0 10px;
+            padding: 0 15px;
         }
         .info-item {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .label {
-            color: #4b5563;
-            font-weight: 900;
+            color: #6b7280;
+            font-weight: bold;
             text-transform: uppercase;
+            font-size: 7px;
             display: block;
-            margin-bottom: 2px;
         }
         .value {
-            color: #d1d5db;
-            font-weight: 700;
+            color: #e5e7eb;
+            font-weight: bold;
         }
         .footer {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 60px;
+            height: 80px;
             background: #0f172a;
             border-top: 1px solid #1e293b;
-            padding: 10px;
             text-align: center;
+            padding-top: 10px;
         }
         .qr-container {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             background: white;
-            padding: 2px;
-            border-radius: 5px;
-            display: inline-block;
+            padding: 3px;
+            border-radius: 6px;
+            margin: 0 auto;
         }
         .qr-img {
             width: 100%;
             height: 100%;
-        }
-        .wave {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 40px;
-            background: linear-gradient(to top right, transparent 50%, #4f46e5 50%);
-            opacity: 0.1;
         }
     </style>
 </head>
