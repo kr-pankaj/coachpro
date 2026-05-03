@@ -34,7 +34,7 @@ class StudentRegistrationController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|confirmed|min:8',
+            'password' => ['required', 'string', 'confirmed', \Illuminate\Validation\Rules\Password::defaults()],
             'phone' => ['required', 'string', 'regex:/^\+?[0-9]{10,13}$/'], // Strict: Optional + followed by 10-13 digits
         ]);
 

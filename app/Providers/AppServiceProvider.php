@@ -21,6 +21,18 @@ class AppServiceProvider extends ServiceProvider
     {
         \Illuminate\Pagination\Paginator::useTailwind();
 
+        // Global Strong Password Policy
+        \Illuminate\Validation\Rules\Password::defaults(function () {
+            $rule = \Illuminate\Validation\Rules\Password::min(8)
+                ->mixedCase()
+                ->numbers()
+                ->symbols();
+
+            return app()->isProduction()
+                ? $rule->uncompromised()
+                : $rule;
+        });
+
         // Dev Logging for Emails
         if (app()->environment('local')) {
             \Illuminate\Support\Facades\Event::listen(\Illuminate\Mail\Events\MessageSending::class, function ($event) {
