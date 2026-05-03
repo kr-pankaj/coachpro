@@ -14,23 +14,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
         
-        <!-- PWA Meta Tags -->
-        <link rel="manifest" href="/manifest.json">
-        <meta name="theme-color" content="#4f46e5">
-        <link rel="apple-touch-icon" href="/icon-192.png">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        <script>
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw.js').catch(err => {
-                        console.log('ServiceWorker registration failed: ', err);
-                    });
-                });
-            }
-        </script>
         <style>
             body { font-family: 'Inter', sans-serif; }
             .auth-gradient {
