@@ -256,11 +256,6 @@
 
                     showLoader();
                 });
-
-                // 3. Page Unload Guard
-                window.addEventListener('beforeunload', function() {
-                    showLoader();
-                });
             });
 
             // Reset on Back Button
