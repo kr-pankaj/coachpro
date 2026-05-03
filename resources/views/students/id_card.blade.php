@@ -130,7 +130,8 @@
             @if($student->photo_url)
                 <img src="{{ public_path($student->photo_url) }}" style="width: 100%; height: 100%; object-fit: cover;">
             @else
-                <div class="initial">{{ substr($student->name, 0, 1) }}</div>
+                {{-- Professional Dummy Profile Image --}}
+                <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
             @endif
         </div>
 
