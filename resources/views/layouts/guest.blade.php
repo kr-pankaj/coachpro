@@ -207,12 +207,14 @@
                 const loaderText = loader.querySelector('p');
 
                 const messages = [
-                    'QuonixAI Thinking...',
-                    'Preparing Your Portal...',
-                    'Securing Environment...',
-                    'Analyzing Request...',
-                    'Optimizing Experience...',
-                    'Verifying Security...'
+                    'QuonixAI is thinking...',
+                    'Assembling your cockpit...',
+                    'Waking up the cloud hamsters...',
+                    'Bribing the firewall with cookies...',
+                    'Polishing the welcome mat...',
+                    'Calculating your future success...',
+                    'Counting the bits... one by one...',
+                    'Preparing to blow your mind...'
                 ];
                 
                 function showLoader() {

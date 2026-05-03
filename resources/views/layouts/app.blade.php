@@ -193,14 +193,17 @@
                 const loaderText = loader.querySelector('p');
                 
                 const messages = [
-                    'QuonixAI Thinking...',
-                    'Optimizing Student Success...',
-                    'Organizing Your Academy...',
-                    'Finalizing Records...',
-                    'Securing Data Integrity...',
-                    'Empowering Your Tutors...',
-                    'Synchronizing Knowledge...',
-                    'Preparing Excellence...'
+                    'QuonixAI is thinking...',
+                    'Drinking my morning data...',
+                    'Bribing the database with cookies...',
+                    'Charging the flux capacitor...',
+                    'Teaching bits how to dance...',
+                    'Converting caffeine into code...',
+                    'Asking the server nicely...',
+                    'Updating the hamster wheel...',
+                    'Rethinking my life choices... just kidding!',
+                    'Polishing the pixels...',
+                    'Calculating the meaning of life...'
                 ];
 
                 function showLoader() {
