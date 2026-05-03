@@ -23,7 +23,7 @@ class SuperAdminController extends Controller
         $stats = [
             'total_institutes' => $institutes->count(),
             'total_students'   => Student::count(),
-            'total_revenue'    => Fee::where('status', 'paid')->sum('amount'),
+            'total_revenue'    => Fee::where('status', 'paid')->sum('paid_amount'),
             'new_institutes'   => Institute::where('created_at', '>=', today()->subDays(7))->count(),
         ];
 
