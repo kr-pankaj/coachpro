@@ -13,11 +13,15 @@ class FeePayment extends Model
     protected static function booted()
     {
         static::created(function ($payment) {
-            $payment->fee->increment('paid_amount', $payment->amount);
+            $fee = $payment->fee;
+            $fee->paid_amount += $payment->amount;
+            $fee->save(); // This triggers the 'updating' event in Fee model to recalculate due_amount
         });
 
         static::deleted(function ($payment) {
-            $payment->fee->decrement('paid_amount', $payment->amount);
+            $fee = $payment->fee;
+            $fee->paid_amount -= $payment->amount;
+            $fee->save();
         });
     }
 
