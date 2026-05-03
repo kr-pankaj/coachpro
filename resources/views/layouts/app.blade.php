@@ -170,6 +170,67 @@
                 @endif
             @endauth
             </div>
+        {{-- Global Loader Overlay --}}
+        <div id="global-loader" class="fixed inset-0 z-[100] flex items-center justify-center bg-white/80 dark:bg-gray-900/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+            <div class="flex flex-col items-center">
+                <div class="relative w-16 h-16">
+                    <div class="absolute inset-0 border-4 border-indigo-500/20 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <p class="mt-6 text-[10px] font-black uppercase tracking-[0.3em] text-indigo-600 dark:text-indigo-400 animate-pulse">Processing Request</p>
+            </div>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const loader = document.getElementById('global-loader');
+                
+                // 1. Intercept all Form Submissions
+                document.querySelectorAll('form').forEach(form => {
+                    form.addEventListener('submit', function(e) {
+                        // Prevent double-trigger if already loading
+                        if (loader.classList.contains('active')) {
+                            e.preventDefault();
+                            return false;
+                        }
+
+                        // Show Loader
+                        loader.classList.remove('hidden');
+                        setTimeout(() => loader.classList.add('opacity-100', 'active'), 10);
+
+                        // Disable all submit buttons inside this form
+                        const buttons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+                        buttons.forEach(btn => {
+                            btn.disabled = true;
+                            btn.classList.add('opacity-50', 'cursor-not-allowed');
+                            // Add a small spinner or change text if it's a primary button
+                            if (btn.classList.contains('btn-gradient-indigo')) {
+                                btn.innerHTML = 'Processing...';
+                            }
+                        });
+                    });
+                });
+
+                // 2. Intercept Specific Direct Clicks (for delete buttons etc)
+                document.querySelectorAll('.btn-confirm').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (!this.disabled) {
+                            loader.classList.remove('hidden');
+                            setTimeout(() => loader.classList.add('opacity-100', 'active'), 10);
+                        }
+                    });
+                });
+            });
+
+            // Handle back-button / bfcache issues
+            window.addEventListener('pageshow', function(event) {
+                const loader = document.getElementById('global-loader');
+                if (event.persisted) {
+                    loader.classList.add('hidden');
+                    loader.classList.remove('opacity-100', 'active');
+                    document.querySelectorAll('button[type="submit"]').forEach(btn => btn.disabled = false);
+                }
+            });
+        </script>
     </body>
 </html>
