@@ -3,13 +3,11 @@
 <head>
     <meta charset="utf-8">
     <style>
-        @page { 
-            margin: 0px;
-        }
+        @page { margin: 0px; }
         body {
             font-family: 'Helvetica', sans-serif;
-            background-color: #050514;
-            color: white;
+            background-color: #020617;
+            color: #f8fafc;
             margin: 0;
             padding: 0;
             width: 240px;
@@ -20,102 +18,110 @@
             height: 380px;
             position: relative;
             overflow: hidden;
-            background-color: #050514;
+            background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
         }
         .header {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            height: 100px;
+            height: 70px;
             text-align: center;
-            padding-top: 20px;
+            padding-top: 25px;
             position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
         .logo-text {
-            font-size: 16px;
+            font-size: 13px;
             font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 0 10px;
+            letter-spacing: 2px;
+            color: #818cf8;
+        }
+        .photo-section {
+            margin-top: 25px;
+            text-align: center;
         }
         .photo-container {
-            width: 90px;
-            height: 90px;
-            background: white;
-            border-radius: 15px;
-            margin: -45px auto 0;
-            position: relative;
-            z-index: 10;
-            border: 3px solid #050514;
-            overflow: hidden;
+            width: 110px;
+            height: 110px;
+            margin: 0 auto;
+            border-radius: 50%;
+            border: 2px solid #4f46e5;
+            padding: 3px;
+            background: rgba(79, 70, 229, 0.1);
         }
-        .initial {
+        .photo-inner {
             width: 100%;
             height: 100%;
-            display: block;
-            text-align: center;
-            line-height: 90px;
-            font-size: 40px;
-            font-weight: 900;
-            color: #4f46e5;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #1e293b;
         }
         .content {
-            padding: 15px;
+            padding: 20px 15px;
             text-align: center;
         }
         .student-name {
-            font-size: 15px;
+            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             color: #fff;
         }
         .student-batch {
-            font-size: 9px;
-            font-weight: bold;
-            color: #818cf8;
+            font-size: 8px;
+            color: #6366f1;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
+            letter-spacing: 1.5px;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
-        .info-grid {
-            margin-top: 10px;
+        .info-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px;
             text-align: left;
-            font-size: 9px;
-            padding: 0 15px;
         }
-        .info-item {
-            margin-bottom: 6px;
+        .info-row {
+            margin-bottom: 8px;
         }
         .label {
-            color: #6b7280;
-            font-weight: bold;
+            font-size: 6px;
+            color: #64748b;
             text-transform: uppercase;
-            font-size: 7px;
-            display: block;
+            font-weight: bold;
+            margin-bottom: 1px;
         }
         .value {
-            color: #e5e7eb;
+            font-size: 10px;
+            color: #cbd5e1;
             font-weight: bold;
         }
         .footer {
             position: absolute;
             bottom: 0;
             width: 100%;
-            height: 80px;
-            background: #0f172a;
-            border-top: 1px solid #1e293b;
+            height: 60px;
             text-align: center;
-            padding-top: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 8px;
         }
         .qr-container {
-            width: 45px;
-            height: 45px;
+            width: 32px;
+            height: 32px;
             background: white;
-            padding: 3px;
-            border-radius: 6px;
+            padding: 2px;
+            border-radius: 4px;
             margin: 0 auto;
         }
         .qr-img {
             width: 100%;
             height: 100%;
+        }
+        .verify-text {
+            font-size: 6px;
+            color: #475569;
+            margin-top: 4px;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
     </style>
 </head>
@@ -123,47 +129,48 @@
     <div class="card">
         <div class="header">
             <div class="logo-text">{{ $student->institute->name }}</div>
-            <div style="font-size: 8px; font-weight: bold; opacity: 0.7; margin-top: 5px;">STUDENT IDENTITY CARD</div>
         </div>
         
-        <div class="photo-container">
-            @if($student->photo_url)
-                <img src="{{ public_path($student->photo_url) }}" style="width: 100%; height: 100%; object-fit: cover;">
-            @else
-                {{-- Professional Dummy Profile Image --}}
-                <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
-            @endif
+        <div class="photo-section">
+            <div class="photo-container">
+                <div class="photo-inner">
+                    @if($student->photo_url)
+                        <img src="{{ public_path($student->photo_url) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    @else
+                        <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.6;">
+                    @endif
+                </div>
+            </div>
         </div>
 
         <div class="content">
             <div class="student-name">{{ $student->name }}</div>
             <div class="student-batch">{{ $student->batch->name ?? 'GENERAL BATCH' }}</div>
 
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="label">Student ID</span>
-                    <span class="value">#{{ str_pad($student->id, 5, '0', STR_PAD_LEFT) }}</span>
+            <div class="info-card">
+                <div style="display: table; width: 100%;">
+                    <div style="display: table-cell; width: 50%;">
+                        <div class="label">ID NUMBER</div>
+                        <div class="value">#{{ str_pad($student->id, 5, '0', STR_PAD_LEFT) }}</div>
+                    </div>
+                    <div style="display: table-cell;">
+                        <div class="label">SINCE</div>
+                        <div class="value">{{ $student->joined_date ? \Carbon\Carbon::parse($student->joined_date)->format('M Y') : 'N/A' }}</div>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <span class="label">Joined Date</span>
-                    <span class="value">{{ $student->joined_date ? \Carbon\Carbon::parse($student->joined_date)->format('d M, Y') : 'N/A' }}</span>
-                </div>
-                <div class="info-item">
-                    <span class="label">Contact</span>
-                    <span class="value">{{ $student->phone ?? 'N/A' }}</span>
+                <div style="margin-top: 8px;">
+                    <div class="label">CONTACT</div>
+                    <div class="value">{{ $student->phone ?? 'N/A' }}</div>
                 </div>
             </div>
         </div>
 
         <div class="footer">
             <div class="qr-container">
-                {{-- Using a dummy QR for now, in real case would be student's unique profile link --}}
-                <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(route('dashboard')) }}">
+                <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode(route('dashboard')) }}">
             </div>
-            <div style="font-size: 7px; color: #4b5563; margin-top: 5px; font-weight: bold;">VERIFY IDENTITY</div>
+            <div class="verify-text">SECURE IDENTITY VERIFIED</div>
         </div>
-
-        <div class="wave"></div>
     </div>
 </body>
 </html>
