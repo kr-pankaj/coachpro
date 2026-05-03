@@ -185,49 +185,78 @@
         </div>
 
         {{-- Global Loader Overlay --}}
-        <div id="global-loader" class="fixed inset-0 z-[100] flex items-center justify-center bg-white/80 dark:bg-gray-900/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-            <div class="flex flex-col items-center">
-                <div class="relative w-16 h-16">
-                    <div class="absolute inset-0 border-4 border-indigo-500/20 rounded-full"></div>
-                    <div class="absolute inset-0 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+        <div id="global-loader" style="display:none; position:fixed; inset:0; z-index:9999; align-items:center; justify-content:center; background:rgba(255,255,255,0.85); backdrop-filter:blur(8px); transition:opacity 0.3s ease;">
+            <div style="display:flex; flex-direction:column; align-items:center;">
+                <div style="position:relative; width:4rem; height:4rem;">
+                    <div style="position:absolute; inset:0; border:4px solid rgba(79, 70, 229, 0.1); border-radius:50%;"></div>
+                    <div style="position:absolute; inset:0; border:4px solid #4f46e5; border-top-color:transparent; border-radius:50%; animation: spin 0.8s linear infinite;"></div>
                 </div>
-                <p class="mt-6 text-[10px] font-black uppercase tracking-[0.3em] text-indigo-600 dark:text-indigo-400 animate-pulse">Preparing Environment</p>
+                <p style="margin-top:1.5rem; font-size:10px; font-weight:900; text-transform:uppercase; letter-spacing:0.3em; color:#4f46e5; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;">QuonixAI Thinking...</p>
             </div>
         </div>
+
+        <style>
+            @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+            @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+            .loader-active { overflow: hidden !important; pointer-events: none !important; }
+        </style>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const loader = document.getElementById('global-loader');
                 
+                function showLoader() {
+                    loader.style.display = 'flex';
+                    loader.style.opacity = '0';
+                    document.body.classList.add('loader-active');
+                    setTimeout(() => { loader.style.opacity = '1'; }, 10);
+                }
+
                 // 1. Intercept all Form Submissions
                 document.querySelectorAll('form').forEach(form => {
                     form.addEventListener('submit', function(e) {
-                        if (loader.classList.contains('active')) {
-                            e.preventDefault();
-                            return false;
-                        }
-
-                        loader.classList.remove('hidden');
-                        setTimeout(() => loader.classList.add('opacity-100', 'active'), 10);
-
-                        const buttons = form.querySelectorAll('button[type="submit"], input[type="submit"]');
-                        buttons.forEach(btn => {
+                        if (form.getAttribute('data-submitting')) return;
+                        form.setAttribute('data-submitting', 'true');
+                        showLoader();
+                        
+                        // Disable buttons
+                        form.querySelectorAll('button, input[type="submit"]').forEach(btn => {
                             btn.disabled = true;
-                            btn.classList.add('opacity-50', 'cursor-not-allowed');
-                            if (btn.classList.contains('btn-primary')) {
-                                btn.innerHTML = 'Processing...';
-                            }
+                            if (btn.classList.contains('btn-primary')) btn.innerText = 'Processing...';
                         });
                     });
                 });
+
+                // 2. Intercept all Link Clicks (Navigation)
+                document.addEventListener('click', function(e) {
+                    const link = e.target.closest('a');
+                    if (!link) return;
+
+                    if (link.target === '_blank' || 
+                        link.href.includes('#') || 
+                        !link.href.startsWith('http') || 
+                        link.hasAttribute('download') ||
+                        e.ctrlKey || e.metaKey || e.shiftKey) {
+                        return;
+                    }
+
+                    showLoader();
+                });
+
+                // 3. Page Unload Guard
+                window.addEventListener('beforeunload', function() {
+                    showLoader();
+                });
             });
 
+            // Reset on Back Button
             window.addEventListener('pageshow', function(event) {
                 const loader = document.getElementById('global-loader');
                 if (event.persisted) {
-                    loader.classList.add('hidden');
-                    loader.classList.remove('opacity-100', 'active');
-                    document.querySelectorAll('button[type="submit"]').forEach(btn => btn.disabled = false);
+                    loader.style.display = 'none';
+                    document.body.classList.remove('loader-active');
+                    document.querySelectorAll('form').forEach(f => f.removeAttribute('data-submitting'));
+                    document.querySelectorAll('button').forEach(b => b.disabled = false);
                 }
             });
         </script>

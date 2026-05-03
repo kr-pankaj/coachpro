@@ -1,0 +1,29 @@
+[33mcommit 0f37ddaa1fb0e765878ca3923d89eacb8c8b2634[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m)[m
+Author: kr-pankaj <pk846608@gamil.com>
+Date:   Sun May 3 23:41:55 2026 +0530
+
+    QuonixAI v1.0.6.0 UX: Implemented global loader and double-submission prevention
+
+[33mcommit ffb4d9b7fb5cc447a1c3b94cb747e713b5f94b07[m
+Author: kr-pankaj <pk846608@gamil.com>
+Date:   Sun May 3 23:36:06 2026 +0530
+
+    QuonixAI v1.0.6.0 Feature: Implemented Multi-Batch enrollment for students
+
+[33mcommit 23cdd1f5d564c39749fa3db619626a6aec372a53[m
+Author: kr-pankaj <pk846608@gamil.com>
+Date:   Sun May 3 23:28:16 2026 +0530
+
+    QuonixAI v1.0.6.0 Fix: Removed QR code from ID card to ensure single-page fit
+
+[33mcommit 0e41ac154c5990d3fcb6d3053ec941851e4b4824[m
+Author: kr-pankaj <pk846608@gamil.com>
+Date:   Sun May 3 23:25:40 2026 +0530
+
+    QuonixAI: ID card - clean stacked layout, fixed white gap and QR alignment
+
+[33mcommit b2788f5c707b1f0d02bf837eb733df27cefede8d[m
+Author: kr-pankaj <pk846608@gamil.com>
+Date:   Sun May 3 23:20:54 2026 +0530
+
+    QuonixAI v1.0.6.0 UI: Final Professional Corporate ID card redesign
