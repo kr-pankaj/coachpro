@@ -225,25 +225,31 @@
                     setTimeout(() => { loader.style.opacity = '1'; }, 10);
                 }
 
-                // 1. Intercept all Form Submissions
-                document.querySelectorAll('form').forEach(form => {
-                    form.addEventListener('submit', function(e) {
-                        if (form.getAttribute('data-submitting')) return;
-                        form.setAttribute('data-submitting', 'true');
-                        showLoader();
-                        
-                        // Disable buttons
-                        form.querySelectorAll('button, input[type="submit"]').forEach(btn => {
-                            btn.disabled = true;
-                            if (btn.classList.contains('btn-primary')) btn.innerText = 'Processing...';
-                        });
+                // 1. Unified Form Submission (Delegated)
+                document.addEventListener('submit', function(e) {
+                    const form = e.target;
+                    if (e.defaultPrevented) return;
+
+                    if (form.getAttribute('data-submitting')) {
+                        e.preventDefault();
+                        return;
+                    }
+
+                    form.setAttribute('data-submitting', 'true');
+                    showLoader();
+                    
+                    form.querySelectorAll('button, input[type="submit"]').forEach(btn => {
+                        btn.disabled = true;
+                        if (btn.classList.contains('btn-primary')) btn.innerText = 'Processing...';
                     });
                 });
 
-                // 2. Intercept all Link Clicks (Navigation)
+                // 2. Unified Link Click (Delegated)
                 document.addEventListener('click', function(e) {
                     const link = e.target.closest('a');
                     if (!link) return;
+
+                    if (e.defaultPrevented) return;
 
                     if (link.target === '_blank' || 
                         link.href.includes('#') || 
@@ -258,7 +264,7 @@
                 });
             });
 
-            // Reset on Back Button
+            // Reset on Back Button / bfcache
             window.addEventListener('pageshow', function(event) {
                 const loader = document.getElementById('global-loader');
                 if (event.persisted) {
