@@ -69,13 +69,13 @@
             <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="relative z-10 space-y-8 animate-float">
                     <span class="inline-flex items-center px-4 py-2 rounded-full text-xs font-black bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 uppercase tracking-widest">
-                        🚀 Version 2.0 is Live
+                        🚀 QuonixAI v1.0.6.0 is Live
                     </span>
                     <h1 class="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter">
-                        Manage Your <span class="text-gradient">Coaching</span> Like a Pro.
+                        Master Your <span class="text-gradient">Academics</span> with Ease.
                     </h1>
                     <p class="text-lg text-gray-400 max-w-lg leading-relaxed">
-                        The all-in-one platform to track students, attendance, fees, and performance. Spend less time on paperwork and more time teaching.
+                        The elite platform for modern coaching institutes. Enroll students in multiple batches, track every rupee, and generate professional ID cards automatically.
                     </p>
                     <div class="flex flex-wrap gap-4 pt-4">
                         <a href="{{ route('register') }}" class="btn-gradient-indigo text-base px-10 py-5">
@@ -86,20 +86,20 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
                         </a>
                     </div>
-                    <div class="flex items-center gap-6 pt-8 border-t border-white/5">
-                        <div>
-                            <p class="text-2xl font-black">500+</p>
-                            <p class="text-xs text-gray-500 uppercase font-bold tracking-widest">Institutes</p>
+                    <div class="flex flex-wrap items-center gap-6 pt-8 border-t border-white/5">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Multi-Batch Enrollment Ready</p>
                         </div>
-                        <div class="w-px h-8 bg-white/10"></div>
-                        <div>
-                            <p class="text-2xl font-black">50k+</p>
-                            <p class="text-xs text-gray-500 uppercase font-bold tracking-widest">Students</p>
+                        <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></div>
+                            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Automated ID Generator</p>
                         </div>
-                        <div class="w-px h-8 bg-white/10"></div>
-                        <div>
-                            <p class="text-2xl font-black">4.9/5</p>
-                            <p class="text-xs text-gray-500 uppercase font-bold tracking-widest">User Rating</p>
+                        <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 bg-rose-500 rounded-full animate-pulse"></div>
+                            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Student CRM Pro</p>
                         </div>
                     </div>
                 </div>
