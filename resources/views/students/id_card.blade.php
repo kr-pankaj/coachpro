@@ -189,7 +189,7 @@
     <div class="stripe"></div>
 
     <!-- Info Rows -->
-    <div class="info-body">
+    <div class="info-body" style="border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
         <div class="info-row">
             <span class="info-key">Student ID</span>
             <span class="info-colon">:</span>
@@ -205,19 +205,11 @@
             <span class="info-colon">:</span>
             <span class="info-val" style="font-size:7pt;">{{ $student->user->email ?? 'N/A' }}</span>
         </div>
-        <div class="info-row">
+        <div class="info-row" style="border-bottom: none;">
             <span class="info-key">Joined</span>
             <span class="info-colon">:</span>
             <span class="info-val accent">{{ $student->joined_date ? \Carbon\Carbon::parse($student->joined_date)->format('d-m-Y') : 'N/A' }}</span>
         </div>
-    </div>
-
-    <!-- QR Footer -->
-    <div class="qr-footer">
-        <div class="qr-box">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode(route('dashboard')) }}">
-        </div>
-        <div class="qr-label">Scan to Verify</div>
     </div>
 </body>
 </html>
