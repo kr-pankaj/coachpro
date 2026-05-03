@@ -66,7 +66,7 @@
             </div>
         </div>
 
-        <p class="text-white/40 text-xs mt-8">Powered by <a href="/" class="underline">CoachPro</a></p>
+        <p class="text-white/40 text-xs mt-8">Powered by <a href="/" class="underline">QuonixAI</a></p>
     </div>
 
     {{-- Right: Registration Form --}}

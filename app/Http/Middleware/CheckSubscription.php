@@ -62,6 +62,6 @@ class CheckSubscription
 
         // For any other route, redirect to subscription page
         return redirect()->route('subscription.index')
-            ->with('error', 'Your free trial has expired. Please subscribe to continue using CoachPro.');
+            ->with('error', 'Your free trial has expired. Please subscribe to continue using QuonixAI.');
     }
 }

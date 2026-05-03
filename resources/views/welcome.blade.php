@@ -3,56 +3,61 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>CoachPro | The Ultimate Coaching Management System</title>
+        <title>QuonixAI | The Ultimate Coaching Management System</title>
         <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
         
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,800,900&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
         
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         
         <style>
             .hero-mesh {
-                background-color: #0f172a;
+                background-color: #050514;
                 background-image: 
-                    radial-gradient(at 0% 0%, hsla(253,16%,15%,1) 0, transparent 50%), 
-                    radial-gradient(at 50% 0%, hsla(225,39%,25%,1) 0, transparent 50%), 
-                    radial-gradient(at 100% 0%, hsla(339,49%,25%,1) 0, transparent 50%);
+                    radial-gradient(at 0% 0%, hsla(263,70%,15%,1) 0, transparent 50%), 
+                    radial-gradient(at 50% 0%, hsla(280,60%,10%,1) 0, transparent 50%), 
+                    radial-gradient(at 100% 0%, hsla(330,60%,10%,1) 0, transparent 50%);
             }
             .glass-nav {
-                background: rgba(15, 23, 42, 0.8);
+                background: rgba(5, 5, 20, 0.8);
                 backdrop-filter: blur(12px);
                 border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             }
             .text-gradient {
-                background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+                background: linear-gradient(135deg, #7C3AED 0%, #C026D3 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+            .text-ai-gradient {
+                background: linear-gradient(135deg, #EC4899 0%, #F59E0B 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
             }
         </style>
     </head>
-    <body class="antialiased font-sans bg-[#0f172a] text-gray-100 selection:bg-indigo-500 selection:text-white overflow-x-hidden">
+    <body class="antialiased font-sans bg-[#050514] text-gray-100 selection:bg-quonix-purple selection:text-white overflow-x-hidden">
         
         <!-- Navigation -->
         <nav class="fixed top-0 left-0 right-0 z-50 glass-nav">
             <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                 <div class="flex items-center gap-2">
-                    <x-application-logo class="h-10 w-auto" />
+                    <x-application-logo class="h-10 w-auto" text-color="text-white" />
                 </div>
                 
                 <div class="hidden md:flex items-center gap-8 text-sm font-bold tracking-tight uppercase">
-                    <a href="#features" class="hover:text-indigo-400 transition-colors">Features</a>
-                    <a href="#pricing" class="hover:text-indigo-400 transition-colors">Pricing</a>
-                    <a href="#testimonials" class="hover:text-indigo-400 transition-colors">Success Stories</a>
+                    <a href="#features" class="hover:text-quonix-purple transition-colors">Features</a>
+                    <a href="#pricing" class="hover:text-quonix-purple transition-colors">Pricing</a>
+                    <a href="#testimonials" class="hover:text-quonix-purple transition-colors">Success Stories</a>
                 </div>
 
                 <div class="flex items-center gap-4">
                     @auth
                         <a href="{{ url('/dashboard') }}" class="btn-gradient-indigo">Dashboard</a>
                     @else
-                        <a href="{{ route('login') }}" class="text-sm font-bold uppercase hover:text-indigo-400 transition-colors">Login</a>
+                        <a href="{{ route('login') }}" class="text-sm font-bold uppercase hover:text-quonix-purple transition-colors">Login</a>
                         <a href="{{ route('register') }}" class="btn-gradient-indigo">Start Free Trial</a>
                     @endauth
                 </div>
@@ -101,7 +106,7 @@
 
                 <div class="relative lg:h-[600px] flex items-center justify-center">
                     <div class="absolute inset-0 bg-indigo-500/20 blur-[100px] rounded-full"></div>
-                    <img src="{{ asset('hero-mockup.png') }}" alt="CoachPro Dashboard" class="relative z-10 w-full h-auto rounded-[2.5rem] shadow-2xl border border-white/10 animate-float" style="animation-delay: -3s;">
+                    <img src="{{ asset('hero-mockup.png') }}" alt="QuonixAI Dashboard" class="relative z-10 w-full h-auto rounded-[2.5rem] shadow-2xl border border-white/10 animate-float" style="animation-delay: -3s;">
                 </div>
             </div>
         </section>
@@ -238,7 +243,7 @@
             <div class="max-w-5xl mx-auto px-6">
                 <div class="bg-gradient-to-br from-indigo-600 to-violet-800 rounded-[3rem] p-12 text-center space-y-8 shadow-2xl shadow-indigo-500/20">
                     <h2 class="text-4xl lg:text-6xl font-black tracking-tighter">Ready to transform your institute?</h2>
-                    <p class="text-indigo-100 text-lg max-w-xl mx-auto">Join hundreds of successful educators who are growing their coaching business with CoachPro.</p>
+                    <p class="text-indigo-100 text-lg max-w-xl mx-auto">Join hundreds of successful educators who are growing their coaching business with QuonixAI.</p>
                     <div class="pt-4">
                         <a href="{{ route('register') }}" class="bg-white text-indigo-600 px-12 py-5 rounded-2xl text-lg font-black hover:scale-105 active:scale-95 transition-all inline-block uppercase tracking-widest shadow-xl">
                             Start 14-Day Free Trial
@@ -252,9 +257,9 @@
         <footer class="py-12 border-t border-white/5">
             <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="flex items-center gap-2">
-                    <x-application-logo class="h-8 w-auto grayscale" />
+                    <x-application-logo class="h-8 w-auto grayscale opacity-50" text-color="text-white" />
                 </div>
-                <p class="text-gray-600 text-xs font-bold uppercase tracking-widest">© {{ date('Y') }} CoachPro SaaS. All rights reserved.</p>
+                <p class="text-gray-600 text-xs font-bold uppercase tracking-widest">© {{ date('Y') }} QuonixAI SaaS. All rights reserved.</p>
                 <div class="flex gap-8 text-xs font-bold uppercase tracking-widest text-gray-500">
                     <a href="#" class="hover:text-white transition-colors">Privacy</a>
                     <a href="#" class="hover:text-white transition-colors">Terms</a>

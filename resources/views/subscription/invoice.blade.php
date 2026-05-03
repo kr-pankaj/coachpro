@@ -32,7 +32,7 @@
     <div class="invoice-card">
         <div class="header">
             <div class="logo-section">
-                <h1>CoachPro Elite</h1>
+                <h1>QuonixAI Elite</h1>
                 <p style="font-size: 12px; color: #6b7280; font-weight: 600;">The Ultimate Command Center</p>
             </div>
             <div class="invoice-details">
@@ -97,7 +97,7 @@
         </div>
 
         <div class="footer">
-            <p style="font-weight: 700; margin-bottom: 4px; color: #4b5563;">Thank you for being part of CoachPro Elite.</p>
+            <p style="font-weight: 700; margin-bottom: 4px; color: #4b5563;">Thank you for being part of QuonixAI Elite.</p>
             <p>This is a system-generated invoice and does not require a physical signature.</p>
         </div>
     </div>

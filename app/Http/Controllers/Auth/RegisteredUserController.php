@@ -63,6 +63,6 @@ class RegisteredUserController extends Controller
         }
 
         return redirect()->route('dashboard')
-            ->with('success', 'Welcome to CoachPro! Your 14-day free trial has started. Explore all features freely.');
+            ->with('success', 'Welcome to QuonixAI! Your 14-day free trial has started. Explore all features freely.');
     }
 }

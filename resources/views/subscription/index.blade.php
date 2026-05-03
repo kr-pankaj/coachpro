@@ -34,7 +34,7 @@
                     </div>
                     <div>
                         <h3 style="font-size:1.25rem;font-weight:700;">Lifetime Free Access</h3>
-                        <p style="opacity:0.85;font-size:0.9rem;">You have been granted permanent free access to CoachPro. No subscription required!</p>
+                        <p style="opacity:0.85;font-size:0.9rem;">You have been granted permanent free access to QuonixAI. No subscription required!</p>
                     </div>
                 </div>
 

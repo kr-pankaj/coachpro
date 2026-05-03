@@ -1,7 +1,7 @@
 @component('mail::message')
-# Welcome to CoachPro, {{ $adminName }}! 🎉
+# Welcome to QuonixAI, {{ $adminName }}! 🎉
 
-Your institute **{{ $instituteName }}** has been successfully registered on CoachPro. Your **14-day free trial** has started — no credit card required.
+Your institute **{{ $instituteName }}** has been successfully registered on QuonixAI. Your **14-day free trial** has started — no credit card required.
 
 @component('mail::panel')
 You have **14 days** to explore all features completely free. After that, you can subscribe to continue managing your institute effortlessly.
@@ -22,5 +22,5 @@ Go to Your Dashboard
 If you have any questions, just reply to this email. We're here to help!
 
 Thanks,
-**The CoachPro Team**
+**The QuonixAI Team**
 @endcomponent

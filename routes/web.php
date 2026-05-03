@@ -12,8 +12,8 @@ Route::get('/offline', function () {
 });
 
 Route::get('/manifest.json', function () {
-    $name = 'CoachPro';
-    $shortName = 'CoachPro';
+    $name = 'QuonixAI';
+    $shortName = 'QuonixAI';
     $color = '#4f46e5';
     $logo = '/icon-192.png'; // Fallback icon
 

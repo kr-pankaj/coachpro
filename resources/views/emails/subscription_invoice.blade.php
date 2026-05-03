@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1 style="margin:0; font-size: 24px; font-weight: 800; letter-spacing: -0.025em;">CoachPro Elite</h1>
+            <h1 style="margin:0; font-size: 24px; font-weight: 800; letter-spacing: -0.025em;">QuonixAI Elite</h1>
             <p style="margin: 8px 0 0; opacity: 0.8; font-size: 14px;">Subscription Payment Confirmation</p>
         </div>
         <div class="content">
@@ -58,7 +58,7 @@
             </div>
         </div>
         <div class="footer">
-            &copy; {{ date('Y') }} CoachPro SaaS Platform. All rights reserved.<br>
+            &copy; {{ date('Y') }} QuonixAI SaaS Platform. All rights reserved.<br>
             This is a computer-generated invoice.
         </div>
     </div>

@@ -14,7 +14,7 @@ class TrialExpiryMail extends Mailable
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: "Your CoachPro Trial Expires in {$this->daysLeft} Days!");
+        return new Envelope(subject: "Your QuonixAI Trial Expires in {$this->daysLeft} Days!");
     }
 
     public function content(): Content

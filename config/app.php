@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'CoachPro'),
+    'name' => env('APP_NAME', 'QuonixAI'),
     'version' => env('APP_VERSION', '1.0.0'),
 
     /*

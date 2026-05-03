@@ -12,7 +12,16 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter', ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                quonix: {
+                    purple: '#7C3AED',
+                    magenta: '#C026D3',
+                    pink: '#EC4899',
+                    amber: '#F59E0B',
+                    navy: '#050514',
+                },
             },
         },
     },

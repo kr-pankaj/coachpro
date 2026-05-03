@@ -14,7 +14,7 @@ class WelcomeInstituteMail extends Mailable
 
     public function envelope(): Envelope
     {
-        return new Envelope(subject: 'Welcome to CoachPro – Your 14-Day Trial Has Started!');
+        return new Envelope(subject: 'Welcome to QuonixAI – Your 14-Day Trial Has Started!');
     }
 
     public function content(): Content

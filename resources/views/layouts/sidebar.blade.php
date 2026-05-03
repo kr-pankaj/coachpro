@@ -1,11 +1,11 @@
 <div class="hidden sm:flex flex-col w-72 h-screen fixed left-0 top-0 p-4 z-40 transition-all duration-500">
-    <div class="flex flex-col h-full bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-2xl shadow-indigo-100/50 dark:shadow-none border border-gray-100 dark:border-gray-700 overflow-hidden">
+    <div class="flex flex-col h-full bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-2xl shadow-quonix-purple/10 dark:shadow-none border border-gray-100 dark:border-gray-700 overflow-hidden">
         <div class="flex items-center px-8 h-28 shrink-0">
             <a href="{{ route('dashboard') }}" class="group">
                 <x-application-logo class="h-16 w-auto transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" />
             </a>
             <div class="ml-auto">
-                <span class="text-[10px] font-black text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded-full uppercase tracking-widest">v{{ config('app.version') }}</span>
+                <span class="text-[10px] font-black text-quonix-purple bg-quonix-purple/10 dark:bg-quonix-purple/30 px-2 py-0.5 rounded-full uppercase tracking-widest">v{{ config('app.version') }}</span>
             </div>
         </div>
 
@@ -19,7 +19,7 @@
                     {{ __('Insights') }}
                 </x-sidebar-link>
 
-                <a href="{{ route('notifications.index') }}" class="flex items-center justify-between px-4 py-3.5 text-sm font-bold rounded-2xl transition-all duration-300 {{ request()->routeIs('notifications.*') ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200' : 'text-gray-500 dark:text-gray-400 hover:bg-indigo-50 dark:hover:bg-gray-700/50 hover:text-indigo-600' }}">
+                <a href="{{ route('notifications.index') }}" class="flex items-center justify-between px-4 py-3.5 text-sm font-bold rounded-2xl transition-all duration-300 {{ request()->routeIs('notifications.*') ? 'bg-quonix-purple text-white shadow-xl shadow-quonix-purple/20' : 'text-gray-500 dark:text-gray-400 hover:bg-quonix-purple/5 dark:hover:bg-gray-700/50 hover:text-quonix-purple' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
                         <span>{{ __('Inbox') }}</span>
@@ -102,16 +102,16 @@
 
         <div class="p-6 shrink-0 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-100 dark:border-gray-800">
             <div class="flex items-center gap-4 mb-6">
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white font-black shadow-lg shadow-indigo-100">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-quonix-purple to-quonix-magenta flex items-center justify-center text-white font-black shadow-lg shadow-quonix-purple/20">
                     {{ substr(auth()->user()->name, 0, 1) }}
                 </div>
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-black text-gray-900 dark:text-white truncate">{{ auth()->user()->name }}</p>
-                    <p class="text-[10px] text-indigo-600 font-black uppercase tracking-widest">{{ auth()->user()->role }}</p>
+                    <p class="text-[10px] text-quonix-purple font-black uppercase tracking-widest">{{ auth()->user()->role }}</p>
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-2">
-                <a href="{{ route('profile.edit') }}" class="flex items-center justify-center gap-2 py-2.5 bg-white dark:bg-gray-800 rounded-xl text-xs font-bold text-gray-600 border border-gray-100 dark:border-gray-700 hover:bg-indigo-50 transition-all">
+                <a href="{{ route('profile.edit') }}" class="flex items-center justify-center gap-2 py-2.5 bg-white dark:bg-gray-800 rounded-xl text-xs font-bold text-gray-600 border border-gray-100 dark:border-gray-700 hover:bg-quonix-purple/5 transition-all">
                     Profile
                 </a>
                 <form method="POST" action="{{ route('logout') }}" class="inline-block">

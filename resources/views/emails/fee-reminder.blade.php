@@ -14,5 +14,5 @@ Please make the payment at the earliest to avoid any inconvenience.
 If you have already paid, please ignore this email or inform the institute admin.
 
 Thanks,
-**{{ $instituteName }}** via CoachPro
+**{{ $instituteName }}** via QuonixAI
 @endcomponent

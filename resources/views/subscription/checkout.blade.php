@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Complete Payment — CoachPro</title>
+    <title>Complete Payment — QuonixAI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -29,7 +29,7 @@
             <div style="background:#f8fafc;border-radius:1rem;padding:1.25rem;margin-bottom:1.5rem;border:1px solid #e2e8f0;">
                 <p style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#64748b;margin:0 0 0.75rem;">Order Summary</p>
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
-                    <span style="font-size:0.9rem;color:#374151;">CoachPro — One-time Activation</span>
+                    <span style="font-size:0.9rem;color:#374151;">QuonixAI — One-time Activation</span>
                     <span style="font-size:1rem;font-weight:700;color:#0f172a;">₹{{ number_format($amount / 100, 0) }}</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -101,7 +101,7 @@
             key:         '{{ $key_id }}',
             amount:      {{ $amount }},
             currency:    '{{ $currency }}',
-            name:        'CoachPro',
+            name:        'QuonixAI',
             description: 'One-time Activation — {{ addslashes($institute->name) }}',
             image:       'https://ui-avatars.com/api/?name=CP&color=7F9CF5&background=4f46e5&size=128&bold=true',
             order_id:    '{{ $order_id }}',

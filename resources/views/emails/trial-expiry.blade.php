@@ -3,7 +3,7 @@
 
 Hi there,
 
-Your **CoachPro** free trial for **{{ $instituteName }}** will expire in **{{ $daysLeft }} {{ $daysLeft === 1 ? 'day' : 'days' }}**.
+Your **QuonixAI** free trial for **{{ $instituteName }}** will expire in **{{ $daysLeft }} {{ $daysLeft === 1 ? 'day' : 'days' }}**.
 
 @component('mail::panel')
 After your trial ends, you will lose access to the dashboard. Subscribe now to continue managing your students, attendance, fees, and more — without any interruption.
@@ -18,5 +18,5 @@ Subscribe Now & Continue
 Have questions? Just reply to this email.
 
 Thanks,
-**The CoachPro Team**
+**The QuonixAI Team**
 @endcomponent
