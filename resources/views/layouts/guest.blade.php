@@ -204,8 +204,19 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const loader = document.getElementById('global-loader');
+                const loaderText = loader.querySelector('p');
+
+                const messages = [
+                    'QuonixAI Thinking...',
+                    'Preparing Your Portal...',
+                    'Securing Environment...',
+                    'Analyzing Request...',
+                    'Optimizing Experience...',
+                    'Verifying Security...'
+                ];
                 
                 function showLoader() {
+                    loaderText.innerText = messages[Math.floor(Math.random() * messages.length)];
                     loader.style.display = 'flex';
                     loader.style.opacity = '0';
                     document.body.classList.add('loader-active');

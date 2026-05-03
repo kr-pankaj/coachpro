@@ -190,8 +190,23 @@
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const loader = document.getElementById('global-loader');
+                const loaderText = loader.querySelector('p');
                 
+                const messages = [
+                    'QuonixAI Thinking...',
+                    'Optimizing Student Success...',
+                    'Organizing Your Academy...',
+                    'Finalizing Records...',
+                    'Securing Data Integrity...',
+                    'Empowering Your Tutors...',
+                    'Synchronizing Knowledge...',
+                    'Preparing Excellence...'
+                ];
+
                 function showLoader() {
+                    // Pick a random message
+                    loaderText.innerText = messages[Math.floor(Math.random() * messages.length)];
+                    
                     loader.style.display = 'flex';
                     loader.style.opacity = '0';
                     document.body.classList.add('loader-active');
