@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->string('type')->default('info'); // info, warning, success
+            $table->boolean('is_active')->default(true);
             $table->date('expires_on')->nullable();
             $table->timestamps();
         });

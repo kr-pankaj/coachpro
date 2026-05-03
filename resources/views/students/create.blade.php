@@ -19,8 +19,14 @@
                             </div>
 
                             <div>
-                                <x-input-label for="phone" :value="__('Phone')" />
-                                <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" />
+                                <x-input-label for="email" :value="__('Email (Required for Portal access) *')" />
+                                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+                                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="phone" :value="__('Phone *')" />
+                                <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required />
                                 <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                             </div>
 
@@ -31,8 +37,8 @@
                             </div>
 
                             <div>
-                                <x-input-label for="batch_id" :value="__('Batch')" />
-                                <select id="batch_id" name="batch_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+                                <x-input-label for="batch_id" :value="__('Batch *')" />
+                                <select id="batch_id" name="batch_id" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required>
                                     <option value="">Select Batch</option>
                                     @foreach($batches as $batch)
                                         <option value="{{ $batch->id }}" {{ old('batch_id') == $batch->id ? 'selected' : '' }}>{{ $batch->name }}</option>

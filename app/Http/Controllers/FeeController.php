@@ -72,8 +72,8 @@ class FeeController extends Controller
             ]);
         }
 
-        if ($fee->status === 'paid' && $fee->student && $fee->student->user) {
-            $fee->student->user->notify(new \App\Notifications\FeeReceipt($fee));
+        if (($validated['amount_paid'] ?? 0) > 0 && $fee->student && $fee->student->user) {
+            $fee->student->user->notify(new \App\Notifications\FeeReceipt($fee->fresh()));
         }
 
         return redirect()->route('fees.show', $fee)->with('success', 'Fee record created successfully.');
@@ -100,8 +100,8 @@ class FeeController extends Controller
 
         $fee->payments()->create($validated);
 
-        if ($fee->fresh()->status === 'paid' && $fee->student && $fee->student->user) {
-            $fee->student->user->notify(new \App\Notifications\FeeReceipt($fee));
+        if ($fee->student && $fee->student->user) {
+            $fee->student->user->notify(new \App\Notifications\FeeReceipt($fee->fresh()));
         }
 
         return back()->with('success', 'Payment recorded successfully.');

@@ -20,6 +20,12 @@
                             </div>
 
                             <div>
+                                <x-input-label for="email" :value="__('Email (for portal access)')" />
+                                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $student->email)" required />
+                                <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                            </div>
+
+                            <div>
                                 <x-input-label for="phone" :value="__('Phone')" />
                                 <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone', $student->phone)" />
                                 <x-input-error :messages="$errors->get('phone')" class="mt-2" />

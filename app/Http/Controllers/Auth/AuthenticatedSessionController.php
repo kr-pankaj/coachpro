@@ -26,6 +26,33 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        $user = auth()->user();
+        $isSubdomain = $request->has('resolved_institute');
+
+        // 1. If on main domain, only allow Super Admin
+        if (!$isSubdomain && $user->role !== 'superadmin') {
+            Auth::guard('web')->logout();
+            $inst = $user->institute;
+            if ($inst) {
+                $appUrl = config('app.url');
+                $host = parse_url($appUrl, PHP_URL_HOST);
+                $port = parse_url($appUrl, PHP_URL_PORT);
+                $baseHost = $host . ($port ? ':' . $port : '');
+                $correctUrl = 'http://' . $inst->slug . '.' . $baseHost . '/login';
+                return redirect($correctUrl)->with('error', 'Please log in through your institute portal.');
+            }
+            return redirect()->route('login')->with('error', 'Unauthorized domain access.');
+        }
+
+        // 2. If on subdomain, ensure user belongs to this institute
+        if ($isSubdomain) {
+            $institute = $request->get('resolved_institute');
+            if ($user->role !== 'superadmin' && $user->institute_id !== $institute->id) {
+                Auth::guard('web')->logout();
+                return redirect()->route('login')->with('error', 'You do not have access to this institute.');
+            }
+        }
+
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));

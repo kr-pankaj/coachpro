@@ -20,10 +20,75 @@ class DashboardController extends Controller
 
         if (auth()->user()->role === 'student') {
             $student = Student::where('user_id', auth()->id())->first();
-            if (!$student) return view('dashboard');
+            if (!$student) return view('student.dashboard');
+            
             $fees        = Fee::where('student_id', $student->id)->orderBy('month_year', 'desc')->get();
             $attendances = Attendance::where('student_id', $student->id)->orderBy('date', 'desc')->take(30)->get();
-            return view('student.dashboard', compact('student', 'fees', 'attendances'));
+            
+            // Student Performance
+            $attempts = \App\Models\QuizAttempt::where('student_id', $student->id)->with('quiz')->latest()->take(5)->get();
+            $avgScore = \App\Models\QuizAttempt::where('student_id', $student->id)->avg('score');
+            $totalPossible = \App\Models\QuizAttempt::where('student_id', $student->id)->avg('total_marks');
+            $performanceRate = $totalPossible > 0 ? round(($avgScore / $totalPossible) * 100) : 0;
+
+            // Attendance Rate
+            $presentCount = Attendance::where('student_id', $student->id)->where('status', 'present')->count();
+            $totalCount = Attendance::where('student_id', $student->id)->count();
+            $attendanceRate = $totalCount > 0 ? round(($presentCount / $totalCount) * 100) : 0;
+
+            // Upcoming Quizzes for their batch
+            $upcomingQuizzes = \App\Models\Quiz::where('batch_id', $student->batch_id)
+                ->where('is_active', true)
+                ->whereDoesntHave('attempts', fn($q) => $q->where('student_id', $student->id))
+                ->latest()->take(3)->get();
+
+            // Digital Badges
+            $badges = [];
+            if ($performanceRate >= 90) $badges[] = ['label' => 'Elite Performer', 'icon' => '⭐', 'color' => 'amber'];
+            if ($attendanceRate >= 95) $badges[] = ['label' => 'Perfect Attendance', 'icon' => '🎯', 'color' => 'emerald'];
+            if ($student->attempts()->count() >= 10) $badges[] = ['label' => 'Dedicated Learner', 'icon' => '📚', 'color' => 'indigo'];
+            
+            $rank = Student::query()
+                ->select('students.*')
+                ->addSelect([
+                    'avg_pct' => \App\Models\QuizAttempt::selectRaw('avg(score/total_marks)*100')
+                        ->whereColumn('student_id', 'students.id')
+                ])
+                ->orderByDesc('avg_pct')
+                ->get()
+                ->search(fn($s) => $s->id == $student->id);
+            
+            if ($rank !== false && $rank < 3) $badges[] = ['label' => 'Top 3 Global', 'icon' => '🏆', 'color' => 'rose'];
+
+            // Learning Streak
+            $streak = 0;
+            $activityDates = array_merge(
+                $attendances->pluck('date')->map(fn($d) => \Carbon\Carbon::parse($d)->toDateString())->toArray(),
+                $student->attempts()->pluck('completed_at')->map(fn($d) => \Carbon\Carbon::parse($d)->toDateString())->toArray()
+            );
+            $activityDates = array_unique($activityDates);
+            rsort($activityDates);
+            
+            if (!empty($activityDates)) {
+                $currentDate = \Carbon\Carbon::parse($activityDates[0]);
+                if ($currentDate->isToday() || $currentDate->isYesterday()) {
+                    $streak = 1;
+                    for ($i = 1; $i < count($activityDates); $i++) {
+                        $prevDate = \Carbon\Carbon::parse($activityDates[$i]);
+                        if ($currentDate->diffInDays($prevDate) == 1) {
+                            $streak++;
+                            $currentDate = $prevDate;
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return view('student.dashboard', compact(
+                'student', 'fees', 'attendances', 
+                'attempts', 'performanceRate', 'attendanceRate', 'upcomingQuizzes', 'badges', 'streak'
+            ));
         }
 
         // Admin dashboard
@@ -67,11 +132,56 @@ class DashboardController extends Controller
         $convertedLeads = \App\Models\Enquiry::where('status', 'converted')->count();
         $conversionRate = $totalLeads > 0 ? round(($convertedLeads / $totalLeads) * 100) : 0;
 
+        // AI Retention Analysis (At-Risk Students)
+        $atRiskStudents = Student::with(['batch', 'attendances', 'attempts'])
+            ->get()
+            ->map(function($student) {
+                $riskReasons = [];
+                
+                // 1. Attendance Check (Last 10 records)
+                $recentAttendance = $student->attendances()->latest()->take(10)->get();
+                $absentCount = $recentAttendance->where('status', 'absent')->count();
+                if ($absentCount >= 3) {
+                    $riskReasons[] = "Low Attendance ({$absentCount}/10 absent)";
+                }
+
+                // 2. Performance Check (Last 5 attempts)
+                $recentAttempts = $student->attempts()->latest()->take(5)->get();
+                if ($recentAttempts->count() > 0) {
+                    $avgScore = $recentAttempts->avg(function($a) {
+                        return ($a->total_marks > 0) ? ($a->score / $a->total_marks) * 100 : 0;
+                    });
+                    
+                    if ($avgScore < 40) {
+                        $riskReasons[] = "Poor Academic Performance (" . round($avgScore) . "%)";
+                    }
+
+                    // 3. Trend Check (Declining scores)
+                    if ($recentAttempts->count() >= 3) {
+                        $scores = $recentAttempts->map(function($a) {
+                            return ($a->total_marks > 0) ? $a->score / $a->total_marks : 0;
+                        })->toArray();
+                        
+                        if ($scores[0] < $scores[1] && $scores[1] < $scores[2]) {
+                            $riskReasons[] = "Declining Test Scores";
+                        }
+                    }
+                }
+
+                $student->risk_reasons = $riskReasons;
+                $student->risk_level = count($riskReasons);
+                return $student;
+            })
+            ->filter(fn($s) => $s->risk_level > 0)
+            ->sortByDesc('risk_level')
+            ->take(5);
+
         return view('dashboard', compact(
             'institute', 'totalStudents', 'totalBatches',
             'todayAttended', 'todayTotal', 'pendingFees', 'collectedFees',
             'recentStudents', 'batches', 'announcements', 'profilePct',
-            'chartData', 'revenueData', 'batchPerformance', 'conversionRate', 'leadsToday'
+            'chartData', 'revenueData', 'batchPerformance', 'conversionRate', 'leadsToday',
+            'atRiskStudents'
         ));
     }
 

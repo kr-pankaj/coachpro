@@ -17,7 +17,8 @@ class AttendanceController extends Controller
         if ($batch_id) {
             $students    = \App\Models\Student::where('batch_id', $batch_id)->get();
             $attendances = \App\Models\Attendance::where('batch_id', $batch_id)
-                            ->where('date', $date)
+                            ->whereDate('date', $date)
+                            ->get()
                             ->pluck('status', 'student_id')
                             ->toArray();
         }
@@ -42,23 +43,25 @@ class AttendanceController extends Controller
             'attendance' => 'required|array',
         ]);
 
-        foreach ($validated['attendance'] as $student_id => $status) {
-            $attendance = \App\Models\Attendance::updateOrCreate(
-                [
-                    'student_id' => $student_id,
-                    'batch_id' => $validated['batch_id'],
-                    'date' => $validated['date'],
-                ],
-                ['status' => $status]
-            );
+        \Illuminate\Support\Facades\DB::transaction(function () use ($validated) {
+            foreach ($validated['attendance'] as $student_id => $status) {
+                $attendance = \App\Models\Attendance::updateOrCreate(
+                    [
+                        'student_id' => $student_id,
+                        'batch_id' => $validated['batch_id'],
+                        'date' => $validated['date'],
+                        'institute_id' => auth()->user()->institute_id,
+                    ],
+                    ['status' => $status]
+                );
 
-            // Notify Student if user account exists
-            if ($attendance->wasRecentlyCreated || $attendance->wasChanged('status')) {
-                if ($attendance->student && $attendance->student->user) {
-                    $attendance->student->user->notify(new \App\Notifications\AttendanceMarked($attendance));
+                if ($attendance->wasRecentlyCreated || $attendance->wasChanged('status')) {
+                    if ($attendance->student && $attendance->student->user) {
+                        $attendance->student->user->notify(new \App\Notifications\AttendanceMarked($attendance));
+                    }
                 }
             }
-        }
+        });
 
         return back()->with('success', 'Attendance saved successfully and notifications sent.');
     }

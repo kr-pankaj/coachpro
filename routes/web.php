@@ -61,6 +61,11 @@ Route::get('/student/register', function (\Illuminate\Http\Request $request) {
     return redirect()->route('register');
 })->name('student.register.portal');
 
+// Dedicated Super Admin Login Route
+Route::get('/admin/super-portal', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'create'])
+    ->middleware('guest')
+    ->name('superadmin.login');
+
 Route::post('/student/register', function (\Illuminate\Http\Request $request) {
     if ($request->has('resolved_institute')) {
         return app(App\Http\Controllers\StudentRegistrationController::class)->store($request, $request->get('resolved_institute')->slug);
@@ -96,6 +101,7 @@ Route::middleware(['auth', 'verified', 'check.subscription'])->group(function ()
         Route::resource('batches', App\Http\Controllers\BatchController::class);
         Route::resource('teachers', App\Http\Controllers\TeacherController::class);
         Route::resource('students', App\Http\Controllers\StudentController::class);
+        Route::get('students/{student}/id-card', [App\Http\Controllers\StudentController::class, 'generateIdCard'])->name('students.id-card');
         Route::resource('enquiries', App\Http\Controllers\EnquiryController::class);
         Route::resource('attendances', App\Http\Controllers\AttendanceController::class)->only(['index', 'create', 'store']);
         Route::post('/fees/{fee}/payments', [App\Http\Controllers\FeeController::class, 'addPayment'])->name('fees.payments.store');
@@ -143,6 +149,7 @@ Route::middleware(['auth', 'verified', 'check.subscription'])->group(function ()
 
     // Shared / Student allowed
     Route::post('/profile-requests', [App\Http\Controllers\ProfileUpdateRequestController::class, 'store'])->name('profile_requests.store');
+    Route::get('/leaderboard', [App\Http\Controllers\LeaderboardController::class, 'index'])->name('leaderboard');
     Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('notifications.read_all');

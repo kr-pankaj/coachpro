@@ -6,6 +6,7 @@ const urlsToCache = [
 ];
 
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
@@ -15,23 +16,16 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // Only handle GET requests
-  if (event.request.method !== 'GET') return;
+  // Only handle GET requests and avoid non-http(s) schemes (like chrome-extension)
+  if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) return;
 
   event.respondWith(
     fetch(event.request)
-      .then(response => {
-        // If we have a valid response, maybe cache it (optional)
-        // For now, just return it
-        return response;
-      })
       .catch(() => {
-        // If network fails, try cache
         return caches.match(event.request).then(cachedResponse => {
           if (cachedResponse) {
             return cachedResponse;
           }
-          // Final fallback
           if (event.request.mode === 'navigate') {
             return caches.match('/offline');
           }
@@ -41,6 +35,7 @@ self.addEventListener('fetch', event => {
 });
 
 self.addEventListener('activate', event => {
+  event.waitUntil(self.clients.claim());
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then(cacheNames => {

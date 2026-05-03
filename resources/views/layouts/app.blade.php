@@ -5,8 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'QuonixAI') }}</title>
-        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+        @php
+            $institute = request()->get('resolved_institute') ?? (auth()->check() ? auth()->user()->institute : null);
+            $pageTitle = $institute ? $institute->name . ' | Portal' : config('app.name', 'QuonixAI');
+            $favicon = ($institute && $institute->logo_url) ? $institute->logo_url : asset('favicon.png');
+        @endphp
+
+        <title>{{ $pageTitle }}</title>
+        <link rel="icon" type="image/png" href="{{ $favicon }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,15 +36,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script>
-            // Force unregister all service workers once to fix navigation issues
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for(let registration of registrations) {
-                        registration.unregister();
-                    }
-                });
-
-                // Re-register the new one
                 window.addEventListener('load', () => {
                     navigator.serviceWorker.register('/sw.js').catch(err => {
                         console.log('ServiceWorker registration failed: ', err);

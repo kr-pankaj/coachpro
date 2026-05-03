@@ -16,17 +16,16 @@ class AnnouncementController extends Controller
             'expires_on' => 'nullable|date|after:today',
         ]);
 
-        $announcement = Announcement::create($request->only('title', 'content', 'type', 'expires_on'));
+        $data = $request->only('title', 'content', 'type', 'expires_on');
+        $data['institute_id'] = auth()->user()->institute_id;
+        $data['is_active'] = true;
 
-        // Notify all students in the institute
-        $students = \App\Models\Student::with('user')->get();
-        foreach ($students as $student) {
-            if ($student->user) {
-                $student->user->notify(new \App\Notifications\AnnouncementNotification($announcement));
-            }
-        }
+        $announcement = Announcement::create($data);
 
-        return back()->with('success', 'Announcement posted!');
+        // Dispatch background job for broadcasting to students
+        \App\Jobs\BroadcastAnnouncement::dispatch($announcement, auth()->user()->institute_id);
+
+        return back()->with('success', 'Announcement posted and broadcast started in background.');
     }
 
     public function destroy(Announcement $announcement)

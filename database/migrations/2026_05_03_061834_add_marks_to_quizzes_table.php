@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('quizzes', function (Blueprint $table) {
+            $table->integer('total_marks')->default(100)->after('title');
+            $table->integer('passing_marks')->default(35)->after('total_marks');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('quizzes', function (Blueprint $table) {
+            $table->dropColumn(['total_marks', 'passing_marks']);
+        });
+    }
+};

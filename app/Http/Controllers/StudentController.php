@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
+use App\Models\Batch;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class StudentController extends Controller
 {
@@ -11,7 +14,7 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        $query = \App\Models\Student::with('batch');
+        $query = Student::with('batch');
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -26,14 +29,14 @@ class StudentController extends Controller
         }
 
         $students = $query->latest()->paginate(10)->withQueryString();
-        $batches = \App\Models\Batch::all();
+        $batches = Batch::all();
 
         return view('students.index', compact('students', 'batches'));
     }
 
     public function create()
     {
-        $batches = \App\Models\Batch::all();
+        $batches = Batch::all();
         return view('students.create', compact('batches'));
     }
 
@@ -41,14 +44,38 @@ class StudentController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'parent_phone' => 'nullable|string|max:20',
+            'email' => 'required|email|unique:users,email',
+            'phone' => ['required', 'string', 'regex:/^\+?[0-9]{10,13}$/'], 
+            'parent_phone' => ['nullable', 'string', 'regex:/^\+?[0-9]{10,13}$/'],
             'address' => 'nullable|string',
-            'batch_id' => 'nullable|exists:batches,id',
+            'batch_id' => 'required|exists:batches,id', // Recommended mandatory for students
             'joined_date' => 'nullable|date',
         ]);
-        \App\Models\Student::create($validated);
-        return redirect()->route('students.index')->with('success', 'Student created successfully.');
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($validated) {
+            $institute = auth()->user()->institute;
+
+            // 1. Create the User account
+            $user = \App\Models\User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => \Illuminate\Support\Facades\Hash::make(\Illuminate\Support\Str::random(16)), // Random password, they will reset it
+                'role' => 'student',
+                'institute_id' => $institute->id,
+            ]);
+
+            // 2. Create the Student and link to user
+            $studentData = $validated;
+            $studentData['user_id'] = $user->id;
+            $studentData['institute_id'] = $institute->id;
+            
+            $student = Student::create($studentData);
+
+            // 3. Trigger Professional Welcome Email
+            $user->notify(new \App\Notifications\NewStudentWelcome($institute));
+        });
+
+        return redirect()->route('students.index')->with('success', 'Student onboarded successfully. A welcome email with portal instructions has been sent.');
     }
 
     public function show(string $id)
@@ -56,29 +83,49 @@ class StudentController extends Controller
         //
     }
 
-    public function edit(\App\Models\Student $student)
+    public function edit(Student $student)
     {
-        $batches = \App\Models\Batch::all();
+        $batches = Batch::all();
         return view('students.edit', compact('student', 'batches'));
     }
 
-    public function update(Request $request, \App\Models\Student $student)
+    public function update(Request $request, Student $student)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'parent_phone' => 'nullable|string|max:20',
+            'email' => 'required|email|unique:users,email,' . $student->user_id,
+            'phone' => ['nullable', 'string', 'regex:/^\+?[0-9]{10,13}$/'],
+            'parent_phone' => ['nullable', 'string', 'regex:/^\+?[0-9]{10,13}$/'],
             'address' => 'nullable|string',
             'batch_id' => 'nullable|exists:batches,id',
             'joined_date' => 'nullable|date',
         ]);
-        $student->update($validated);
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($validated, $student) {
+            $student->update($validated);
+
+            if ($student->user) {
+                $student->user->update([
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                ]);
+            }
+        });
+
         return redirect()->route('students.index')->with('success', 'Student updated successfully.');
     }
 
-    public function destroy(\App\Models\Student $student)
+    public function destroy(Student $student)
     {
         $student->delete();
         return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
+    }
+
+    public function generateIdCard(Student $student)
+    {
+        $pdf = Pdf::loadView('students.id_card', compact('student'))
+            ->setPaper([0, 0, 240, 380], 'portrait'); // Custom ID card size
+
+        return $pdf->download("ID_Card_{$student->id}.pdf");
     }
 }

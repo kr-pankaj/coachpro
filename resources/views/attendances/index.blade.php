@@ -66,8 +66,9 @@
                             <tbody>
                                 @foreach($students as $student)
                                     @php
-                                        $isMarked = isset($attendances[$student->id]);
-                                        $currentStatus = $attendances[$student->id] ?? 'present';
+                                        $studentId = (string) $student->id;
+                                        $isMarked = array_key_exists($studentId, $attendances);
+                                        $currentStatus = $isMarked ? $attendances[$studentId] : 'present';
                                     @endphp
                                     <tr class="group">
                                         <td>
@@ -88,15 +89,15 @@
                                         <td>
                                             <div class="flex items-center gap-6">
                                                 <label class="flex items-center cursor-pointer group/label">
-                                                    <input type="radio" name="attendance[{{ $student->id }}]" value="present" class="hidden peer" {{ ($isMarked && $currentStatus == 'present') ? 'checked' : '' }}>
+                                                    <input type="radio" name="attendance[{{ $student->id }}]" value="present" class="sr-only peer" {{ (!$isMarked || $currentStatus == 'present') ? 'checked' : '' }}>
                                                     <span class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-gray-100 dark:border-gray-700 text-gray-400 peer-checked:bg-emerald-50 peer-checked:text-emerald-600 peer-checked:border-emerald-200 dark:peer-checked:bg-emerald-900/20 dark:peer-checked:border-emerald-800 transition-all">Present</span>
                                                 </label>
                                                 <label class="flex items-center cursor-pointer group/label">
-                                                    <input type="radio" name="attendance[{{ $student->id }}]" value="absent" class="hidden peer" {{ ($isMarked && $currentStatus == 'absent') ? 'checked' : '' }}>
+                                                    <input type="radio" name="attendance[{{ $student->id }}]" value="absent" class="sr-only peer" {{ ($isMarked && $currentStatus == 'absent') ? 'checked' : '' }}>
                                                     <span class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-gray-100 dark:border-gray-700 text-gray-400 peer-checked:bg-rose-50 peer-checked:text-rose-600 peer-checked:border-rose-200 dark:peer-checked:bg-rose-900/20 dark:peer-checked:border-rose-800 transition-all">Absent</span>
                                                 </label>
                                                 <label class="flex items-center cursor-pointer group/label">
-                                                    <input type="radio" name="attendance[{{ $student->id }}]" value="late" class="hidden peer" {{ ($isMarked && $currentStatus == 'late') ? 'checked' : '' }}>
+                                                    <input type="radio" name="attendance[{{ $student->id }}]" value="late" class="sr-only peer" {{ ($isMarked && $currentStatus == 'late') ? 'checked' : '' }}>
                                                     <span class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-gray-100 dark:border-gray-700 text-gray-400 peer-checked:bg-amber-50 peer-checked:text-amber-600 peer-checked:border-amber-200 dark:peer-checked:bg-amber-900/20 dark:peer-checked:border-amber-800 transition-all">Late</span>
                                                 </label>
                                             </div>

@@ -11,10 +11,10 @@ class SuperAdminSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => 'superadmin@coachpro.app'],
+            ['email' => 'superadmin@quonixai.com'],
             [
-                'name'         => 'Super Admin',
-                'email'        => 'superadmin@coachpro.app',
+                'name'         => 'QuonixAI Super Admin',
+                'email'        => 'superadmin@quonixai.com',
                 'password'     => Hash::make('superadmin123'),
                 'role'         => 'superadmin',
                 'institute_id' => null,
@@ -22,7 +22,7 @@ class SuperAdminSeeder extends Seeder
         );
 
         $this->command->info('Super admin created:');
-        $this->command->line('  Email:    superadmin@coachpro.app');
+        $this->command->line('  Email:    superadmin@quonixai.com');
         $this->command->line('  Password: superadmin123');
         $this->command->warn('  ⚠ Change the password immediately after first login!');
     }

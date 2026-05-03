@@ -20,33 +20,65 @@ class ResolveSubdomain
         $appUrl = config('app.url');
         $appHost = parse_url($appUrl, PHP_URL_HOST);
         $appPort = parse_url($appUrl, PHP_URL_PORT);
-        
         $baseHost = $appHost . ($appPort ? ':' . $appPort : ''); // e.g. localhost:8000
         
-        // Check if the current host is a subdomain of the base host
-        if ($httpHost !== $baseHost && Str::endsWith($httpHost, '.' . $baseHost)) {
+        $isSubdomain = ($httpHost !== $baseHost && Str::endsWith($httpHost, '.' . $baseHost));
+
+        if ($isSubdomain) {
             $subdomain = Str::before($httpHost, '.' . $baseHost);
-            
             $institute = \App\Models\Institute::where('slug', $subdomain)->first();
             
+            if (!$institute && $subdomain !== 'www') {
+                abort(404, 'Institute not found.');
+            }
+
             if ($institute) {
-                // Attach the resolved institute to the request for easy access
                 $request->merge(['resolved_institute' => $institute]);
                 
-                // If hitting the root '/' on a subdomain, redirect to login
                 if ($request->is('/')) {
                     return redirect()->route('login');
                 }
 
-                // If hitting the general '/register' on a subdomain, block it
                 if ($request->is('register')) {
-                    return redirect()->route('login')->with('error', 'General registration is not allowed on this portal.');
+                    return redirect()->route('student.register.portal');
                 }
 
-                // If the user is logged in, verify they belong to this institute
-                if (auth()->check() && auth()->user()->role !== 'superadmin' && auth()->user()->institute_id !== $institute->id) {
+                // If logged in, verify institute access
+                if (auth()->check()) {
+                    $user = auth()->user();
+                    if ($user->role !== 'superadmin' && $user->institute_id !== $institute->id) {
+                        auth()->logout();
+                        return redirect()->route('login')->with('error', 'Unauthorized access to this institute.');
+                    }
+                }
+            }
+        } else {
+            // ON MAIN DOMAIN: Restrict access
+            
+            // 1. Allow Super Admin Portal
+            if ($request->is('admin/super-portal')) {
+                return $next($request);
+            }
+
+            // 2. Block standard login on main domain for non-superadmins
+            if ($request->is('login') && !$request->isMethod('POST')) {
+                // If it's a GET login request on main domain, we show a message or redirect
+                // But for now, we'll let it show, and block on POST.
+            }
+
+            if (auth()->check()) {
+                $user = auth()->user();
+                // Block everyone except Super Admin from main domain dashboard/profile
+                if ($user->role !== 'superadmin') {
+                    $inst = $user->institute;
                     auth()->logout();
-                    return redirect()->route('login')->with('error', 'You do not have access to this institute.');
+                    
+                    if ($inst) {
+                        $correctUrl = 'http://' . $inst->slug . '.' . $baseHost . '/login';
+                        return redirect($correctUrl)->with('error', 'Please log in through your institute portal.');
+                    }
+                    
+                    return redirect()->route('login')->with('error', 'This domain is reserved for administration.');
                 }
             }
         }

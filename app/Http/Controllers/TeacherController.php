@@ -24,18 +24,22 @@ class TeacherController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        \App\Models\User::create([
+        $institute = auth()->user()->institute;
+
+        $teacher = \App\Models\User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
+            'password' => \Illuminate\Support\Facades\Hash::make(\Illuminate\Support\Str::random(16)),
             'role' => 'teacher',
-            'institute_id' => auth()->user()->institute_id,
+            'institute_id' => $institute->id,
         ]);
 
-        return redirect()->route('teachers.index')->with('success', 'Teacher added successfully.');
+        // Trigger Professional Welcome Email
+        $teacher->notify(new \App\Notifications\TeacherWelcome($institute));
+
+        return redirect()->route('teachers.index')->with('success', 'Teacher onboarded successfully and welcome email sent.');
     }
 
     public function edit(\App\Models\User $teacher)

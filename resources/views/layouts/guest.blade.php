@@ -4,8 +4,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ config('app.name', 'QuonixAI') }} — {{ $pageTitle ?? 'Welcome' }}</title>
-        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+        @php
+            $institute = request()->get('resolved_institute') ?? (auth()->check() ? auth()->user()->institute : null);
+            $finalTitle = $institute ? $institute->name . ' | Portal' : config('app.name', 'QuonixAI');
+            $favicon = ($institute && $institute->logo_url) ? $institute->logo_url : asset('favicon.png');
+        @endphp
+        <title>{{ $finalTitle }} — {{ $pageTitle ?? 'Welcome' }}</title>
+        <link rel="icon" type="image/png" href="{{ $favicon }}">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
         

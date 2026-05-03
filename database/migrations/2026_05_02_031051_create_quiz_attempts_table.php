@@ -17,6 +17,9 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained()->cascadeOnDelete();
             $table->integer('score')->nullable();
             $table->integer('total_marks')->nullable();
+            $table->integer('total_questions')->default(0);
+            $table->integer('correct_answers')->default(0);
+            $table->string('status')->default('completed');
             $table->dateTime('started_at')->nullable();
             $table->dateTime('completed_at')->nullable();
             $table->timestamps();

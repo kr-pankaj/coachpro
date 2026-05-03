@@ -4,9 +4,9 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NewQuizAvailable extends Notification
+class NewQuizAvailable extends Notification implements ShouldQueue
 {
     use Queueable;
 

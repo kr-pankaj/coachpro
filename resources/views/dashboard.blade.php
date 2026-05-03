@@ -226,6 +226,53 @@
                         </div>
                     </div>
 
+                    {{-- AI Retention Hub (At-Risk Students) --}}
+                    @if($atRiskStudents->count() > 0)
+                    <div class="bg-rose-50 dark:bg-rose-900/10 rounded-[2.5rem] border border-rose-100 dark:border-rose-900/30 p-10 mb-8">
+                        <div class="flex items-center justify-between mb-8">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-8 bg-rose-500 rounded-full"></div>
+                                <h3 class="text-xl font-black text-rose-900 dark:text-rose-100 uppercase tracking-tighter">AI Retention Hub</h3>
+                            </div>
+                            <span class="px-4 py-1.5 bg-rose-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest animate-pulse">Critical Alerts</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            @foreach($atRiskStudents as $student)
+                            <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm border border-rose-100/50 hover:shadow-md transition-all group">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-black">
+                                            {{ substr($student->name, 0, 1) }}
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-black text-gray-900 dark:text-white">{{ $student->name }}</p>
+                                            <p class="text-[10px] font-bold text-gray-400 uppercase">{{ $student->batch?->name ?? 'No Batch' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-1">
+                                        @for($i=0; $i<$student->risk_level; $i++)
+                                            <div class="w-2 h-2 rounded-full bg-rose-500"></div>
+                                        @endfor
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    @foreach($student->risk_reasons as $reason)
+                                    <div class="flex items-center gap-2 text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-900/30 px-3 py-1.5 rounded-lg">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                                        {{ $reason }}
+                                    </div>
+                                    @endforeach
+                                </div>
+                                <div class="mt-5 flex justify-end">
+                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $student->phone) }}" target="_blank" class="text-[9px] font-black text-rose-600 uppercase hover:underline">Intervene via WhatsApp →</a>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+
                     {{-- Recent Enrollments List --}}
                     <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 p-8">
                         <div class="flex items-center justify-between mb-8">

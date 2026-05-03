@@ -1,4 +1,4 @@
-<div class="hidden sm:flex flex-col w-72 h-screen fixed left-0 top-0 p-4 z-40 transition-all duration-500">
+<div class="hidden sm:flex flex-col w-72 h-screen fixed left-0 top-0 p-4 z-40">
     <div class="flex flex-col h-full bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-2xl shadow-quonix-purple/10 dark:shadow-none border border-gray-100 dark:border-gray-700 overflow-hidden">
         <div class="flex items-center px-8 h-28 shrink-0">
             <a href="{{ route('dashboard') }}" class="group">
@@ -17,6 +17,10 @@
                 
                 <x-sidebar-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
                     {{ __('Insights') }}
+                </x-sidebar-link>
+
+                <x-sidebar-link :href="route('leaderboard')" :active="request()->routeIs('leaderboard')" icon="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-2.394 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946 2.394 3.42 3.42 0 010 4.606 3.42 3.42 0 00-1.946 2.394 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-2.394 3.42 3.42 0 010-4.606z">
+                    {{ __('Leaderboard') }}
                 </x-sidebar-link>
 
                 <a href="{{ route('notifications.index') }}" class="flex items-center justify-between px-4 py-3.5 text-sm font-bold rounded-2xl transition-all duration-300 {{ request()->routeIs('notifications.*') ? 'bg-quonix-purple text-white shadow-xl shadow-quonix-purple/20' : 'text-gray-500 dark:text-gray-400 hover:bg-quonix-purple/5 dark:hover:bg-gray-700/50 hover:text-quonix-purple' }}">

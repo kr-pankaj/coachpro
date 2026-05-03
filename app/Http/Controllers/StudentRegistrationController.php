@@ -35,30 +35,38 @@ class StudentRegistrationController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
-            'phone' => 'nullable|string|max:20',
+            'phone' => ['required', 'string', 'regex:/^\+?[0-9]{10,13}$/'], // Strict: Optional + followed by 10-13 digits
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'institute_id' => $institute->id,
-            'role' => 'student',
-        ]);
+        $user = \Illuminate\Support\Facades\DB::transaction(function () use ($request, $institute) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'institute_id' => $institute->id,
+                'role' => 'student',
+            ]);
 
-        Student::create([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'user_id' => $user->id,
-            'institute_id' => $institute->id,
-            'joined_date' => now(),
-        ]);
+            Student::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'user_id' => $user->id,
+                'institute_id' => $institute->id,
+                'joined_date' => now(),
+            ]);
 
-        // Notify Institute Admin
+            return $user;
+        });
+
+        // 1. Notify Institute Admin (New Student Alert)
         $admin = User::where('institute_id', $institute->id)->where('role', 'admin')->first();
         if ($admin) {
             $admin->notify(new \App\Notifications\StudentRegistered($user));
         }
+
+        // 2. Notify Student (Professional Welcome)
+        $user->notify(new \App\Notifications\NewStudentWelcome($institute));
 
         event(new Registered($user));
 

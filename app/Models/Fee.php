@@ -22,6 +22,10 @@ class Fee extends Model
         'share_token'
     ];
 
+    protected $casts = [
+        'payment_date' => 'date',
+    ];
+
     protected static function booted()
     {
         static::creating(function ($fee) {

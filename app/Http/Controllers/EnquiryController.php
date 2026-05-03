@@ -45,7 +45,7 @@ class EnquiryController extends Controller
     {
         $validated = $request->validate([
             'student_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => ['required', 'string', 'regex:/^\+?[0-9]{10,13}$/'],
             'email' => 'nullable|email|max:255',
             'course_interested' => 'nullable|string|max:255',
             'status' => 'required|in:new,contacted,demo_scheduled,converted,lost',
@@ -54,9 +54,10 @@ class EnquiryController extends Controller
         ]);
 
         $enquiry = \App\Models\Enquiry::create($validated);
+        $institute = auth()->user()->institute;
 
-        // Notify Admin
-        $admin = \App\Models\User::where('institute_id', auth()->user()->institute_id)
+        // 1. Notify Admin (New Lead Alert)
+        $admin = \App\Models\User::where('institute_id', $institute->id)
             ->where('role', 'admin')
             ->first();
             
@@ -64,7 +65,13 @@ class EnquiryController extends Controller
             $admin->notify(new \App\Notifications\NewLead($enquiry));
         }
 
-        return redirect()->route('enquiries.index')->with('success', 'Lead added successfully.');
+        // 2. Notify Inquirer (Professional Thank You)
+        if ($enquiry->email) {
+            \Illuminate\Support\Facades\Notification::route('mail', $enquiry->email)
+                ->notify(new \App\Notifications\InquiryThankYou($enquiry, $institute));
+        }
+
+        return redirect()->route('enquiries.index')->with('success', 'Lead added successfully and thank you email sent.');
     }
 
     public function edit(\App\Models\Enquiry $enquiry)
@@ -76,7 +83,7 @@ class EnquiryController extends Controller
     {
         $validated = $request->validate([
             'student_name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'phone' => ['required', 'string', 'regex:/^\+?[0-9]{10,13}$/'],
             'email' => 'nullable|email|max:255',
             'course_interested' => 'nullable|string|max:255',
             'status' => 'required|in:new,contacted,demo_scheduled,converted,lost',

@@ -92,8 +92,8 @@
                     <input type="email" name="email" value="{{ old('email') }}" class="input-field" placeholder="you@example.com" required>
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Phone Number</label>
-                    <input type="text" name="phone" value="{{ old('phone') }}" class="input-field" placeholder="+91 98765 43210">
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Phone Number *</label>
+                    <input type="text" name="phone" value="{{ old('phone') }}" class="input-field" placeholder="+91 98765 43210" required>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>

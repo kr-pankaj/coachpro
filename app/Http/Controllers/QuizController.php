@@ -107,6 +107,14 @@ class QuizController extends Controller
             'batch_id' => 'nullable|exists:batches,id',
             'time_limit_minutes' => 'required|integer|min:1',
             'is_active' => 'boolean',
+            'questions' => 'required|array|min:1',
+            'questions.*.id' => 'nullable|exists:questions,id',
+            'questions.*.question_text' => 'required|string',
+            'questions.*.marks' => 'required|integer|min:1',
+            'questions.*.options' => 'required|array|min:2',
+            'questions.*.options.*.id' => 'nullable|exists:quiz_options,id',
+            'questions.*.options.*.option_text' => 'required|string',
+            'questions.*.correct_option' => 'required|integer',
         ]);
 
         $quiz->update([
@@ -116,6 +124,41 @@ class QuizController extends Controller
             'time_limit_minutes' => $validated['time_limit_minutes'],
             'is_active' => $request->boolean('is_active'),
         ]);
+
+        $submittedQuestionIds = collect($request->questions)->pluck('id')->filter()->toArray();
+        $quiz->questions()->whereNotIn('id', $submittedQuestionIds)->delete();
+
+        foreach ($request->questions as $i => $q) {
+            $questionData = [
+                'question_text' => $q['question_text'],
+                'marks' => $q['marks'],
+                'order' => $i,
+            ];
+
+            if (isset($q['id'])) {
+                $question = \App\Models\Question::findOrFail($q['id']);
+                $question->update($questionData);
+            } else {
+                $question = $quiz->questions()->create($questionData);
+            }
+
+            $submittedOptionIds = collect($q['options'])->pluck('id')->filter()->toArray();
+            $question->options()->whereNotIn('id', $submittedOptionIds)->delete();
+
+            $correctIndex = (int)$q['correct_option'];
+            foreach ($q['options'] as $j => $opt) {
+                $optionData = [
+                    'option_text' => $opt['option_text'],
+                    'is_correct' => ($j === $correctIndex),
+                ];
+
+                if (isset($opt['id'])) {
+                    \App\Models\QuizOption::where('id', $opt['id'])->update($optionData);
+                } else {
+                    $question->options()->create($optionData);
+                }
+            }
+        }
 
         return redirect()->route('quizzes.index')->with('success', 'Quiz updated successfully!');
     }
