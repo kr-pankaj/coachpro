@@ -6,8 +6,8 @@
         @page { margin: 0px; }
         body {
             font-family: 'Helvetica', sans-serif;
-            background-color: #020617;
-            color: #f8fafc;
+            background-color: #ffffff;
+            color: #333333;
             margin: 0;
             padding: 0;
             width: 240px;
@@ -18,158 +18,164 @@
             height: 380px;
             position: relative;
             overflow: hidden;
-            background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+            background: #ffffff;
         }
         .header {
-            height: 70px;
+            background-color: #444444;
+            height: 180px;
             text-align: center;
-            padding-top: 25px;
+            padding-top: 20px;
             position: relative;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 1;
         }
         .logo-text {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: bold;
+            color: #06b6d4;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #818cf8;
-        }
-        .photo-section {
-            margin-top: 25px;
-            text-align: center;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
         }
         .photo-container {
-            width: 110px;
-            height: 110px;
+            width: 90px;
+            height: 90px;
             margin: 0 auto;
             border-radius: 50%;
-            border: 2px solid #4f46e5;
-            padding: 3px;
-            background: rgba(79, 70, 229, 0.1);
+            border: 3px solid #06b6d4;
+            overflow: hidden;
+            background: #eeeeee;
         }
-        .photo-inner {
+        .photo-img {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
-            overflow: hidden;
-            background: #1e293b;
+            object-fit: cover;
         }
-        .content {
-            padding: 20px 15px;
-            text-align: center;
+        .name-section {
+            margin-top: 10px;
+            color: #ffffff;
         }
         .student-name {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
-            margin-bottom: 2px;
-            color: #fff;
+            text-transform: uppercase;
         }
         .student-batch {
-            font-size: 8px;
-            color: #6366f1;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-weight: bold;
-            margin-bottom: 20px;
+            font-size: 9px;
+            opacity: 0.8;
+            margin-top: 2px;
         }
-        .info-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 12px;
-            text-align: left;
+        .wave-container {
+            position: absolute;
+            top: 150px;
+            left: 0;
+            width: 100%;
+            z-index: 2;
         }
-        .info-row {
-            margin-bottom: 8px;
+        .content {
+            padding: 45px 20px 20px;
+            font-size: 10px;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .info-table td {
+            padding: 4px 0;
+            vertical-align: top;
         }
         .label {
-            font-size: 6px;
-            color: #64748b;
-            text-transform: uppercase;
-            font-weight: bold;
-            margin-bottom: 1px;
+            color: #666666;
+            width: 60px;
+            font-weight: normal;
+        }
+        .separator {
+            width: 10px;
+            color: #999999;
         }
         .value {
-            font-size: 10px;
-            color: #cbd5e1;
+            color: #333333;
+            font-weight: bold;
+        }
+        .accent-label {
+            color: #06b6d4;
             font-weight: bold;
         }
         .footer {
             position: absolute;
-            bottom: 0;
+            bottom: 15px;
             width: 100%;
-            height: 60px;
             text-align: center;
-            background: rgba(0, 0, 0, 0.3);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 8px;
-        }
-        .qr-container {
-            width: 32px;
-            height: 32px;
-            background: white;
-            padding: 2px;
-            border-radius: 4px;
-            margin: 0 auto;
         }
         .qr-img {
-            width: 100%;
-            height: 100%;
-        }
-        .verify-text {
-            font-size: 6px;
-            color: #475569;
-            margin-top: 4px;
-            font-weight: bold;
-            letter-spacing: 1px;
+            width: 35px;
+            height: 35px;
+            border: 1px solid #eeeeee;
+            padding: 2px;
         }
     </style>
 </head>
 <body>
     <div class="card">
+        <!-- Header Section -->
         <div class="header">
             <div class="logo-text">{{ $student->institute->name }}</div>
-        </div>
-        
-        <div class="photo-section">
             <div class="photo-container">
-                <div class="photo-inner">
-                    @if($student->photo_url)
-                        <img src="{{ public_path($student->photo_url) }}" style="width: 100%; height: 100%; object-fit: cover;">
-                    @else
-                        <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.6;">
-                    @endif
-                </div>
+                @if($student->photo_url)
+                    <img src="{{ public_path($student->photo_url) }}" class="photo-img">
+                @else
+                    <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y" class="photo-img" style="opacity: 0.6;">
+                @endif
+            </div>
+            <div class="name-section">
+                <div class="student-name">{{ $student->name }}</div>
+                <div class="student-batch">{{ $student->batch->name ?? 'GENERAL BATCH' }}</div>
             </div>
         </div>
 
+        <!-- Wave Decoration (SVG approach for PDF compatibility) -->
+        <div class="wave-container">
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 60px; width: 100%;">
+                <path d="M0.00,49.98 C149.99,150.00 349.20,-49.98 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #ffffff;"></path>
+                <path d="M0.00,49.98 C149.99,150.00 271.49,-49.98 500.00,49.98 L500.00,0.00 L0.00,0.00 Z" style="stroke: none; fill: #444444;"></path>
+                <path d="M0.00,49.98 C149.99,150.00 300.00,-49.98 500.00,49.98" style="stroke: #06b6d4; stroke-width: 4px; fill: none; opacity: 0.5;"></path>
+            </svg>
+        </div>
+
+        <!-- Body Section -->
         <div class="content">
-            <div class="student-name">{{ $student->name }}</div>
-            <div class="student-batch">{{ $student->batch->name ?? 'GENERAL BATCH' }}</div>
-
-            <div class="info-card">
-                <div style="display: table; width: 100%;">
-                    <div style="display: table-cell; width: 50%;">
-                        <div class="label">ID NUMBER</div>
-                        <div class="value">#{{ str_pad($student->id, 5, '0', STR_PAD_LEFT) }}</div>
-                    </div>
-                    <div style="display: table-cell;">
-                        <div class="label">SINCE</div>
-                        <div class="value">{{ $student->joined_date ? \Carbon\Carbon::parse($student->joined_date)->format('M Y') : 'N/A' }}</div>
-                    </div>
-                </div>
-                <div style="margin-top: 8px;">
-                    <div class="label">CONTACT</div>
-                    <div class="value">{{ $student->phone ?? 'N/A' }}</div>
-                </div>
-            </div>
+            <table class="info-table">
+                <tr>
+                    <td class="label">ID</td>
+                    <td class="separator">:</td>
+                    <td class="value">#{{ str_pad($student->id, 5, '0', STR_PAD_LEFT) }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Phone</td>
+                    <td class="separator">:</td>
+                    <td class="value">{{ $student->phone ?? 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <td class="label">Email</td>
+                    <td class="separator">:</td>
+                    <td class="value" style="font-size: 8px;">{{ $student->user->email ?? 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <td class="accent-label">Join</td>
+                    <td class="separator">:</td>
+                    <td class="value">{{ $student->joined_date ? \Carbon\Carbon::parse($student->joined_date)->format('d-m-Y') : 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <td class="accent-label">Status</td>
+                    <td class="separator">:</td>
+                    <td class="value" style="color: #059669;">ACTIVE</td>
+                </tr>
+            </table>
         </div>
 
+        <!-- Footer Section -->
         <div class="footer">
-            <div class="qr-container">
-                <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode(route('dashboard')) }}">
-            </div>
-            <div class="verify-text">SECURE IDENTITY VERIFIED</div>
+            <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode(route('dashboard')) }}">
+            <div style="font-size: 6px; color: #999999; margin-top: 4px; letter-spacing: 1px;">VERIFIED STUDENT ID</div>
         </div>
     </div>
 </body>
