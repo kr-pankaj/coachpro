@@ -19,8 +19,9 @@
                             </div>
                             <div>
                                 <p class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">Branded Registration URL</p>
-                                <a href="http://{{ $institute->slug }}.{{ trim(str_replace(['http://', 'https://', '/'], '', config('app.url')), '/') }}/student/register" target="_blank" class="text-sm font-bold text-gray-900 dark:text-white hover:text-indigo-600 transition-colors">
-                                    {{ $institute->slug }}.{{ trim(str_replace(['http://', 'https://', '/'], '', config('app.url')), '/') }}/student/register
+                                @php $regUrl = config('app.url') . "/" . $institute->slug . "/student/register"; @endphp
+                                <a href="{{ $regUrl }}" target="_blank" class="text-sm font-bold text-gray-900 dark:text-white hover:text-indigo-600 transition-colors">
+                                    {{ str_replace(['http://', 'https://'], '', config('app.url')) }}/{{ $institute->slug }}/student/register
                                 </a>
                             </div>
                         </div>
@@ -72,10 +73,10 @@
                             @error('name')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">URL Slug (Subdomain) <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Portal URL Slug <span class="text-red-500">*</span></label>
                             <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden focus-within:border-indigo-400 focus-within:ring-2 focus-within:ring-indigo-100">
+                                <span class="px-3 py-2.5 bg-gray-50 text-xs text-gray-400 border-r border-gray-200 whitespace-nowrap">{{ str_replace(['http://', 'https://'], '', config('app.url')) }}/</span>
                                 <input type="text" name="slug" value="{{ old('slug', $institute->slug) }}" required class="flex-1 px-3 py-2.5 text-sm focus:outline-none">
-                                <span class="px-3 py-2.5 bg-gray-50 text-xs text-gray-400 border-l border-gray-200 whitespace-nowrap">.{{ trim(str_replace(['http://', 'https://'], '', config('app.url')), '/') }}</span>
                             </div>
                             @error('slug')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
@@ -99,7 +100,7 @@
                         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
                         <h3 class="font-semibold text-gray-800">Institute Description</h3>
                     </div>
-                    <p class="text-xs text-gray-400 mb-3">This appears on your student registration page. Describe your teaching approach, subjects offered, achievements, and what makes your institute unique. Example: <em>"We specialise in Science and Maths for classes 9–12, with a 95% board exam success rate since 2015."</em></p>
+                    <p class="text-xs text-gray-400 mb-3">This appears on your student registration page. Describe your teaching approach, subjects offered, achievements, and what makes your institute unique.</p>
                     <textarea name="description" rows="4" placeholder="Tell students about your institute — subjects, teaching style, achievements, batch sizes..." class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-400 resize-none">{{ old('description', $institute->description) }}</textarea>
                     @error('description')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                     <p class="text-right text-xs text-gray-400 mt-1" id="desc-count">0/1000 chars</p>
@@ -169,7 +170,7 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Logo URL</label>
                         <input type="url" name="logo_url" value="{{ old('logo_url', $institute->logo_url) }}" placeholder="https://yourinstitute.com/logo.png" class="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
-                        <p class="text-xs text-gray-400 mt-1">Paste a direct link to your institute logo image. Appears on student registration page. Recommended: 200×200px PNG with transparent background.</p>
+                        <p class="text-xs text-gray-400 mt-1">Paste a direct link to your logo image. Recommended: 200×200px PNG.</p>
                         @if($institute->logo_url)
                             <img src="{{ $institute->logo_url }}" alt="Logo" class="mt-3 h-16 w-16 object-contain rounded-lg border border-gray-100">
                         @endif
@@ -186,16 +187,16 @@
                         <input type="checkbox" name="allow_student_self_registration" class="mt-0.5 w-4 h-4 accent-indigo-600" {{ $institute->allow_student_self_registration ? 'checked' : '' }}>
                         <div>
                             <p class="text-sm font-medium text-gray-800 group-hover:text-indigo-600">Allow student self-registration</p>
-                            <p class="text-xs text-gray-400 mt-0.5">Students can register themselves using your unique link:
-                                <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs">{{ $institute->slug }}.{{ trim(str_replace(['http://', 'https://', '/'], '', config('app.url')), '/') }}/student/register</code>
+                            @php $cleanDomain = str_replace(['http://', 'https://'], '', config('app.url')); @endphp
+                            <p class="text-xs text-gray-400 mt-0.5">Students can register themselves using your link:
+                                <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs">{{ $cleanDomain }}/{{ $institute->slug }}/student/register</code>
                             </p>
                         </div>
                     </label>
                     @if($institute->allow_student_self_registration)
                     <div class="mt-4 p-3 bg-indigo-50 rounded-lg flex items-center gap-3">
-                        <code class="text-xs text-indigo-800 flex-1 break-all">http://{{ $institute->slug }}.{{ trim(str_replace(['http://', 'https://', '/'], '', config('app.url')), '/') }}/student/register</code>
-                        @php $regUrl = "http://" . $institute->slug . "." . trim(str_replace(['http://', 'https://', '/'], '', config('app.url')), '/') . "/student/register"; @endphp
-                        <button type="button" onclick="navigator.clipboard.writeText('{{ $regUrl }}');this.textContent='Copied!';" class="text-xs font-semibold text-indigo-600 shrink-0">Copy</button>
+                        <code class="text-xs text-indigo-800 flex-1 break-all">{{ config('app.url') }}/{{ $institute->slug }}/student/register</code>
+                        <button type="button" onclick="navigator.clipboard.writeText('{{ config('app.url') }}/{{ $institute->slug }}/student/register');this.textContent='Copied!';" class="text-xs font-semibold text-indigo-600 shrink-0">Copy</button>
                     </div>
                     @endif
                 </div>

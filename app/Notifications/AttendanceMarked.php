@@ -54,7 +54,7 @@ class AttendanceMarked extends Notification implements ShouldQueue
         return [
             'title' => 'Attendance Marked',
             'message' => 'You were marked ' . $this->attendance->status . ' for ' . $date->format('M d') . '.',
-            'link' => route('dashboard'),
+            'link' => $this->tenantRoute($this->attendance->student->institute, 'dashboard'),
             'type' => 'attendance'
         ];
     }

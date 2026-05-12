@@ -108,7 +108,7 @@
                 <button type="submit" class="btn-brand mt-2">Join {{ $institute->name }} →</button>
             </form>
 
-            <p class="text-xs text-center text-gray-400 mt-4">Already have an account? <a href="{{ route('login') }}" style="color:{{ $institute->brand_color ?? '#4f46e5' }}" class="font-semibold">Sign in</a></p>
+            <p class="text-xs text-center text-gray-400 mt-4">Already have an account? <a href="{{ route('login', ['slug' => $institute->slug]) }}" style="color:{{ $institute->brand_color ?? '#4f46e5' }}" class="font-semibold">Sign in</a></p>
         </div>
     </div>
 </div>

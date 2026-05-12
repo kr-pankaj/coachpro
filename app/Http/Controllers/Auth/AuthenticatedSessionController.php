@@ -27,35 +27,35 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $user = auth()->user();
-        $isSubdomain = $request->has('resolved_institute');
+        // Path-based check: resolved_institute comes from ResolveInstitute middleware
+        $institute = $request->get('resolved_institute');
 
-        // 1. If on main domain, only allow Super Admin
-        if (!$isSubdomain && $user->role !== 'superadmin') {
-            Auth::guard('web')->logout();
+        // 1. If on root domain (no institute resolved), handle redirection
+        if (!$institute && $user->role !== 'superadmin') {
             $inst = $user->institute;
             if ($inst) {
-                $appUrl = config('app.url');
-                $host = parse_url($appUrl, PHP_URL_HOST);
-                $port = parse_url($appUrl, PHP_URL_PORT);
-                $baseHost = $host . ($port ? ':' . $port : '');
-                $correctUrl = 'http://' . $inst->slug . '.' . $baseHost . '/login';
-                return redirect($correctUrl)->with('error', 'Please log in through your institute portal.');
+                // If they logged in at global, just take them to their dashboard!
+                return redirect()->route('dashboard', ['slug' => $inst->slug]);
             }
-            return redirect()->route('login')->with('error', 'Unauthorized domain access.');
+            Auth::guard('web')->logout();
+            return redirect()->route('login.global')->with('error', 'Unauthorized access.');
         }
 
-        // 2. If on subdomain, ensure user belongs to this institute
-        if ($isSubdomain) {
-            $institute = $request->get('resolved_institute');
+        // 2. If an institute is resolved, ensure user belongs to this institute
+        if ($institute) {
             if ($user->role !== 'superadmin' && $user->institute_id !== $institute->id) {
                 Auth::guard('web')->logout();
-                return redirect()->route('login')->with('error', 'You do not have access to this institute.');
+                return redirect()->route('login', ['slug' => $institute->slug])->with('error', 'You do not have access to this institute.');
             }
         }
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        if ($user->role === 'superadmin') {
+             return redirect()->intended(route('superadmin.index'));
+        }
+
+        return redirect()->intended(route('dashboard', ['slug' => $institute->slug]));
     }
 
     /**
@@ -63,12 +63,19 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $institute = $request->get('resolved_institute');
+        $slug = $institute?->slug;
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        if ($slug) {
+            return redirect()->route('login', ['slug' => $slug]);
+        }
+
+        return redirect()->route('login.global');
     }
 }

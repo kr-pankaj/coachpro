@@ -1,272 +1,306 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>QuonixAI | The Ultimate Coaching Management System</title>
-        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-        
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-        
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-        
-        <style>
-            .hero-mesh {
-                background-color: #050514;
-                background-image: 
-                    radial-gradient(at 0% 0%, hsla(263,70%,15%,1) 0, transparent 50%), 
-                    radial-gradient(at 50% 0%, hsla(280,60%,10%,1) 0, transparent 50%), 
-                    radial-gradient(at 100% 0%, hsla(330,60%,10%,1) 0, transparent 50%);
-            }
-            .glass-nav {
-                background: rgba(5, 5, 20, 0.8);
-                backdrop-filter: blur(12px);
-                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            }
-            .text-gradient {
-                background: linear-gradient(135deg, #7C3AED 0%, #C026D3 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-            .text-ai-gradient {
-                background: linear-gradient(135deg, #EC4899 0%, #F59E0B 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-        </style>
-    </head>
-    <body class="antialiased font-sans bg-[#050514] text-gray-100 selection:bg-quonix-purple selection:text-white overflow-x-hidden">
-        
-        <!-- Navigation -->
-        <nav class="fixed top-0 left-0 right-0 z-50 glass-nav">
-            <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <x-application-logo class="h-10 w-auto" text-color="text-white" />
-                </div>
-                
-                <div class="hidden md:flex items-center gap-8 text-sm font-bold tracking-tight uppercase">
-                    <a href="#features" class="hover:text-quonix-purple transition-colors">Features</a>
-                    <a href="#pricing" class="hover:text-quonix-purple transition-colors">Pricing</a>
-                    <a href="#testimonials" class="hover:text-quonix-purple transition-colors">Success Stories</a>
-                </div>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QuonixAI | Coaching Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        :root { --pink: #ec4899; --amber: #f59e0b; }
+        body { font-family: 'Inter', sans-serif; background: #ffffff; color: #111827; }
+        .brand-gradient { background: linear-gradient(135deg, #ec4899 0%, #f59e0b 100%); }
+        .text-brand { background: linear-gradient(135deg, #ec4899 0%, #f59e0b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .btn-brand { background: linear-gradient(135deg, #ec4899 0%, #f59e0b 100%); color: white; font-weight: 800; border-radius: 14px; transition: all .2s; box-shadow: 0 4px 20px rgba(236,72,153,.3); }
+        .btn-brand:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(236,72,153,.4); }
+        .nav-glass { background: rgba(255,255,255,.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(0,0,0,.06); }
+        .feature-card { background: #fff; border: 1px solid #f3f4f6; border-radius: 24px; transition: all .3s; }
+        .feature-card:hover { border-color: #f9a8d4; box-shadow: 0 12px 40px rgba(236,72,153,.12); transform: translateY(-4px); }
+        .hero-bg { background: linear-gradient(160deg, #fff9f0 0%, #fff0f6 50%, #fdf4ff 100%); }
+        .pricing-popular { background: linear-gradient(135deg, #ec4899 0%, #f59e0b 100%); }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+        .float { animation: float 5s ease-in-out infinite; }
+        .section-pill { display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(236,72,153,.08),rgba(245,158,11,.08));border:1px solid rgba(236,72,153,.2);color:#be185d;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:6px 16px;border-radius:999px;margin-bottom:16px; }
+    </style>
+</head>
+<body class="antialiased overflow-x-hidden">
 
-                <div class="flex items-center gap-4">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="btn-gradient-indigo">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm font-bold uppercase hover:text-quonix-purple transition-colors">Login</a>
-                        <a href="{{ route('register') }}" class="btn-gradient-indigo">Start Free Trial</a>
-                    @endauth
+{{-- NAV --}}
+<nav class="fixed top-0 left-0 right-0 z-50 nav-glass">
+    <div class="max-w-7xl mx-auto px-6 h-18 flex items-center justify-between py-4">
+        <x-application-logo class="h-8 w-auto" />
+        <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-500">
+            <a href="#features" class="hover:text-pink-600 transition-colors">Features</a>
+            <a href="#pricing" class="hover:text-pink-600 transition-colors">Pricing</a>
+            <a href="#contact" class="hover:text-pink-600 transition-colors">Contact</a>
+        </div>
+        <div class="flex items-center gap-3">
+            @auth
+                <a href="{{ auth()->user()->role === 'superadmin' ? route('superadmin.index') : (auth()->user()->institute ? route('dashboard', ['slug' => auth()->user()->institute->slug]) : '#') }}" class="btn-brand px-5 py-2.5 text-sm">Dashboard →</a>
+            @else
+                <a href="{{ route('login.global') }}" class="text-sm font-semibold text-gray-500 hover:text-gray-900 transition-colors">Sign in</a>
+                <a href="{{ route('register') }}" class="btn-brand px-5 py-2.5 text-sm">Start Free Trial</a>
+            @endauth
+        </div>
+    </div>
+</nav>
+
+{{-- HERO --}}
+<section class="hero-bg pt-32 pb-20 lg:pt-48 lg:pb-32">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="space-y-8">
+            <div class="section-pill">🚀 Now live — QuonixAI v1.0.6</div>
+            <h1 class="text-5xl lg:text-7xl font-black leading-tight tracking-tight text-gray-900">
+                Run Your Institute<br><span class="text-brand">Like a Pro.</span>
+            </h1>
+            <p class="text-lg text-gray-500 max-w-lg leading-relaxed">
+                The all-in-one coaching management platform. Automate fees, track attendance, engage students — all from a beautiful branded portal.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="{{ route('register') }}" class="btn-brand inline-flex items-center gap-2 px-8 py-4 text-base">
+                    Get started free <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+                <a href="#features" class="inline-flex items-center gap-2 px-8 py-4 text-base font-bold text-gray-700 bg-white border border-gray-200 rounded-2xl hover:border-pink-300 hover:text-pink-600 transition-all">
+                    Explore features
+                </a>
+            </div>
+            <div class="flex flex-wrap gap-6 text-sm font-semibold text-gray-400 pt-2">
+                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> No credit card needed</span>
+                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> 14-day free trial</span>
+                <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> Setup in 2 minutes</span>
+            </div>
+        </div>
+        <div class="relative flex justify-center float">
+            <div class="absolute inset-0 brand-gradient opacity-10 blur-[60px] rounded-full scale-90"></div>
+            <img src="{{ asset('hero-mockup-v2.png') }}" alt="QuonixAI Dashboard" class="relative z-10 w-full max-w-lg rounded-[2rem] shadow-2xl ring-1 ring-black/5">
+        </div>
+    </div>
+</section>
+
+{{-- FEATURES --}}
+<section id="features" class="py-28 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <div class="section-pill mx-auto">✨ Everything you need</div>
+            <h2 class="text-3xl lg:text-5xl font-black text-gray-900 tracking-tight">Powerful features, <span class="text-brand">zero complexity.</span></h2>
+            <p class="mt-4 text-gray-500 text-lg max-w-2xl mx-auto">Built specifically for coaching institutes. Every feature is designed to save you time and grow your business.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @php
+            $features = [
+                ['icon'=>'👨‍🎓','title'=>'Student Management','desc'=>'Full student profiles with batch enrollment, status tracking, and contact info. Searchable and filterable at scale.','color'=>'pink'],
+                ['icon'=>'✅','title'=>'Attendance Tracking','desc'=>'Mark attendance in one tap. Parents get instant notifications. View weekly/monthly reports in seconds.','color'=>'amber'],
+                ['icon'=>'💰','title'=>'Fee Management','desc'=>'Track pending and paid fees, generate PDF receipts, and send WhatsApp reminders automatically.','color'=>'green'],
+                ['icon'=>'📚','title'=>'Academic Library','desc'=>'Upload PDFs, share video links, and organize study materials by batch. Always accessible from mobile.','color'=>'blue'],
+                ['icon'=>'📝','title'=>'Online Quizzes','desc'=>'Create MCQ tests with auto-grading and instant results. Students get a beautiful leaderboard view.','color'=>'violet'],
+                ['icon'=>'📊','title'=>'AI-Powered Insights','desc'=>'AI detects at-risk students, suggests follow-up messages for leads, and gives smart retention tips.','color'=>'rose'],
+                ['icon'=>'🌐','title'=>'Branded Portal','desc'=>'Your own URL: ourdomain.com/yourname. Full branding with your logo and custom colors.','color'=>'indigo'],
+                ['icon'=>'📱','title'=>'Mobile First PWA','desc'=>'Works perfectly on any phone. Installable as an app. Designed for on-the-go institute management.','color'=>'cyan'],
+                ['icon'=>'🔒','title'=>'Secure & Isolated','desc'=>'Each institute\'s data is fully isolated. Role-based access for admins, teachers, and students.','color'=>'gray'],
+            ];
+            @endphp
+            @foreach($features as $f)
+            <div class="feature-card p-7">
+                <div class="text-3xl mb-4">{{ $f['icon'] }}</div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $f['title'] }}</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">{{ $f['desc'] }}</p>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+{{-- PRICING --}}
+<section id="pricing" class="py-28" style="background:linear-gradient(160deg,#fff9f0,#fff0f6);">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <div class="section-pill mx-auto">💳 Pricing</div>
+            <h2 class="text-3xl lg:text-5xl font-black text-gray-900 tracking-tight">Simple, <span class="text-brand">transparent</span> pricing.</h2>
+            <p class="mt-4 text-gray-500 text-lg max-w-2xl mx-auto">Start free. Upgrade when you're ready. No hidden fees, ever.</p>
+        </div>
+
+        @php
+            $monthly  = \App\Models\Setting::get('monthly_price', 999);
+            $sixMonth = \App\Models\Setting::get('six_month_price', 4999);
+            $discount = \App\Models\Setting::get('bulk_discount_percentage', 20);
+            $monthlyFull = round($monthly * 1.4);
+            $sixMonthFull = round($monthly * 6);
+        @endphp
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch max-w-5xl mx-auto">
+
+            {{-- Monthly --}}
+            <div class="bg-white rounded-3xl border border-gray-200 p-8 flex flex-col shadow-sm">
+                <div class="mb-6">
+                    <h3 class="text-xl font-black text-gray-900">Monthly</h3>
+                    <p class="text-gray-400 text-sm mt-1">Flexible, month-to-month access.</p>
+                </div>
+                <div class="mb-6">
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-4xl font-black text-gray-900">₹{{ number_format($monthly) }}</span>
+                        <span class="text-gray-400 text-sm">/month</span>
+                    </div>
+                    <p class="text-xs text-gray-400 line-through mt-1">Normally ₹{{ number_format($monthlyFull) }}/mo</p>
+                </div>
+                <ul class="space-y-3 mb-8 flex-1 text-sm text-gray-600">
+                    <li class="flex items-center gap-2"><span class="text-pink-500 font-bold">✓</span> Unlimited Students & Batches</li>
+                    <li class="flex items-center gap-2"><span class="text-pink-500 font-bold">✓</span> All Core Modules</li>
+                    <li class="flex items-center gap-2"><span class="text-pink-500 font-bold">✓</span> Attendance & Fee Tracking</li>
+                    <li class="flex items-center gap-2"><span class="text-pink-500 font-bold">✓</span> Email Notifications</li>
+                    <li class="flex items-center gap-2"><span class="text-pink-500 font-bold">✓</span> 14-day Free Trial</li>
+                </ul>
+                <a href="{{ route('register') }}" class="block w-full py-3.5 text-center font-bold text-gray-700 bg-gray-100 rounded-2xl hover:bg-gray-200 transition-all">Start Free Trial</a>
+            </div>
+
+            {{-- 6-Month POPULAR --}}
+            <div class="relative rounded-3xl p-8 flex flex-col shadow-2xl text-white pricing-popular" style="box-shadow:0 20px 60px rgba(236,72,153,.35);">
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-white text-pink-600 text-xs font-black uppercase tracking-widest px-5 py-1.5 rounded-full shadow-lg border border-pink-100">
+                    🏆 Most Popular
+                </div>
+                <div class="mb-6 mt-3">
+                    <h3 class="text-xl font-black">6-Month Plan</h3>
+                    <p class="text-white/70 text-sm mt-1">Best value for growing institutes.</p>
+                </div>
+                <div class="mb-2">
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-5xl font-black">₹{{ number_format($sixMonth) }}</span>
+                        <span class="text-white/70 text-sm">/6 months</span>
+                    </div>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span class="text-sm text-white/60 line-through">₹{{ number_format($sixMonthFull) }}</span>
+                        <span class="bg-white/20 text-white text-xs font-black px-2 py-0.5 rounded-full">
+                            Save ₹{{ number_format($sixMonthFull - $sixMonth) }} ({{ round((($sixMonthFull - $sixMonth) / $sixMonthFull) * 100) }}% off)
+                        </span>
+                    </div>
+                    <p class="text-white/60 text-xs mt-1">Just ₹{{ number_format(round($sixMonth / 6)) }}/month effectively</p>
+                </div>
+                <ul class="space-y-3 mb-8 flex-1 text-sm text-white/90 mt-4">
+                    <li class="flex items-center gap-2"><span class="font-black">✓</span> Everything in Monthly</li>
+                    <li class="flex items-center gap-2"><span class="font-black">✓</span> Priority Email Support</li>
+                    <li class="flex items-center gap-2"><span class="font-black">✓</span> Branded Tenant Portal URL</li>
+                    <li class="flex items-center gap-2"><span class="font-black">✓</span> AI Enquiry Follow-Up Suggestions</li>
+                    <li class="flex items-center gap-2"><span class="font-black">✓</span> Extended Payment History</li>
+                </ul>
+                <a href="{{ route('register') }}" class="block w-full py-4 text-center font-black text-pink-600 bg-white rounded-2xl hover:bg-pink-50 transition-all shadow-lg">Get Started Now →</a>
+            </div>
+
+            {{-- Custom --}}
+            <div class="bg-white rounded-3xl border border-gray-200 p-8 flex flex-col shadow-sm">
+                <div class="mb-6">
+                    <h3 class="text-xl font-black text-gray-900">Custom Plan</h3>
+                    <p class="text-gray-400 text-sm mt-1">Flexible duration for large operations.</p>
+                </div>
+                <div class="mb-6">
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-4xl font-black text-gray-900">Flexible</span>
+                    </div>
+                    <p class="text-xs text-pink-600 font-bold mt-1">Up to {{ $discount }}% bulk discount</p>
+                </div>
+                <ul class="space-y-3 mb-8 flex-1 text-sm text-gray-600">
+                    <li class="flex items-center gap-2"><span class="text-pink-500 font-bold">✓</span> Choose 1–12 months</li>
+                    <li class="flex items-center gap-2"><span class="text-pink-500 font-bold">✓</span> Volume-based discount</li>
+                    <li class="flex items-center gap-2"><span class="text-pink-500 font-bold">✓</span> Dedicated account manager</li>
+                    <li class="flex items-center gap-2"><span class="text-pink-500 font-bold">✓</span> Custom onboarding support</li>
+                    <li class="flex items-center gap-2"><span class="text-pink-500 font-bold">✓</span> Priority feature requests</li>
+                </ul>
+                <a href="#contact" class="block w-full py-3.5 text-center font-bold text-white rounded-2xl transition-all btn-brand">Contact Sales</a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{{-- CONTACT FORM --}}
+<section id="contact" class="py-28 bg-white">
+    <div class="max-w-3xl mx-auto px-6">
+        <div class="text-center mb-12">
+            <div class="section-pill mx-auto">📬 Get in Touch</div>
+            <h2 class="text-3xl lg:text-5xl font-black text-gray-900 tracking-tight">Talk to <span class="text-brand">our team.</span></h2>
+            <p class="mt-4 text-gray-500 text-lg">Have questions or want a custom plan? Fill out the form and we'll get back to you within 24 hours.</p>
+        </div>
+
+        @if(session('contact_success'))
+            <div class="mb-8 p-5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-2xl font-semibold text-center text-base">
+                🎉 {{ session('contact_success') }}
+            </div>
+        @endif
+
+        <form action="{{ route('contact.store') }}" method="POST" class="bg-white border border-gray-100 rounded-3xl shadow-xl p-8 space-y-5">
+            @csrf
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1.5">Your Name <span class="text-pink-500">*</span></label>
+                    <input type="text" name="name" value="{{ old('name') }}" placeholder="Rajesh Kumar" required class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all @error('name') border-red-400 @enderror">
+                    @error('name')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1.5">Email Address <span class="text-pink-500">*</span></label>
+                    <input type="email" name="email" value="{{ old('email') }}" placeholder="you@institute.com" required class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all @error('email') border-red-400 @enderror">
+                    @error('email')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>
             </div>
-        </nav>
-
-        <!-- Hero Section -->
-        <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden hero-mesh">
-            <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="relative z-10 space-y-8 animate-float">
-                    <span class="inline-flex items-center px-4 py-2 rounded-full text-xs font-black bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 uppercase tracking-widest">
-                        🚀 QuonixAI v1.0.6.0 is Live
-                    </span>
-                    <h1 class="text-6xl lg:text-8xl font-black leading-[0.9] tracking-tighter">
-                        Master Your <span class="text-gradient">Academics</span> with Ease.
-                    </h1>
-                    <p class="text-lg text-gray-400 max-w-lg leading-relaxed">
-                        The elite platform for modern coaching institutes. AI-driven insights to retain students, multi-batch enrollment, and automated financial tracking.
-                    </p>
-                    <div class="flex flex-wrap gap-4 pt-4">
-                        <a href="{{ route('register') }}" class="btn-gradient-indigo text-base px-10 py-5">
-                            Get Started for Free
-                        </a>
-                        <a href="#features" class="px-10 py-5 rounded-2xl bg-white/5 border border-white/10 text-base font-black hover:bg-white/10 transition-all flex items-center gap-2">
-                            Explore Features
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                        </a>
-                    </div>
-                    <div class="flex flex-wrap items-center gap-6 pt-8 border-t border-white/5">
-                        <div class="flex items-center gap-2">
-                            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Multi-Batch Enrollment</p>
-                        </div>
-                        <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
-                        <div class="flex items-center gap-2">
-                            <div class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></div>
-                            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">AI Retention Guardian</p>
-                        </div>
-                        <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
-                        <div class="flex items-center gap-2">
-                            <div class="w-2 h-2 bg-rose-500 rounded-full animate-pulse"></div>
-                            <p class="text-xs text-gray-400 uppercase font-bold tracking-widest">Smart Learning Analytics</p>
-                        </div>
-                    </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1.5">Phone Number</label>
+                    <input type="text" name="phone" value="{{ old('phone') }}" placeholder="+91 98765 43210" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all">
                 </div>
-
-                <div class="relative lg:h-[600px] flex items-center justify-center">
-                    <div class="absolute inset-0 bg-indigo-500/20 blur-[100px] rounded-full"></div>
-                    <img src="{{ asset('hero-mockup.png') }}" alt="QuonixAI Dashboard" class="relative z-10 w-full h-auto rounded-[2.5rem] shadow-2xl border border-white/10 animate-float" style="animation-delay: -3s;">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1.5">City</label>
+                    <input type="text" name="city" value="{{ old('city') }}" placeholder="Mumbai" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all">
                 </div>
             </div>
-        </section>
-
-        <!-- Features Grid -->
-        <section id="features" class="py-32 bg-[#0a0f1d]">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="text-center mb-20 space-y-4">
-                    <h2 class="text-4xl lg:text-6xl font-black tracking-tighter">Everything you need to <span class="text-gradient">Scale.</span></h2>
-                    <p class="text-gray-500 max-w-2xl mx-auto">Focus on teaching, we'll handle the rest. Powerful tools built for modern educators.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1.5">Institute Name</label>
+                    <input type="text" name="institute_name" value="{{ old('institute_name') }}" placeholder="Bright Future Classes" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all">
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @php
-                        $features = [
-                            ['title' => 'Student Management', 'desc' => 'Centralized database for all student profiles, batches, and personal details.', 'icon' => 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m9-10a4 4 0 100-8 4 4 0 000 8zm8-7a4 4 0 00-3 3.5M16 11a4 4 0 013 3.5m0 0V19m0-8a4 4 0 013 3.5', 'color' => 'indigo'],
-                            ['title' => 'Academic Library', 'desc' => 'Digital vault for Study Materials. Upload PDFs, share video lectures, and links.', 'icon' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253', 'color' => 'violet'],
-                            ['title' => 'Branded Portals', 'desc' => 'Get a professional URL (e.g., ica.coachpro.com) to provide a premium experience.', 'icon' => 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9', 'color' => 'emerald'],
-                            ['title' => 'Attendance Tracking', 'desc' => 'Smart attendance system with real-time notifications for parents.', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M10 16h.01', 'color' => 'rose'],
-                            ['title' => 'Audit Activity Logs', 'desc' => 'Complete accountability. Track every addition, update, and deletion across your institute.', 'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', 'color' => 'amber'],
-                            ['title' => 'Fee Records', 'desc' => 'Track pending fees. Generate automated PDF receipts and share via WhatsApp.', 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'color' => 'blue'],
-                            ['title' => 'Online Quizzes', 'desc' => 'Create and conduct online tests. Automated grading and detailed result analytics.', 'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4', 'color' => 'indigo'],
-                            ['title' => 'Mobile First', 'desc' => 'Completely responsive and installable as a PWA. Manage your institute on the go.', 'icon' => 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z', 'color' => 'violet'],
-                            ['title' => 'Lead Tracking', 'desc' => 'Don\'t lose a single inquiry. Manage follow-ups and convert leads efficiently.', 'icon' => 'M13 10V3L4 14h7v7l9-11h-7z', 'color' => 'rose'],
-                        ];
-                    @endphp
- 
-                    @foreach($features as $f)
-                        <div class="p-8 rounded-[2rem] bg-white/5 border border-white/5 hover:border-{{ $f['color'] }}-500/50 transition-all duration-500 hover:-translate-y-2 group relative overflow-hidden">
-                            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-{{ $f['color'] }}-500/10 rounded-full blur-2xl group-hover:bg-{{ $f['color'] }}-500/20 transition-all"></div>
-                            
-                            <div class="w-12 h-12 rounded-xl bg-{{ $f['color'] }}-500/10 text-{{ $f['color'] }}-400 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="{{ $f['icon'] }}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
-                            </div>
-                            
-                            <h3 class="text-lg font-black mb-3 tracking-tight group-hover:text-{{ $f['color'] }}-400 transition-colors">{{ $f['title'] }}</h3>
-                            <p class="text-sm text-gray-500 leading-relaxed font-medium">{{ $f['desc'] }}</p>
-                        </div>
-                    @endforeach
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-1.5">Interested Plan</label>
+                    <select name="plan_interest" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all bg-white">
+                        <option value="">— Select a plan —</option>
+                        <option value="monthly" {{ old('plan_interest') === 'monthly' ? 'selected' : '' }}>Monthly</option>
+                        <option value="six_month" {{ old('plan_interest') === 'six_month' ? 'selected' : '' }}>6-Month (Best Value)</option>
+                        <option value="custom" {{ old('plan_interest') === 'custom' ? 'selected' : '' }}>Custom Plan</option>
+                    </select>
                 </div>
             </div>
-        </section>
-
-        <!-- Pricing Section -->
-        <section id="pricing" class="py-32 bg-[#0f172a]">
-            <div class="max-w-7xl mx-auto px-6">
-                <div class="text-center mb-20 space-y-4">
-                    <h2 class="text-4xl lg:text-6xl font-black tracking-tighter">Simple, <span class="text-gradient">Transparent</span> Pricing.</h2>
-                    <p class="text-gray-500 max-w-2xl mx-auto">Choose a plan that scales with your growth. No hidden fees, no credit card required.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {{-- Starter --}}
-                    <div class="p-10 rounded-[3rem] bg-white/5 border border-white/10 hover:border-indigo-500/50 transition-all flex flex-col">
-                        <h3 class="text-2xl font-black mb-2">Monthly</h3>
-                        <p class="text-gray-500 text-sm mb-8">Perfect for small coaching centers starting out.</p>
-                        <div class="mb-8">
-                            <span class="text-5xl font-black">₹{{ \App\Models\Setting::get('monthly_price', 999) }}</span>
-                            <span class="text-gray-500 text-sm">/ month</span>
-                        </div>
-                        <ul class="space-y-4 mb-10 flex-1">
-                            <li class="flex items-center gap-3 text-sm text-gray-300">
-                                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                                Unlimited Students & Batches
-                            </li>
-                            <li class="flex items-center gap-3 text-sm text-gray-300">
-                                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                                All Core Modules Included
-                            </li>
-                            <li class="flex items-center gap-3 text-sm text-gray-300">
-                                <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                                Basic Analytics
-                            </li>
-                        </ul>
-                        <a href="{{ route('register') }}" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-center font-black hover:bg-white/10 transition-all">Start Trial</a>
-                    </div>
-
-                    {{-- Pro --}}
-                    <div class="p-10 rounded-[3rem] bg-indigo-600 relative overflow-hidden flex flex-col shadow-2xl shadow-indigo-500/20 scale-110 z-10">
-                        <div class="absolute top-6 right-6 bg-white/20 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">Most Popular</div>
-                        <h3 class="text-2xl font-black mb-2 text-white">6-Month Plan</h3>
-                        <p class="text-indigo-100 text-sm mb-8">Advanced features for growing institutes.</p>
-                        <div class="mb-8">
-                            <span class="text-5xl font-black text-white">₹{{ \App\Models\Setting::get('six_month_price', 4999) }}</span>
-                            <span class="text-indigo-200 text-sm">/ 6 months</span>
-                        </div>
-                        <ul class="space-y-4 mb-10 flex-1">
-                            <li class="flex items-center gap-3 text-sm text-white">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                                <strong>Significant Savings</strong> Included
-                            </li>
-                            <li class="flex items-center gap-3 text-sm text-white">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                                Branded Subdomains
-                            </li>
-                            <li class="flex items-center gap-3 text-sm text-white">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                                Priority Support
-                            </li>
-                        </ul>
-                        <a href="{{ route('register') }}" class="w-full py-4 rounded-2xl bg-white text-indigo-600 text-center font-black hover:scale-105 transition-all shadow-lg shadow-indigo-900/20">Get Started</a>
-                    </div>
-
-                    {{-- Enterprise --}}
-                    <div class="p-10 rounded-[3rem] bg-white/5 border border-white/10 hover:border-violet-500/50 transition-all flex flex-col">
-                        <h3 class="text-2xl font-black mb-2">Custom</h3>
-                        <p class="text-gray-500 text-sm mb-8">Flexible plans for large-scale operations.</p>
-                        <div class="mb-8">
-                            <span class="text-4xl font-black">Flexible</span>
-                            <span class="text-gray-500 text-sm"> Pricing</span>
-                        </div>
-                        <ul class="space-y-4 mb-10 flex-1">
-                            <li class="flex items-center gap-3 text-sm text-gray-300">
-                                <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                                Select Your Months
-                            </li>
-                            <li class="flex items-center gap-3 text-sm text-gray-300">
-                                <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                                <strong>Up to {{ \App\Models\Setting::get('bulk_discount_percentage', 30) }}% Discount</strong>
-                            </li>
-                            <li class="flex items-center gap-3 text-sm text-gray-300">
-                                <svg class="w-5 h-5 text-violet-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                                Dedicated Account Manager
-                            </li>
-                        </ul>
-                        <a href="{{ route('register') }}" class="w-full py-4 rounded-2xl bg-white/5 border border-white/10 text-center font-black hover:bg-white/10 transition-all">Contact Sales</a>
-                    </div>
-                </div>
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-1.5">Message</label>
+                <textarea name="message" rows="4" placeholder="Tell us about your institute, how many students you have, and any specific requirements..." class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all resize-none">{{ old('message') }}</textarea>
             </div>
-        </section>
+            <button type="submit" class="w-full btn-brand py-4 text-base font-black">
+                Send Enquiry — We'll respond within 24 hours
+            </button>
+        </form>
+    </div>
+</section>
 
-        <!-- CTA Section -->
-        <section class="py-20">
-            <div class="max-w-5xl mx-auto px-6">
-                <div class="bg-gradient-to-br from-indigo-600 to-violet-800 rounded-[3rem] p-12 text-center space-y-8 shadow-2xl shadow-indigo-500/20">
-                    <h2 class="text-4xl lg:text-6xl font-black tracking-tighter">Ready to transform your institute?</h2>
-                    <p class="text-indigo-100 text-lg max-w-xl mx-auto">Join hundreds of successful educators who are growing their coaching business with QuonixAI.</p>
-                    <div class="pt-4">
-                        <a href="{{ route('register') }}" class="bg-white text-indigo-600 px-12 py-5 rounded-2xl text-lg font-black hover:scale-105 active:scale-95 transition-all inline-block uppercase tracking-widest shadow-xl">
-                            Start 14-Day Free Trial
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
+{{-- CTA --}}
+<section class="py-24" style="background:linear-gradient(135deg,#fdf4ff,#fff9f0);">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+        <h2 class="text-3xl lg:text-5xl font-black text-gray-900 tracking-tight mb-6">Ready to transform<br><span class="text-brand">your institute?</span></h2>
+        <p class="text-gray-500 text-lg mb-10 max-w-xl mx-auto">Join coaching institutes across India already using QuonixAI to save time, reduce errors, and grow enrolment.</p>
+        <a href="{{ route('register') }}" class="btn-brand inline-flex items-center gap-2 px-10 py-5 text-lg font-black">
+            Start Your Free 14-Day Trial
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+        <p class="text-gray-400 text-sm mt-4">No credit card required. Cancel anytime.</p>
+    </div>
+</section>
 
-        <!-- Footer -->
-        <footer class="py-12 border-t border-white/5">
-            <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-2">
-                    <x-application-logo class="h-8 w-auto grayscale opacity-50" text-color="text-white" />
-                </div>
-                <p class="text-gray-600 text-xs font-bold uppercase tracking-widest">© {{ date('Y') }} QuonixAI SaaS. All rights reserved.</p>
-                <div class="flex gap-8 text-xs font-bold uppercase tracking-widest text-gray-500">
-                    <a href="#" class="hover:text-white transition-colors">Privacy</a>
-                    <a href="#" class="hover:text-white transition-colors">Terms</a>
-                    <a href="#" class="hover:text-white transition-colors">Contact</a>
-                </div>
-            </div>
-        </footer>
+{{-- FOOTER --}}
+<footer class="py-10 border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+        <x-application-logo class="h-7 w-auto opacity-70" />
+        <p class="text-gray-400 text-sm">© {{ date('Y') }} QuonixAI. All rights reserved.</p>
+        <div class="flex gap-6 text-sm font-semibold text-gray-400">
+            <a href="#" class="hover:text-pink-500 transition-colors">Privacy</a>
+            <a href="#" class="hover:text-pink-500 transition-colors">Terms</a>
+            <a href="#contact" class="hover:text-pink-500 transition-colors">Contact</a>
+        </div>
+    </div>
+</footer>
 
-    </body>
+</body>
 </html>

@@ -18,7 +18,7 @@ class SubscriptionInvoice extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public $instituteName,
+        public \App\Models\Institute $institute,
         public $planName,
         public $paymentId,
         public $amountPaid,

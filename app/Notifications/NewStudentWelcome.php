@@ -45,7 +45,7 @@ class NewStudentWelcome extends Notification implements ShouldQueue
             'title' => 'Welcome to ' . $this->institute->name,
             'message' => 'Your portal account has been created. Use the forgot password link to set your password.',
             'type' => 'welcome',
-            'link' => '/dashboard'
+            'link' => $this->tenantRoute($this->institute, 'dashboard')
         ];
     }
 }

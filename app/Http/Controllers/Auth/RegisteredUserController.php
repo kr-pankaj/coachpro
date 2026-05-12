@@ -62,7 +62,7 @@ class RegisteredUserController extends Controller
             // Silently fail — don't block registration if email fails
         }
 
-        return redirect()->route('dashboard')
+        return redirect()->route('dashboard', ['slug' => $institute->slug])
             ->with('success', 'Welcome to QuonixAI! Your 14-day free trial has started. Explore all features freely.');
     }
 }

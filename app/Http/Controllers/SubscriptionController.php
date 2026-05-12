@@ -135,7 +135,7 @@ class SubscriptionController extends Controller
             try {
                 \Illuminate\Support\Facades\Mail::to($institute->contact_email ?? auth()->user()->email)
                     ->send(new \App\Mail\SubscriptionInvoice(
-                        $institute->name,
+                        $institute,
                         $institute->plan_name,
                         $request->razorpay_payment_id,
                         ($order->amount / 100), // convert paise to rupees
@@ -145,7 +145,7 @@ class SubscriptionController extends Controller
                 \Illuminate\Support\Facades\Log::error('Invoice Mail Failed: ' . $e->getMessage());
             }
 
-            return redirect()->route('dashboard')
+            return redirect()->route('dashboard', ['slug' => $institute->slug])
                 ->with('success', 'Payment successful! Your account has been extended by ' . ($months * 30) . ' days. 🎉');
 
         } catch (\Exception $e) {

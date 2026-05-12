@@ -141,7 +141,7 @@
 
             {{-- Mobile bottom nav (Admin & Teacher Only) --}}
             @auth
-                @if(auth()->user()->role === 'admin' || auth()->user()->role === 'teacher')
+                @if(isset($resolved_institute) && (auth()->user()->role === 'admin' || auth()->user()->role === 'teacher'))
                     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex sm:hidden z-50">
                         @php 
                             $links = [];

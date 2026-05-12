@@ -31,7 +31,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('login') }}" style="display:flex;flex-direction:column;gap:1.125rem;">
+    <form method="POST" action="{{ request()->route('slug') ? route('login', ['slug' => request()->route('slug')]) : route('superadmin.login') }}" style="display:flex;flex-direction:column;gap:1.125rem;">
         @csrf
 
         <!-- Email -->
@@ -52,7 +52,7 @@
         <div>
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.375rem;">
                 <label for="password" style="font-size:0.8125rem;font-weight:600;color:#374151;">Password</label>
-                @if (Route::has('password.request'))
+                @if (request('resolved_institute') && Route::has('password.request'))
                     <a href="{{ route('password.request') }}" style="font-size:0.8rem;color:#4f46e5;text-decoration:none;font-weight:500;">Forgot password?</a>
                 @endif
             </div>
@@ -86,6 +86,11 @@
     <p style="text-align:center;margin-top:1.5rem;font-size:0.875rem;color:#64748b;">
         New to {{ config('app.name') }}? 
         <a href="{{ route('register') }}" style="color:#4f46e5;font-weight:600;text-decoration:none;">Create an account</a>
+    </p>
+    @else
+    <p style="text-align:center;margin-top:1.5rem;font-size:0.875rem;color:#64748b;">
+        Not your institute? 
+        <a href="{{ route('login.global') }}" style="color:#4f46e5;font-weight:600;text-decoration:none;">Find my institute</a>
     </p>
     @endif
 

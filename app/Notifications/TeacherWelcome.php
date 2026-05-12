@@ -46,7 +46,7 @@ class TeacherWelcome extends Notification implements ShouldQueue
             'title' => 'Welcome to ' . $this->institute->name,
             'message' => 'Your teacher account is ready. Use forgot password to set your credentials.',
             'type' => 'welcome',
-            'link' => '/dashboard'
+            'link' => $this->tenantRoute($this->institute, 'dashboard')
         ];
     }
 }

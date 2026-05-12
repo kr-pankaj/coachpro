@@ -15,7 +15,7 @@ Here's what you can do right now:
 - ✅ **Track leads** from walk-in enquiries
 - ✅ **Create online tests** with auto-grading
 
-@component('mail::button', ['url' => config('app.url') . '/dashboard', 'color' => 'blue'])
+@component('mail::button', ['url' => config('app.url') . '/' . $institute->slug . '/dashboard', 'color' => 'blue'])
 Go to Your Dashboard
 @endcomponent
 

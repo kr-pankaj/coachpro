@@ -27,12 +27,11 @@
         <!-- Portal Slug -->
         <div>
             <label for="slug" style="display:block;font-size:0.8125rem;font-weight:600;color:#374151;margin-bottom:0.375rem;">Your Unique Portal URL</label>
-            <div class="input-group">
-                <span class="input-icon">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="input-group" style="display:flex; align-items:center; background:#fafafa; border:1.5px solid #e5e7eb; border-radius:0.625rem; overflow:hidden;">
+                <span style="padding:0 0.75rem; font-size:0.875rem; font-weight:700; color:#94a3b8; background:#f1f5f9; border-right:1.5px solid #e2e8f0; height:100%; display:flex; align-items:center;">
+                    {{ trim(str_replace(['http://', 'https://'], '', config('app.url')), '/') }}/
                 </span>
-                <input id="slug" class="input-field" type="text" name="slug" value="{{ old('slug') }}" required placeholder="your-institute-name" style="padding-right:11rem;" />
-                <span style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);font-size:0.75rem;font-weight:700;color:#94a3b8;">.{{ trim(str_replace(['http://', 'https://', '/'], '', config('app.url')), '/') }}</span>
+                <input id="slug" class="input-field" type="text" name="slug" value="{{ old('slug') }}" required placeholder="your-institute-name" style="border:none; background:transparent; flex:1;" />
             </div>
             <p style="font-size:0.7rem;color:#64748b;margin-top:0.3rem;">Letters, numbers, and dashes only.</p>
             @error('slug')
@@ -108,7 +107,7 @@
 
     <p style="text-align:center;margin-top:1.25rem;font-size:0.875rem;color:#64748b;">
         Already have an account? 
-        <a href="{{ route('login') }}" style="color:#4f46e5;font-weight:600;text-decoration:none;">Sign in</a>
+        <a href="{{ route('login.global') }}" style="color:#4f46e5;font-weight:600;text-decoration:none;">Sign in</a>
     </p>
 
     <div style="display:flex;align-items:center;gap:0.75rem;margin-top:1.25rem;padding:0.875rem;background:#f8fafc;border-radius:0.625rem;border:1px solid #e2e8f0;">

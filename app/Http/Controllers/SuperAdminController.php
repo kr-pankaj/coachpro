@@ -57,7 +57,7 @@ class SuperAdminController extends Controller
         
         auth()->login($owner);
 
-        return redirect()->route('dashboard')->with('success', 'You are now impersonating ' . $institute->name);
+        return redirect()->route('dashboard', ['slug' => $institute->slug])->with('success', 'You are now impersonating ' . $institute->name);
     }
 
     public function broadcast(Request $request)
@@ -102,7 +102,7 @@ class SuperAdminController extends Controller
     public function stopImpersonating()
     {
         if (!session()->has('impersonated_by')) {
-            return redirect()->route('dashboard');
+            return redirect()->route('superadmin.index');
         }
 
         $superAdmin = User::find(session('impersonated_by'));

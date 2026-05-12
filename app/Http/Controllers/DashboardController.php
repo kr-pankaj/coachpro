@@ -84,10 +84,16 @@ class DashboardController extends Controller
                     }
                 }
             }
+            
+            // Announcements
+            $announcements = Announcement::where('institute_id', $student->institute_id)
+                ->where(fn($q) => $q->whereNull('expires_on')->orWhere('expires_on', '>=', today()))
+                ->orderByDesc('created_at')->take(5)->get();
 
             return view('student.dashboard', compact(
                 'student', 'fees', 'attendances', 
-                'attempts', 'performanceRate', 'attendanceRate', 'upcomingQuizzes', 'badges', 'streak'
+                'attempts', 'performanceRate', 'attendanceRate', 'upcomingQuizzes', 'badges', 'streak',
+                'announcements'
             ));
         }
 

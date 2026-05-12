@@ -11,7 +11,7 @@ After your trial ends, you will lose access to the dashboard. Subscribe now to c
 
 Our subscription is just **₹1,999** — a one-time payment that keeps your institute running smoothly.
 
-@component('mail::button', ['url' => config('app.url') . '/subscription', 'color' => 'blue'])
+@component('mail::button', ['url' => config('app.url') . '/' . $institute->slug . '/subscription', 'color' => 'blue'])
 Subscribe Now & Continue
 @endcomponent
 

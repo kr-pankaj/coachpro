@@ -1,7 +1,7 @@
 <div class="hidden sm:flex flex-col w-72 h-screen fixed left-0 top-0 p-4 z-40">
     <div class="flex flex-col h-full bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-2xl shadow-quonix-purple/10 dark:shadow-none border border-gray-100 dark:border-gray-700 overflow-hidden">
         <div class="flex items-center px-8 h-28 shrink-0">
-            <a href="{{ route('dashboard') }}" class="group">
+            <a href="{{ auth()->user()->role === 'superadmin' ? route('superadmin.index') : route('dashboard') }}" class="group">
                 <x-application-logo class="h-16 w-auto transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" />
             </a>
             <div class="ml-auto">
@@ -15,78 +15,82 @@
                     <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Main Menu</span>
                 </div>
                 
-                <x-sidebar-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                {{-- Global/Superadmin Dashboard Link --}}
+                <x-sidebar-link :href="auth()->user()->role === 'superadmin' ? route('superadmin.index') : route('dashboard')" :active="request()->routeIs('dashboard') || request()->routeIs('superadmin.index')" icon="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
                     {{ __('Insights') }}
                 </x-sidebar-link>
 
-                <x-sidebar-link :href="route('leaderboard')" :active="request()->routeIs('leaderboard')" icon="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-2.394 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946 2.394 3.42 3.42 0 010 4.606 3.42 3.42 0 00-1.946 2.394 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-2.394 3.42 3.42 0 010-4.606z">
-                    {{ __('Leaderboard') }}
-                </x-sidebar-link>
+                {{-- Institute-Specific Links: ONLY show if we are in an institute context --}}
+                @if(isset($resolved_institute))
+                    <x-sidebar-link :href="route('leaderboard')" :active="request()->routeIs('leaderboard')" icon="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-2.394 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946 2.394 3.42 3.42 0 010 4.606 3.42 3.42 0 00-1.946 2.394 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-2.394 3.42 3.42 0 010-4.606z">
+                        {{ __('Leaderboard') }}
+                    </x-sidebar-link>
 
-                <a href="{{ route('notifications.index') }}" class="flex items-center justify-between px-4 py-3.5 text-sm font-bold rounded-2xl transition-all duration-300 {{ request()->routeIs('notifications.*') ? 'bg-quonix-purple text-white shadow-xl shadow-quonix-purple/20' : 'text-gray-500 dark:text-gray-400 hover:bg-quonix-purple/5 dark:hover:bg-gray-700/50 hover:text-quonix-purple' }}">
-                    <div class="flex items-center gap-3">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
-                        <span>{{ __('Inbox') }}</span>
-                    </div>
-                    @if(auth()->user()->unreadNotifications->count() > 0)
-                        <span class="flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[10px] font-black bg-rose-500 text-white rounded-full animate-pulse">
-                            {{ auth()->user()->unreadNotifications->count() }}
-                        </span>
+                    <a href="{{ route('notifications.index') }}" class="flex items-center justify-between px-4 py-3.5 text-sm font-bold rounded-2xl transition-all duration-300 {{ request()->routeIs('notifications.*') ? 'bg-quonix-purple text-white shadow-xl shadow-quonix-purple/20' : 'text-gray-500 dark:text-gray-400 hover:bg-quonix-purple/5 dark:hover:bg-gray-700/50 hover:text-quonix-purple' }}">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                            <span>{{ __('Inbox') }}</span>
+                        </div>
+                        @if(auth()->user()->unreadNotifications->count() > 0)
+                            <span class="flex items-center justify-center min-w-[20px] h-5 px-1.5 text-[10px] font-black bg-rose-500 text-white rounded-full animate-pulse">
+                                {{ auth()->user()->unreadNotifications->count() }}
+                            </span>
+                        @endif
+                    </a>
+
+                    @if(auth()->user()->role === 'admin' || auth()->user()->role === 'teacher')
+                        <div class="pt-8 pb-2 px-4">
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Academic</span>
+                        </div>
+                        <x-sidebar-link :href="route('batches.index')" :active="request()->routeIs('batches.*')" icon="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                            {{ __('Class Batches') }}
+                        </x-sidebar-link>
+                        <x-sidebar-link :href="route('students.index')" :active="request()->routeIs('students.*')" icon="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                            {{ __('Student CRM') }}
+                        </x-sidebar-link>
+                        <x-sidebar-link :href="route('attendances.index')" :active="request()->routeIs('attendances.*')" icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                            {{ __('Attendance') }}
+                        </x-sidebar-link>
+                        <x-sidebar-link :href="route('quizzes.index')" :active="request()->routeIs('quizzes.*')" icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
+                            {{ __('Assessment') }}
+                        </x-sidebar-link>
+                        <x-sidebar-link :href="route('study_materials.index')" :active="request()->routeIs('study_materials.*')" icon="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                            {{ __('Study Materials') }}
+                        </x-sidebar-link>
                     @endif
-                </a>
 
-                @if(auth()->user()->role === 'admin' || auth()->user()->role === 'teacher')
-                    <div class="pt-8 pb-2 px-4">
-                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Academic</span>
-                    </div>
-                    <x-sidebar-link :href="route('batches.index')" :active="request()->routeIs('batches.*')" icon="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
-                        {{ __('Class Batches') }}
-                    </x-sidebar-link>
-                    <x-sidebar-link :href="route('students.index')" :active="request()->routeIs('students.*')" icon="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                        {{ __('Student CRM') }}
-                    </x-sidebar-link>
-                    <x-sidebar-link :href="route('attendances.index')" :active="request()->routeIs('attendances.*')" icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
-                        {{ __('Attendance') }}
-                    </x-sidebar-link>
-                    <x-sidebar-link :href="route('quizzes.index')" :active="request()->routeIs('quizzes.*')" icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
-                        {{ __('Assessment') }}
-                    </x-sidebar-link>
-                    <x-sidebar-link :href="route('study_materials.index')" :active="request()->routeIs('study_materials.*')" icon="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
-                        {{ __('Study Materials') }}
-                    </x-sidebar-link>
-                @endif
+                    @if(auth()->user()->role === 'student')
+                        <div class="pt-8 pb-2 px-4">
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Learning</span>
+                        </div>
+                        <x-sidebar-link :href="route('student.quizzes.index')" :active="request()->routeIs('student.quizzes.*')" icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
+                            {{ __('Assessments') }}
+                        </x-sidebar-link>
+                        <x-sidebar-link :href="route('study_materials.index')" :active="request()->routeIs('study_materials.*')" icon="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                            {{ __('Materials') }}
+                        </x-sidebar-link>
+                    @endif
 
-                @if(auth()->user()->role === 'student')
-                    <div class="pt-8 pb-2 px-4">
-                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Learning</span>
-                    </div>
-                    <x-sidebar-link :href="route('student.quizzes.index')" :active="request()->routeIs('student.quizzes.*')" icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
-                        {{ __('Assessments') }}
-                    </x-sidebar-link>
-                    <x-sidebar-link :href="route('study_materials.index')" :active="request()->routeIs('study_materials.*')" icon="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
-                        {{ __('Materials') }}
-                    </x-sidebar-link>
-                @endif
-
-                @if(auth()->user()->role === 'admin')
-                    <div class="pt-8 pb-2 px-4">
-                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Management</span>
-                    </div>
-                    <x-sidebar-link :href="route('teachers.index')" :active="request()->routeIs('teachers.*')" icon="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0">
-                        {{ __('Faculty Staff') }}
-                    </x-sidebar-link>
-                    <x-sidebar-link :href="route('enquiries.index')" :active="request()->routeIs('enquiries.*')" icon="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
-                        {{ __('Leads & Inquiry') }}
-                    </x-sidebar-link>
-                    <x-sidebar-link :href="route('fees.index')" :active="request()->routeIs('fees.*')" icon="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z">
-                        {{ __('Finance Hub') }}
-                    </x-sidebar-link>
-                    <x-sidebar-link :href="route('institute.settings')" :active="request()->routeIs('institute.settings')" icon="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924-1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0">
-                        {{ __('Settings') }}
-                    </x-sidebar-link>
-                    <x-sidebar-link :href="route('subscription.index')" :active="request()->routeIs('subscription.*')" icon="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
-                        {{ __('Billing & Plan') }}
-                    </x-sidebar-link>
+                    @if(auth()->user()->role === 'admin')
+                        <div class="pt-8 pb-2 px-4">
+                            <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Management</span>
+                        </div>
+                        <x-sidebar-link :href="route('teachers.index')" :active="request()->routeIs('teachers.*')" icon="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0">
+                            {{ __('Faculty Staff') }}
+                        </x-sidebar-link>
+                        <x-sidebar-link :href="route('enquiries.index')" :active="request()->routeIs('enquiries.*')" icon="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                            {{ __('Leads & Inquiry') }}
+                        </x-sidebar-link>
+                        <x-sidebar-link :href="route('fees.index')" :active="request()->routeIs('fees.*')" icon="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z">
+                            {{ __('Finance Hub') }}
+                        </x-sidebar-link>
+                        <x-sidebar-link :href="route('institute.settings')" :active="request()->routeIs('institute.settings')" icon="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924-1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0">
+                            {{ __('Settings') }}
+                        </x-sidebar-link>
+                        <x-sidebar-link :href="route('subscription.index')" :active="request()->routeIs('subscription.*')" icon="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
+                            {{ __('Billing & Plan') }}
+                        </x-sidebar-link>
+                    @endif
                 @endif
             </nav>
         </div>

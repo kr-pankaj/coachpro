@@ -25,7 +25,7 @@
         </div>
         <div class="content">
             <div class="badge">Payment Successful</div>
-            <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 800; color: #111827;">Thank you for your trust, {{ $instituteName }}!</h2>
+            <h2 style="margin: 0 0 16px; font-size: 20px; font-weight: 800; color: #111827;">Thank you for your trust, {{ $institute->name }}!</h2>
             <p style="font-size: 15px; color: #4b5563;">We have received your payment for the <strong>{{ $planName }}</strong>. Your institute access has been successfully extended.</p>
             
             <div class="invoice-box">
@@ -54,7 +54,7 @@
             <p style="font-size: 14px; color: #6b7280;">You can now continue managing your students, attendance, and finances without any interruption.</p>
             
             <div style="text-align: center;">
-                <a href="{{ config('app.url') }}/dashboard" class="btn">Go to Command Center</a>
+                <a href="{{ config('app.url') }}/{{ $institute->slug }}/dashboard" class="btn">Go to Command Center</a>
             </div>
         </div>
         <div class="footer">

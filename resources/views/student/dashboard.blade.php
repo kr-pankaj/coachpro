@@ -180,6 +180,30 @@
                         </div>
                     </div>
 
+                    {{-- Notice Board --}}
+                    @if($announcements->count())
+                    <div class="bg-gradient-to-br from-indigo-900 via-gray-900 to-black rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden mb-8">
+                        <div class="absolute bottom-0 right-0 -mb-10 -mr-10 w-32 h-32 bg-indigo-500/20 rounded-full blur-3xl"></div>
+                        <h3 class="text-lg font-black uppercase tracking-tighter mb-6 flex items-center gap-2 relative z-10">
+                            <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+                            Notice Board
+                        </h3>
+                        
+                        <div class="space-y-4 relative z-10">
+                            @foreach($announcements as $ann)
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-indigo-500/50 transition-all group">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="text-[8px] font-black uppercase tracking-widest {{ $ann->type === 'warning' ? 'text-amber-400' : 'text-indigo-300' }}">{{ $ann->type }}</span>
+                                    <span class="text-[8px] font-bold text-white/30">{{ $ann->created_at->diffForHumans() }}</span>
+                                </div>
+                                <p class="text-xs font-black leading-tight">{{ $ann->title }}</p>
+                                <p class="text-[10px] text-white/50 mt-1">{{ $ann->content }}</p>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+
                     {{-- Profile Update Request --}}
                     <div class="bg-gray-950 rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden">
                         <div class="absolute bottom-0 right-0 -mb-10 -mr-10 w-32 h-32 bg-quonix-purple/20 rounded-full blur-3xl"></div>

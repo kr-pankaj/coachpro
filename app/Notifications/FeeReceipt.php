@@ -56,7 +56,7 @@ class FeeReceipt extends Notification implements ShouldQueue
         return [
             'title' => 'Fee Payment recorded',
             'message' => 'Payment of ₹' . number_format($this->fee->paid_amount, 2) . ' received for ' . $this->fee->month_year,
-            'link' => route('fees.show', $this->fee),
+            'link' => $this->tenantRoute($this->fee->student->institute, 'dashboard'),
             'type' => 'fee_payment'
         ];
     }

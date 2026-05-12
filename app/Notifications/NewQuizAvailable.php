@@ -5,10 +5,11 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class NewQuizAvailable extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, \App\Traits\HasTenantUrl;
 
     protected $quiz;
 
@@ -30,7 +31,7 @@ class NewQuizAvailable extends Notification implements ShouldQueue
                     ->line('A new online quiz has been assigned to your batch.')
                     ->line('Title: ' . $this->quiz->title)
                     ->line('Time Limit: ' . $this->quiz->time_limit_minutes . ' minutes')
-                    ->action('Start Quiz', route('student.quizzes.index'))
+                    ->action('Start Quiz', $this->tenantRoute($this->quiz->batch->institute, 'quizzes'))
                     ->line('Good luck with your test!');
     }
 
@@ -39,7 +40,7 @@ class NewQuizAvailable extends Notification implements ShouldQueue
         return [
             'title' => 'New Quiz Assigned',
             'message' => 'The quiz "' . $this->quiz->title . '" is now available for you to take.',
-            'link' => route('student.quizzes.index'),
+            'link' => $this->tenantRoute($this->quiz->batch->institute, 'dashboard'),
             'type' => 'new_quiz'
         ];
     }

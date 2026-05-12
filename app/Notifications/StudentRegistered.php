@@ -9,7 +9,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 class StudentRegistered extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, \App\Traits\HasTenantUrl;
 
     protected $student;
 
@@ -32,7 +32,7 @@ class StudentRegistered extends Notification implements ShouldQueue
                     ->line('Name: ' . $this->student->name)
                     ->line('Email: ' . $this->student->email)
                     ->line('Phone: ' . ($this->student->phone ?? 'N/A'))
-                    ->action('View Student Details', route('students.index'))
+                    ->action('View Student Details', $this->tenantRoute($this->student->institute, 'students'))
                     ->line('Thank you for using ' . config('app.name') . '!');
     }
 
@@ -41,7 +41,7 @@ class StudentRegistered extends Notification implements ShouldQueue
         return [
             'title' => 'New Student Registered',
             'message' => $this->student->name . ' has just registered.',
-            'link' => route('students.index'),
+            'link' => $this->tenantRoute($this->student->institute, 'students'),
             'type' => 'student_registration'
         ];
     }

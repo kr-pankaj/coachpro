@@ -9,13 +9,9 @@ trait HasTenantUrl
      */
     public function tenantRoute($institute, $path = '')
     {
-        $appUrl = config('app.url');
-        $host = parse_url($appUrl, PHP_URL_HOST);
-        $port = parse_url($appUrl, PHP_URL_PORT);
-        
-        $baseHost = $host . ($port ? ':' . $port : '');
+        $appUrl = rtrim(config('app.url'), '/');
         $path = ltrim($path, '/');
         
-        return 'http://' . $institute->slug . '.' . $baseHost . '/' . $path;
+        return $appUrl . '/' . $institute->slug . '/' . $path;
     }
 }

@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 
 class OverdueFeeReminder extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, \App\Traits\HasTenantUrl;
 
     protected $fee;
 
@@ -46,7 +46,7 @@ class OverdueFeeReminder extends Notification implements ShouldQueue
             'title' => 'Fee Payment Reminder',
             'message' => 'Your fees for ' . $this->fee->month_year . ' are pending (₹' . number_format($this->fee->due_amount) . ').',
             'fee_id' => $this->fee->id,
-            'url' => route('fees.share', $this->fee->share_token),
+            'link' => $this->tenantRoute($this->fee->student->institute, 'dashboard'),
         ];
     }
 }

@@ -5,10 +5,11 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class AnnouncementNotification extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, \App\Traits\HasTenantUrl;
 
     protected $announcement;
 
@@ -30,7 +31,7 @@ class AnnouncementNotification extends Notification implements ShouldQueue
                     ->line('A new announcement has been posted at your institute.')
                     ->line('Title: ' . $this->announcement->title)
                     ->line($this->announcement->content)
-                    ->action('View Dashboard', url('/dashboard'))
+                    ->action('View Dashboard', $this->tenantRoute($this->announcement->institute, 'dashboard'))
                     ->line('Stay updated!');
     }
 
@@ -39,7 +40,7 @@ class AnnouncementNotification extends Notification implements ShouldQueue
         return [
             'title' => 'New Announcement',
             'message' => $this->announcement->title,
-            'link' => url('/dashboard'),
+            'link' => $this->tenantRoute($this->announcement->institute, 'dashboard'),
             'type' => 'announcement'
         ];
     }

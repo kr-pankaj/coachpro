@@ -336,6 +336,7 @@
                         
                         <form method="POST" action="{{ route('announcements.store') }}" class="space-y-4 relative z-10">
                             @csrf
+                            <input type="hidden" name="type" value="info">
                             <input type="text" name="title" placeholder="Topic..." required class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-xs placeholder-white/30 focus:ring-1 focus:ring-indigo-500 focus:bg-white/10 transition-all">
                             <textarea name="content" placeholder="Type your broadcast..." rows="2" required class="w-full bg-white/5 border-white/10 rounded-xl px-4 py-3 text-xs placeholder-white/30 focus:ring-1 focus:ring-indigo-500 focus:bg-white/10 transition-all resize-none"></textarea>
                             <button type="submit" class="w-full bg-white text-gray-900 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-50 transition-colors">Broadcast Notice</button>
