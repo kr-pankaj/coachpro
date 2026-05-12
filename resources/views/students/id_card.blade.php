@@ -18,50 +18,80 @@
             height: 371pt;
             background: #ffffff;
             overflow: hidden;
+            position: relative;
+        }
+
+        /* ── BACKGROUND ART ── */
+        .bg-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 140pt;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            z-index: 1;
+        }
+        .bg-curve {
+            position: absolute;
+            top: 100pt;
+            left: -50pt;
+            width: 350pt;
+            height: 100pt;
+            background: #ffffff;
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+        /* ── CONTENT WRAPPER ── */
+        .content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
         /* ── HEADER ── */
         .header {
-            background: #2d3748;
-            width: 100%;
-            padding: 18pt 0 20pt;
             text-align: center;
+            padding-top: 15pt;
         }
         .institute-name {
-            font-size: 8pt;
-            font-weight: bold;
-            color: #81e6d9;
+            font-size: 10pt;
+            font-weight: 800;
+            color: #ffffff;
             text-transform: uppercase;
             letter-spacing: 1.5pt;
+            margin-bottom: 2pt;
         }
         .id-title {
-            font-size: 6pt;
-            color: #a0aec0;
-            margin-top: 2pt;
+            font-size: 6.5pt;
+            color: rgba(255, 255, 255, 0.85);
             text-transform: uppercase;
             letter-spacing: 1pt;
+            font-weight: 500;
         }
 
         /* ── PHOTO ── */
         .photo-wrap {
             text-align: center;
-            margin-top: 12pt;
+            margin-top: 15pt;
         }
         .photo-ring {
             display: inline-block;
-            width: 76pt;
-            height: 76pt;
+            width: 80pt;
+            height: 80pt;
             border-radius: 50%;
-            border: 2.5pt solid #38b2ac;
-            padding: 3pt;
-            background: #2d3748;
+            border: 3pt solid #ffffff;
+            background: #ffffff;
+            /* Box shadows don't always render in dompdf, but we keep the thick white border for the floating effect */
         }
         .photo-inner {
             width: 100%;
             height: 100%;
             border-radius: 50%;
             overflow: hidden;
-            background: #4a5568;
+            background: #f1f5f9;
         }
         .photo-inner img {
             width: 100%;
@@ -69,40 +99,37 @@
             object-fit: cover;
         }
 
-        /* ── NAME ── */
+        /* ── NAME BLOCK ── */
         .name-block {
             text-align: center;
-            background: #2d3748;
-            padding-bottom: 14pt;
+            margin-top: 10pt;
+            padding: 0 15pt;
         }
         .student-name {
             font-size: 14pt;
-            font-weight: bold;
-            color: #ffffff;
-            margin-top: 8pt;
+            font-weight: 800;
+            color: #111827;
             text-transform: uppercase;
+            letter-spacing: 0.5pt;
         }
         .batch-name {
-            font-size: 7pt;
-            color: #a0aec0;
+            font-size: 7.5pt;
+            color: #6366f1;
+            font-weight: 600;
             margin-top: 3pt;
-        }
-
-        /* ── DIVIDER STRIPE ── */
-        .stripe {
-            height: 4pt;
-            background: linear-gradient(to right, #38b2ac, #2c7a7b);
+            text-transform: uppercase;
+            letter-spacing: 0.5pt;
         }
 
         /* ── INFO BODY ── */
         .info-body {
-            background: #f7fafc;
-            padding: 14pt 20pt;
+            margin-top: 18pt;
+            padding: 0 25pt;
         }
         .info-row {
             display: table;
             width: 100%;
-            padding: 4pt 0;
+            padding: 5pt 0;
             border-bottom: 0.5pt solid #e2e8f0;
         }
         .info-row:last-child {
@@ -110,14 +137,16 @@
         }
         .info-key {
             display: table-cell;
-            font-size: 8pt;
-            color: #718096;
-            width: 55pt;
+            font-size: 7.5pt;
+            color: #64748b;
+            width: 50pt;
             vertical-align: middle;
+            font-weight: 500;
+            text-transform: uppercase;
         }
         .info-colon {
             display: table-cell;
-            font-size: 8pt;
+            font-size: 7.5pt;
             color: #cbd5e0;
             width: 10pt;
             vertical-align: middle;
@@ -125,97 +154,110 @@
         .info-val {
             display: table-cell;
             font-size: 8pt;
-            font-weight: bold;
-            color: #2d3748;
+            font-weight: 700;
+            color: #1e293b;
             vertical-align: middle;
         }
         .info-val.accent {
-            color: #2c7a7b;
+            color: #4f46e5;
         }
 
-        /* ── QR FOOTER ── */
-        .qr-footer {
-            background: #2d3748;
+        /* ── FOOTER ── */
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 25pt;
+            background: #f8fafc;
+            border-top: 1pt solid #e2e8f0;
             text-align: center;
-            padding: 10pt 0 8pt;
+            line-height: 25pt;
+            z-index: 10;
         }
-        .qr-box {
-            display: inline-block;
-            background: #ffffff;
-            padding: 3pt;
-            border-radius: 3pt;
+        .footer-text {
+            font-size: 6pt;
+            color: #94a3b8;
+            letter-spacing: 0.5pt;
         }
-        .qr-box img {
-            width: 36pt;
-            height: 36pt;
-            display: block;
-        }
-        .qr-label {
-            font-size: 5.5pt;
-            color: #81e6d9;
-            margin-top: 5pt;
-            letter-spacing: 0.8pt;
-            text-transform: uppercase;
+        
+        /* ── DECORATIVE ACCENT ── */
+        .accent-bar {
+            position: absolute;
+            bottom: 25pt;
+            left: 0;
+            width: 100%;
+            height: 3pt;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed, #ec4899);
+            z-index: 10;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <div class="institute-name">{{ $student->institute->name }}</div>
-        <div class="id-title">Student Identity Card</div>
-    </div>
+    <!-- Background Elements -->
+    <div class="bg-top"></div>
+    <div class="bg-curve"></div>
 
-    <!-- Photo -->
-    <div class="photo-wrap" style="background:#2d3748;">
-        <div class="photo-ring">
-            <div class="photo-inner">
-                @if($student->photo_url)
-                    <img src="{{ public_path($student->photo_url) }}">
+    <div class="content">
+        <!-- Header -->
+        <div class="header">
+            <div class="institute-name">{{ $student->institute->name }}</div>
+            <div class="id-title">Student Identity Card</div>
+        </div>
+
+        <!-- Photo -->
+        <div class="photo-wrap">
+            <div class="photo-ring">
+                <div class="photo-inner">
+                    @if($student->photo_url)
+                        <img src="{{ public_path($student->photo_url) }}">
+                    @else
+                        <img src="{{ public_path('images/default-avatar.png') }}" onerror="this.src='https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'">
+                    @endif
+                </div>
+            </div>
+        </div>
+
+        <!-- Name Block -->
+        <div class="name-block">
+            <div class="student-name">{{ $student->name }}</div>
+            <div class="batch-name">
+                @if($student->batches->count() > 0)
+                    {{ $student->batches->pluck('name')->implode(' • ') }}
                 @else
-                    <img src="https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y">
+                    {{ $student->batch->name ?? 'General Batch' }}
                 @endif
             </div>
         </div>
+
+        <!-- Info Rows -->
+        <div class="info-body">
+            <div class="info-row">
+                <span class="info-key">ID No</span>
+                <span class="info-colon">:</span>
+                <span class="info-val">#{{ str_pad($student->id, 5, '0', STR_PAD_LEFT) }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-key">Phone</span>
+                <span class="info-colon">:</span>
+                <span class="info-val">{{ $student->phone ?? 'N/A' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-key">Email</span>
+                <span class="info-colon">:</span>
+                <span class="info-val" style="font-size:7pt;">{{ $student->user->email ?? 'N/A' }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-key">Joined</span>
+                <span class="info-colon">:</span>
+                <span class="info-val accent">{{ $student->joined_date ? \Carbon\Carbon::parse($student->joined_date)->format('d M Y') : 'N/A' }}</span>
+            </div>
+        </div>
     </div>
-
-    <!-- Name Block -->
-    <div class="name-block">
-        <div class="student-name">{{ $student->name }}</div>
-        <div class="batch-name">
-            @if($student->batches->count() > 0)
-                {{ $student->batches->pluck('name')->implode(' • ') }}
-            @else
-                {{ $student->batch->name ?? 'General Batch' }}
-            @endif
-        </div>
-    </div>
-
-    <!-- Teal Stripe Divider -->
-    <div class="stripe"></div>
-
-    <!-- Info Rows -->
-    <div class="info-body" style="border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
-        <div class="info-row">
-            <span class="info-key">Student ID</span>
-            <span class="info-colon">:</span>
-            <span class="info-val">#{{ str_pad($student->id, 5, '0', STR_PAD_LEFT) }}</span>
-        </div>
-        <div class="info-row">
-            <span class="info-key">Phone</span>
-            <span class="info-colon">:</span>
-            <span class="info-val">{{ $student->phone ?? 'N/A' }}</span>
-        </div>
-        <div class="info-row">
-            <span class="info-key">Email</span>
-            <span class="info-colon">:</span>
-            <span class="info-val" style="font-size:7pt;">{{ $student->user->email ?? 'N/A' }}</span>
-        </div>
-        <div class="info-row" style="border-bottom: none;">
-            <span class="info-key">Joined</span>
-            <span class="info-colon">:</span>
-            <span class="info-val accent">{{ $student->joined_date ? \Carbon\Carbon::parse($student->joined_date)->format('d-m-Y') : 'N/A' }}</span>
-        </div>
+    
+    <div class="accent-bar"></div>
+    <div class="footer">
+        <span class="footer-text">Property of {{ $student->institute->name }}</span>
     </div>
 </body>
 </html>

@@ -226,7 +226,7 @@
             </div>
         @endif
 
-        <form action="{{ route('contact.store') }}" method="POST" class="bg-white border border-gray-100 rounded-3xl shadow-xl p-8 space-y-5">
+        <form action="{{ route('contact.store') }}" method="POST" id="contactForm" class="bg-white border border-gray-100 rounded-3xl shadow-xl p-8 space-y-5">
             @csrf
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
@@ -269,10 +269,29 @@
                 <label class="block text-sm font-bold text-gray-700 mb-1.5">Message</label>
                 <textarea name="message" rows="4" placeholder="Tell us about your institute, how many students you have, and any specific requirements..." class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all resize-none">{{ old('message') }}</textarea>
             </div>
-            <button type="submit" class="w-full btn-brand py-4 text-base font-black">
-                Send Enquiry — We'll respond within 24 hours
-            </button>
+            <div class="flex justify-center">
+                <button type="submit" id="submitBtn" class="btn-brand px-12 py-3 text-sm font-black flex items-center gap-2">
+                    <span id="btnText">Send Enquiry</span>
+                    <svg id="loadingSpinner" class="hidden animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </div>
         </form>
+
+        <script>
+            document.getElementById('contactForm').addEventListener('submit', function() {
+                const btn = document.getElementById('submitBtn');
+                const text = document.getElementById('btnText');
+                const spinner = document.getElementById('loadingSpinner');
+                
+                btn.disabled = true;
+                btn.classList.add('opacity-75', 'cursor-not-allowed');
+                text.innerText = 'Sending...';
+                spinner.classList.remove('hidden');
+            });
+        </script>
     </div>
 </section>
 

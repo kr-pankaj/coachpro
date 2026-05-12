@@ -9,7 +9,10 @@
         </p>
     </header>
 
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
+    @php
+        $verificationRoute = auth()->user()->institute ? route('verification.send', ['slug' => auth()->user()->institute->slug]) : '#';
+    @endphp
+    <form id="send-verification" method="post" action="{{ $verificationRoute }}">
         @csrf
     </form>
 

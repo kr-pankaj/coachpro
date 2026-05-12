@@ -9,7 +9,12 @@
         </p>
     </header>
 
-    <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
+    @php
+        $passwordRoute = auth()->user()->institute
+            ? route('password.update', ['slug' => auth()->user()->institute->slug])
+            : route('password.update.global');
+    @endphp
+    <form method="post" action="{{ $passwordRoute }}" class="mt-6 space-y-6">
         @csrf
         @method('put')
 

@@ -10,20 +10,22 @@ trait BelongsToInstitute
     protected static function bootBelongsToInstitute()
     {
         static::addGlobalScope('institute', function (Builder $builder) {
-            if (auth()->check()) {
+            // Use hasUser() to avoid recursive DB loops when resolving the authenticated user
+            if (auth()->hasUser() && auth()->user()) {
                 if (auth()->user()->role === 'superadmin') {
                     return;
                 }
                 
-                $builder->where(function($q) {
-                    $q->where('institute_id', auth()->user()->institute_id)
-                      ->orWhereNull('institute_id');
+                $table = $builder->getModel()->getTable();
+                $builder->where(function($q) use ($table) {
+                    $q->where($table . '.institute_id', auth()->user()->institute_id)
+                      ->orWhereNull($table . '.institute_id');
                 });
             }
         });
 
         static::creating(function ($model) {
-            if (auth()->check() && auth()->user()->institute_id) {
+            if (auth()->hasUser() && auth()->user() && auth()->user()->institute_id) {
                 $model->institute_id = auth()->user()->institute_id;
             }
         });

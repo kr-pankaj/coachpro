@@ -78,6 +78,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Global password update route for users without an institute (e.g. Superadmin)
+    Route::put('/password', [App\Http\Controllers\Auth\PasswordController::class, 'update'])->name('password.update.global');
 });
 
 

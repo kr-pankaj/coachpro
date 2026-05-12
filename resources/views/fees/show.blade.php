@@ -31,7 +31,7 @@
                     </div>
                     <div class="flex gap-3">
                         @if($fee->status !== 'pending')
-                            <a href="{{ route('fees.receipt', $fee) }}" class="px-6 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-gray-50 transition-all flex items-center gap-2">
+                            <a href="{{ route('fees.receipt', $fee) }}" target="_blank" class="px-6 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-gray-50 transition-all flex items-center gap-2">
                                 <x-icons.download class="w-4 h-4" />
                                 Receipt
                             </a>

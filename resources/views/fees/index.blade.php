@@ -149,7 +149,7 @@
                                         </a>
 
                                         @if($fee->status !== 'pending')
-                                            <a href="{{ route('fees.receipt', $fee) }}" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl transition-all" title="Download Receipt">
+                                            <a href="{{ route('fees.receipt', $fee) }}" target="_blank" class="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl transition-all" title="Download Receipt">
                                                 <x-icons.download class="w-4 h-4" />
                                             </a>
                                         @endif

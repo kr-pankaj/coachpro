@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Auth;
 
 class StudentRegistrationController extends Controller
 {
-    public function create($slug)
+    public function create(Request $request)
     {
-        $institute = Institute::where('slug', $slug)->firstOrFail();
+        $institute = $request->get('resolved_institute');
 
         if (!$institute->allow_student_self_registration) {
             abort(403, 'This institute does not allow self-registration.');
@@ -23,9 +23,9 @@ class StudentRegistrationController extends Controller
         return view('student.register', compact('institute'));
     }
 
-    public function store(Request $request, $slug)
+    public function store(Request $request)
     {
-        $institute = Institute::where('slug', $slug)->firstOrFail();
+        $institute = $request->get('resolved_institute');
 
         if (!$institute->allow_student_self_registration) {
             abort(403, 'This institute does not allow self-registration.');
@@ -72,6 +72,6 @@ class StudentRegistrationController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('dashboard', ['slug' => $slug]);
+        return redirect()->route('dashboard', ['slug' => $institute->slug]);
     }
 }

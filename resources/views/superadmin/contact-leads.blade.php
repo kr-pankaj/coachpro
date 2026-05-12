@@ -1,15 +1,15 @@
-@extends('layouts.superadmin-app')
-
-@section('content')
-<div class="min-h-screen bg-gray-50 p-6 lg:p-10">
-
-    {{-- Header --}}
-    <div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-            <h1 class="text-2xl font-black text-gray-900">Contact Leads</h1>
-            <p class="text-sm text-gray-500 mt-1">Inbound enquiries from the QuonixAI landing page</p>
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-3xl font-black text-gray-900 dark:text-white tracking-tighter uppercase italic">Contact Leads</h2>
+                <p class="text-[10px] font-black text-pink-500 uppercase tracking-[0.2em] mt-1">Inbound enquiries from the QuonixAI landing page</p>
+            </div>
         </div>
+    </x-slot>
 
+    <div class="py-12">
+    <div class="max-w-7xl mx-auto px-8 sm:px-10 lg:px-12">
         {{-- Filter tabs --}}
         <div class="flex gap-2 flex-wrap text-xs font-bold uppercase tracking-wide">
             @foreach(['all' => 'All', 'new' => 'New 🔔', 'contacted' => 'Contacted', 'converted' => 'Converted', 'closed' => 'Closed'] as $val => $label)
@@ -125,5 +125,6 @@
             <div class="px-6 py-4 border-t border-gray-100">{{ $leads->links() }}</div>
         @endif
     </div>
-</div>
-@endsection
+    </div>
+    </div>
+</x-app-layout>
