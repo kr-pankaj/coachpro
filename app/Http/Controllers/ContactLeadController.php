@@ -15,6 +15,20 @@ class ContactLeadController extends Controller
             return redirect()->to(url()->previous() . '#contact')->with('contact_success', 'Thank you for your enquiry!');
         }
 
+        // Spam check: Google reCAPTCHA v3
+        if (config('services.recaptcha.secret_key')) {
+            $response = \Illuminate\Support\Facades\Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                'secret'   => config('services.recaptcha.secret_key'),
+                'response' => $request->input('g-recaptcha-response'),
+                'remoteip' => $request->ip(),
+            ]);
+
+            if (!$response->json('success') || $response->json('score') < 0.5) {
+                // If it fails or score is too low, we silently return success to avoid letting the bot know
+                return redirect()->to(url()->previous() . '#contact')->with('contact_success', 'Thank you for your enquiry!');
+            }
+        }
+
         $validated = $request->validate([
             'name'             => 'required|string|max:100',
             'email'            => 'required|email|max:100',

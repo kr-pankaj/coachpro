@@ -23,6 +23,9 @@
         .float { animation: float 5s ease-in-out infinite; }
         .section-pill { display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(236,72,153,.08),rgba(245,158,11,.08));border:1px solid rgba(236,72,153,.2);color:#be185d;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:6px 16px;border-radius:999px;margin-bottom:16px; }
     </style>
+    @if(config('services.recaptcha.site_key'))
+        <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+    @endif
 </head>
 <body class="antialiased overflow-x-hidden">
 
@@ -296,6 +299,7 @@
             <div style="display:none !important;" aria-hidden="true">
                 <input type="text" name="website_verification" tabindex="-1" autocomplete="off">
             </div>
+            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1.5">Your Name <span class="text-pink-500">*</span></label>
@@ -349,7 +353,9 @@
         </form>
 
         <script>
-            document.getElementById('contactForm').addEventListener('submit', function() {
+            document.getElementById('contactForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const form = this;
                 const btn = document.getElementById('submitBtn');
                 const text = document.getElementById('btnText');
                 const spinner = document.getElementById('loadingSpinner');
@@ -358,6 +364,17 @@
                 btn.classList.add('opacity-75', 'cursor-not-allowed');
                 text.innerText = 'Sending...';
                 spinner.classList.remove('hidden');
+
+                if (typeof grecaptcha !== 'undefined') {
+                    grecaptcha.ready(function() {
+                        grecaptcha.execute('{{ config('services.recaptcha.site_key') }}', {action: 'contact_form'}).then(function(token) {
+                            document.getElementById('g-recaptcha-response').value = token;
+                            form.submit();
+                        });
+                    });
+                } else {
+                    form.submit();
+                }
             });
         </script>
     </div>
