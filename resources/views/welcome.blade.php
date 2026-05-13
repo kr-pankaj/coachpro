@@ -73,7 +73,7 @@
         </div>
         <div class="relative flex justify-center float">
             <div class="absolute inset-0 brand-gradient opacity-10 blur-[60px] rounded-full scale-90"></div>
-            <img src="{{ asset('hero-mockup-v2.png') }}" alt="QuonixAI Dashboard" class="relative z-10 w-full max-w-lg rounded-[2rem] shadow-2xl ring-1 ring-black/5">
+            <img src="{{ asset('hero.png') }}" alt="QuonixAI Dashboard" class="relative z-10 w-full max-w-lg rounded-[2rem] shadow-2xl ring-1 ring-black/5">
         </div>
     </div>
 </section>
@@ -314,8 +314,8 @@
         <x-application-logo class="h-7 w-auto opacity-70" />
         <p class="text-gray-400 text-sm">© {{ date('Y') }} QuonixAI. All rights reserved.</p>
         <div class="flex gap-6 text-sm font-semibold text-gray-400">
-            <a href="#" class="hover:text-pink-500 transition-colors">Privacy</a>
-            <a href="#" class="hover:text-pink-500 transition-colors">Terms</a>
+            <a href="{{ route('privacy') }}" target="_blank" class="hover:text-pink-500 transition-colors">Privacy</a>
+            <a href="{{ route('terms') }}" target="_blank" class="hover:text-pink-500 transition-colors">Terms</a>
             <a href="#contact" class="hover:text-pink-500 transition-colors">Contact</a>
         </div>
     </div>

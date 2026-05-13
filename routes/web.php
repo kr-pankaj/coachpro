@@ -15,6 +15,9 @@ Route::get('/offline', function () {
     return 'You are currently offline.';
 });
 
+Route::view('/privacy-policy', 'privacy')->name('privacy');
+Route::view('/terms-and-conditions', 'terms')->name('terms');
+
 // Global Login Handler (Find My Institute)
 Route::get('/login', function () {
     if (auth()->check()) {

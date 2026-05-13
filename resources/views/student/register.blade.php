@@ -105,6 +105,12 @@
                         <input type="password" name="password_confirmation" class="input-field" placeholder="Repeat" required>
                     </div>
                 </div>
+                <div style="display:flex;align-items:flex-start;gap:0.5rem;margin-top:0.25rem;">
+                    <input type="checkbox" id="terms" required style="margin-top:0.2rem;width:1rem;height:1rem;accent-color:{{ $institute->brand_color ?? '#4f46e5' }};cursor:pointer;flex-shrink:0;">
+                    <label for="terms" style="font-size:0.8rem;color:#64748b;cursor:pointer;line-height:1.5;">
+                        I agree to the <a href="{{ route('terms') }}" target="_blank" style="color:{{ $institute->brand_color ?? '#4f46e5' }};font-weight:600;">Terms of Service</a> and <a href="{{ route('privacy') }}" target="_blank" style="color:{{ $institute->brand_color ?? '#4f46e5' }};font-weight:600;">Privacy Policy</a>
+                    </label>
+                </div>
                 <button type="submit" class="btn-brand mt-2">Join {{ $institute->name }} →</button>
             </form>
 
