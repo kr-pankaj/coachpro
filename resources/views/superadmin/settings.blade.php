@@ -78,13 +78,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="mt-20 flex justify-end">
-                        <button type="submit" class="px-12 py-5 bg-gray-950 text-white rounded-full font-black text-xs uppercase tracking-widest flex items-center gap-3 hover:bg-indigo-600 transition-all shadow-xl shadow-gray-200 dark:shadow-none hover:scale-105 active:scale-95 no-loader">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                            Save Platform Rules
-                        </button>
-                    </div>
                 </div>
 
                 {{-- Payment Availability --}}
@@ -100,12 +93,20 @@
                             </div>
                         </div>
 
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="hidden" name="settings[payments_enabled]" value="0">
-                            <input type="checkbox" name="settings[payments_enabled]" value="1" class="sr-only peer" {{ ($settings['payments_enabled'] ?? '1') == '1' ? 'checked' : '' }}>
-                            <div class="w-20 h-10 bg-gray-100 peer-focus:outline-none rounded-full peer dark:bg-gray-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[6px] after:left-[6px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-7 after:w-7 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-500 shadow-inner"></div>
-                            <span class="ml-4 text-xs font-black text-gray-500 uppercase tracking-widest peer-checked:text-emerald-600">{{ ($settings['payments_enabled'] ?? '1') == '1' ? 'Active' : 'Disabled' }}</span>
-                        </label>
+                        <div class="flex items-center gap-4 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-3xl border border-gray-100 dark:border-gray-700">
+                            <span id="toggle-label" class="text-xs font-black uppercase tracking-widest {{ ($settings['payments_enabled'] ?? '1') == '1' ? 'text-emerald-600' : 'text-rose-600' }}">
+                                {{ ($settings['payments_enabled'] ?? '1') == '1' ? 'Active' : 'Disabled' }}
+                            </span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="hidden" name="settings[payments_enabled]" value="0">
+                                <input type="checkbox" name="settings[payments_enabled]" value="1" 
+                                    id="payments-toggle"
+                                    class="sr-only peer" {{ ($settings['payments_enabled'] ?? '1') == '1' ? 'checked' : '' }}
+                                    onchange="document.getElementById('toggle-label').innerText = this.checked ? 'Active' : 'Disabled'; 
+                                              document.getElementById('toggle-label').className = 'text-xs font-black uppercase tracking-widest ' + (this.checked ? 'text-emerald-600' : 'text-rose-600');">
+                                <div class="w-16 h-9 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-7 peer-checked:after:border-white after:content-[''] after:absolute after:top-[4.5px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-7 after:w-7 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-500 shadow-inner"></div>
+                            </label>
+                        </div>
                     </div>
 
                     <div class="mt-10 p-8 bg-gray-50 dark:bg-gray-800/50 rounded-3xl space-y-4">
@@ -137,6 +138,13 @@
                                 class="w-full px-6 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 font-bold text-gray-900 dark:text-white shadow-inner">
                         </div>
                     </div>
+                </div>
+
+                <div class="flex justify-end pt-6">
+                    <button type="submit" class="px-16 py-6 bg-gray-950 text-white rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center gap-4 hover:bg-quonix-purple transition-all shadow-2xl shadow-indigo-200 dark:shadow-none hover:scale-105 active:scale-95 no-loader">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/></svg>
+                        Save All Platform Rules
+                    </button>
                 </div>
             </form>
         </div>
