@@ -110,29 +110,27 @@ class EnquiryController extends Controller
         return redirect()->route('enquiries.index')->with('success', 'Lead removed.');
     }
 
-    public function suggestEmail(\App\Models\Enquiry $enquiry)
+    public function sendEmail(Request $request, \App\Models\Enquiry $enquiry)
     {
+        $validated = $request->validate([
+            'subject' => 'required|string|max:255',
+            'body' => 'required|string',
+        ]);
+
         $institute = auth()->user()->institute;
-        if (!$institute->isPremium()) {
-            return response()->json(['error' => 'Premium subscription required'], 403);
+        
+        if (!$enquiry->email) {
+            return response()->json(['success' => false, 'message' => 'Lead does not have an email address.'], 400);
         }
 
-        $course = $enquiry->course_interested ?? 'our courses';
-        $firstName = explode(' ', $enquiry->student_name)[0];
+        try {
+            \Illuminate\Support\Facades\Mail::to($enquiry->email)->send(
+                new \App\Mail\EnquiryFollowUp($validated['subject'], $validated['body'], $institute)
+            );
 
-        $subject = "Quick update: Your interest in {$course} at {$institute->name}";
-        $body = "Hi {$firstName},\n\n" .
-                "Thank you for reaching out to {$institute->name}. We noticed you were interested in our {$course} program and wanted to provide a bit more information.\n\n" .
-                "Our next batch is scheduled to begin shortly, and we would love to invite you for a complimentary demo session to experience our teaching methodology firsthand.\n\n" .
-                "Do you have a few minutes this week for a quick call to discuss your goals?\n\n" .
-                "Best regards,\n" .
-                "{$institute->name} Team\n" .
-                "{$institute->phone}";
-
-        return response()->json([
-            'subject' => $subject,
-            'body' => $body,
-            'email' => $enquiry->email
-        ]);
+            return response()->json(['success' => true, 'message' => 'Email sent successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Failed to send email: ' . $e->getMessage()], 500);
+        }
     }
 }

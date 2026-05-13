@@ -99,8 +99,8 @@
                             <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Management</span>
                         </div>
                         @if(auth()->user()->role === 'admin')
-                            <x-sidebar-link :href="route('teachers.index')" :active="request()->routeIs('teachers.*')" icon="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0">
-                                {{ __('Faculty Staff') }}
+                            <x-sidebar-link :href="route('staff.index')" :active="request()->routeIs('staff.*')" icon="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0">
+                                {{ __('Staff Management') }}
                             </x-sidebar-link>
                         @endif
                         @if(auth()->user()->role !== 'accountant')

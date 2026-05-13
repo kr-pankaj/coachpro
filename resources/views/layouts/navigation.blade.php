@@ -67,8 +67,8 @@
                 @endif
                 
                 @if(auth()->user()->role === 'admin')
-                    <x-responsive-nav-link :href="route('teachers.index')" :active="request()->routeIs('teachers.*')">
-                        {{ __('Teachers') }}
+                    <x-responsive-nav-link :href="route('staff.index')" :active="request()->routeIs('staff.*')">
+                        {{ __('Staff') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('enquiries.index')" :active="request()->routeIs('enquiries.*')">
                         {{ __('Leads') }}

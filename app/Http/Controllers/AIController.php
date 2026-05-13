@@ -38,19 +38,38 @@ class AIController extends Controller
      */
     public function suggestFollowUp(Enquiry $enquiry)
     {
+        $institute = auth()->user()->institute;
+        
+        // Premium-exclusive feature
+        if (!$institute->isPremium()) {
+            return response()->json(['success' => false, 'error' => 'Premium subscription required'], 403);
+        }
+
         try {
             $data = [
-                'institute_name' => auth()->user()->institute->name,
+                'institute_name' => $institute->name,
                 'student_name' => $enquiry->student_name,
                 'course_interest' => $enquiry->course_interested ?? 'Our Courses',
                 'original_message' => $enquiry->message ?? 'No message provided.',
             ];
 
+            // Get suggestion from Gemini
             $suggestion = $this->gemini->suggestFollowUp($data);
+
+            // Attempt to parse out a subject if Gemini provided one (e.g., "Subject: ...\n\nBody...")
+            $subject = "Following up on your interest in " . ($enquiry->course_interested ?? 'our courses');
+            $body = $suggestion;
+
+            if (preg_match('/Subject:\s*(.+?)\n+(.*)/is', $suggestion, $matches)) {
+                $subject = trim($matches[1]);
+                $body = trim($matches[2]);
+            }
 
             return response()->json([
                 'success' => true,
-                'suggestion' => $suggestion,
+                'subject' => $subject,
+                'body' => $body,
+                'email' => $enquiry->email,
                 'phone' => $enquiry->phone
             ]);
         } catch (\Exception $e) {

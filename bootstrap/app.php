@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'check.subscription' => \App\Http\Middleware\CheckSubscription::class,
             'superadmin' => \App\Http\Middleware\SuperAdminOnly::class,
             'admin' => \App\Http\Middleware\AdminOnly::class,
+            'role' => \App\Http\Middleware\CheckRole::class,
         ]);
 
         // Redirect guests to global login or tenant login

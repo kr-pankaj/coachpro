@@ -184,10 +184,9 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M10 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
                             Copy Message
                         </button>
-                        <a id="emailBtn" target="_blank" class="flex-1 py-4 bg-indigo-600 hover:bg-indigo-700 rounded-2xl font-black text-[10px] uppercase tracking-widest text-white shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2">
+                        <button id="emailBtn" onclick="sendAiEmail()" target="_blank" class="flex-1 py-4 bg-indigo-600 hover:bg-indigo-700 rounded-2xl font-black text-[10px] uppercase tracking-widest text-white shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
-                            Send Email
-                        </a>
+                            <span id="emailBtnText">Send Email</span></button>
                     </div>
                 </div>
             </div>
@@ -207,7 +206,7 @@
         loading.classList.remove('hidden');
         content.classList.add('hidden');
 
-        fetch(`/enquiries/${enquiryId}/suggest-email`)
+        fetch(`/${window.location.pathname.split('/')[1]}/ai/enquiries/${enquiryId}/followup`)
             .then(res => {
                 if(res.status === 403) {
                     alert('✨ This is a PREMIUM feature. Please upgrade to the 6-Month plan to unlock AI Email Drafts!');
@@ -221,7 +220,9 @@
                     subject.innerText = 'Subject: ' + data.subject;
                     suggestion.innerText = data.body;
                     
-                    emailBtn.href = `mailto:${data.email}?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(data.body)}`;
+                    emailBtn.dataset.enquiryId = enquiryId;
+                    emailBtn.dataset.subject = data.subject;
+                    emailBtn.dataset.body = data.body;
                     
                     loading.classList.add('hidden');
                     content.classList.remove('hidden');
@@ -231,6 +232,45 @@
                 console.error(err);
                 closeFollowUpModal();
             });
+    }
+
+    function sendAiEmail() {
+        const btn = document.getElementById('emailBtn');
+        const text = document.getElementById('emailBtnText');
+        const enquiryId = btn.dataset.enquiryId;
+        const subject = btn.dataset.subject;
+        const body = btn.dataset.body;
+
+        if (!enquiryId) return;
+
+        btn.disabled = true;
+        text.innerText = 'Sending...';
+
+        fetch(`/${window.location.pathname.split('/')[1]}/enquiries/${enquiryId}/send-email`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ subject, body })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('Email sent successfully!');
+                closeFollowUpModal();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Failed to send email.');
+        })
+        .finally(() => {
+            btn.disabled = false;
+            text.innerText = 'Send Email';
+        });
     }
 
     function closeFollowUpModal() {
@@ -245,3 +285,4 @@
     }
     </script>
 </x-app-layout>
+

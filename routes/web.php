@@ -115,25 +115,49 @@ Route::prefix('{slug}')->group(function () {
         
         Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
-        // Admin & Teacher Only Management
-        Route::middleware(['admin'])->group(function () {
-            Route::resource('batches', App\Http\Controllers\BatchController::class);
-            Route::resource('teachers', App\Http\Controllers\TeacherController::class);
+        // -------------------------------------------------------------
+        // Core Management (Admin, Teacher, Receptionist)
+        // -------------------------------------------------------------
+        Route::middleware(['role:admin,teacher,receptionist'])->group(function () {
             Route::resource('students', App\Http\Controllers\StudentController::class);
             Route::get('students/{student}/id-card', [App\Http\Controllers\StudentController::class, 'generateIdCard'])->name('students.id-card');
-            Route::get('/enquiries/{enquiry}/suggest-email', [App\Http\Controllers\EnquiryController::class, 'suggestEmail'])->name('enquiries.suggest-email');
-        Route::resource('enquiries', App\Http\Controllers\EnquiryController::class);
             Route::resource('attendances', App\Http\Controllers\AttendanceController::class)->only(['index', 'create', 'store']);
-            Route::post('/fees/{fee}/payments', [App\Http\Controllers\FeeController::class, 'addPayment'])->name('fees.payments.store');
-            Route::resource('fees', App\Http\Controllers\FeeController::class);
-            Route::get('fees/{fee}/receipt', [App\Http\Controllers\FeeController::class, 'receipt'])->name('fees.receipt');
+        });
 
+        // -------------------------------------------------------------
+        // Academic Management (Admin, Teacher)
+        // -------------------------------------------------------------
+        Route::middleware(['role:admin,teacher'])->group(function () {
+            Route::resource('batches', App\Http\Controllers\BatchController::class);
+            Route::resource('quizzes', App\Http\Controllers\QuizController::class);
+            
             // AI Features
             Route::post('/ai/generate-questions', [App\Http\Controllers\AIController::class, 'generateQuestions'])->name('ai.generate-questions');
+        });
+
+        // -------------------------------------------------------------
+        // Finance Management (Admin, Accountant)
+        // -------------------------------------------------------------
+        Route::middleware(['role:admin,accountant'])->group(function () {
+            Route::resource('fees', App\Http\Controllers\FeeController::class);
+            Route::post('/fees/{fee}/payments', [App\Http\Controllers\FeeController::class, 'addPayment'])->name('fees.payments.store');
+            Route::get('fees/{fee}/receipt', [App\Http\Controllers\FeeController::class, 'receipt'])->name('fees.receipt');
+        });
+
+        // -------------------------------------------------------------
+        // Leads & Enquiries (Admin, Receptionist)
+        // -------------------------------------------------------------
+        Route::middleware(['role:admin,receptionist'])->group(function () {
+            Route::resource('enquiries', App\Http\Controllers\EnquiryController::class);
             Route::get('/ai/enquiries/{enquiry}/followup', [App\Http\Controllers\AIController::class, 'suggestFollowUp'])->name('ai.enquiries.followup');
-            
-            // Quizzes
-            Route::resource('quizzes', App\Http\Controllers\QuizController::class);
+            Route::post('/enquiries/{enquiry}/send-email', [App\Http\Controllers\EnquiryController::class, 'sendEmail'])->name('enquiries.send-email');
+        });
+
+        // -------------------------------------------------------------
+        // Administration (Admin Only)
+        // -------------------------------------------------------------
+        Route::middleware(['role:admin'])->group(function () {
+            Route::resource('staff', App\Http\Controllers\StaffController::class);
 
             // Profile Requests
             Route::get('/profile-requests', [App\Http\Controllers\ProfileUpdateRequestController::class, 'index'])->name('profile_requests.index');
