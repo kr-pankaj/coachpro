@@ -63,12 +63,15 @@ Route::post('/contact', [App\Http\Controllers\ContactLeadController::class, 'sto
     ->name('contact.store')
     ->middleware('throttle:3,1');
 
+Route::get('/superadmin/stop-impersonate', [App\Http\Controllers\SuperAdminController::class, 'stopImpersonating'])
+    ->name('superadmin.stop_impersonate')
+    ->middleware('auth');
+
 // Super Admin Portal
 Route::middleware(['auth', 'verified', 'superadmin'])->prefix('superadmin')->group(function () {
     Route::get('/institutes', [App\Http\Controllers\SuperAdminController::class, 'index'])->name('superadmin.index');
     Route::post('/institutes/{institute}/toggle-lifetime-free', [App\Http\Controllers\SuperAdminController::class, 'toggleLifetimeFree'])->name('superadmin.toggle_lifetime_free');
     Route::get('/impersonate/{institute}', [App\Http\Controllers\SuperAdminController::class, 'impersonate'])->name('superadmin.impersonate');
-    Route::get('/stop-impersonate', [App\Http\Controllers\SuperAdminController::class, 'stopImpersonating'])->name('superadmin.stop_impersonate');
     Route::post('/broadcast', [App\Http\Controllers\SuperAdminController::class, 'broadcast'])->name('superadmin.broadcast');
     Route::post('/settings', [App\Http\Controllers\SuperAdminController::class, 'updateSettings'])->name('superadmin.settings.update');
     // Contact Leads
