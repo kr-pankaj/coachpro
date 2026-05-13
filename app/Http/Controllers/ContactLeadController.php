@@ -10,6 +10,11 @@ class ContactLeadController extends Controller
 {
     public function store(Request $request)
     {
+        // Spam check: Honeypot
+        if ($request->filled('website_verification')) {
+            return redirect()->to(url()->previous() . '#contact')->with('contact_success', 'Thank you for your enquiry!');
+        }
+
         $validated = $request->validate([
             'name'             => 'required|string|max:100',
             'email'            => 'required|email|max:100',

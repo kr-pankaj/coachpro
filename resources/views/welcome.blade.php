@@ -292,6 +292,10 @@
 
         <form action="{{ route('contact.store') }}" method="POST" id="contactForm" class="bg-white border border-gray-100 rounded-3xl shadow-xl p-8 space-y-5">
             @csrf
+            {{-- Honeypot for spam protection --}}
+            <div style="display:none !important;" aria-hidden="true">
+                <input type="text" name="website_verification" tabindex="-1" autocomplete="off">
+            </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-1.5">Your Name <span class="text-pink-500">*</span></label>

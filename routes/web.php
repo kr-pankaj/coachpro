@@ -59,7 +59,9 @@ Route::post('/register', [App\Http\Controllers\Auth\RegisteredUserController::cl
 Route::get('/receipt/{token}', [App\Http\Controllers\FeeController::class, 'share'])->name('fees.share');
 
 // Public Contact Form Submission
-Route::post('/contact', [App\Http\Controllers\ContactLeadController::class, 'store'])->name('contact.store');
+Route::post('/contact', [App\Http\Controllers\ContactLeadController::class, 'store'])
+    ->name('contact.store')
+    ->middleware('throttle:3,1');
 
 // Super Admin Portal
 Route::middleware(['auth', 'verified', 'superadmin'])->prefix('superadmin')->group(function () {
