@@ -9,7 +9,7 @@ class Batch extends Model
     use \App\Traits\BelongsToInstitute;
     use \App\Traits\LogsActivity, \Illuminate\Database\Eloquent\SoftDeletes;
 
-    protected $fillable = ['name', 'subject', 'time_slot', 'is_active'];
+    protected $fillable = ['name', 'subject', 'time_slot', 'is_active', 'faculty_cost'];
 
     public function students()
     {

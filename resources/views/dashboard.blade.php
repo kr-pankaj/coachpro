@@ -5,7 +5,18 @@
                 <h2 class="font-black text-2xl text-gray-900 dark:text-white tracking-tight">
                     {{ __('Welcome back,') }} <span class="text-indigo-600">{{ explode(' ', auth()->user()->name)[0] }}!</span>
                 </h2>
-                <p class="text-sm text-gray-500 mt-1">Here is what's happening at <span class="font-bold text-gray-700 dark:text-gray-300">{{ auth()->user()->institute->name }}</span> today.</p>
+                <p class="text-sm text-gray-500 mt-1 flex items-center gap-2">
+                    Here is what's happening at 
+                    <span class="font-bold text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                        {{ auth()->user()->institute->name }}
+                        @if(auth()->user()->institute->is_verified)
+                            <svg class="w-4 h-4 text-amber-500 fill-current" viewBox="0 0 20 20">
+                                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                            </svg>
+                        @endif
+                    </span> 
+                    today.
+                </p>
             </div>
             <div class="flex items-center gap-2">
                 <span class="hidden md:inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
@@ -24,6 +35,36 @@
                 <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-800 text-sm font-bold flex items-center gap-3">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                     {{ session('success') }}
+                </div>
+            @endif
+
+            {{-- Promoted Add-on Banner --}}
+            @if(isset($promotedAddOn))
+                <div class="relative overflow-hidden bg-gradient-to-r from-indigo-900 via-indigo-800 to-purple-900 rounded-3xl shadow-xl shadow-indigo-900/20 border border-indigo-700/50 p-8">
+                    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-purple-500/30 rounded-full blur-3xl"></div>
+                    <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-indigo-500/30 rounded-full blur-3xl"></div>
+                    
+                    <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div class="flex-1">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-[10px] font-black uppercase tracking-widest mb-4">
+                                <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                                New Powerup Available
+                            </div>
+                            <h3 class="text-2xl font-black text-white mb-2">{{ $promotedAddOn->name }}</h3>
+                            <p class="text-indigo-200 text-sm max-w-2xl">{{ $promotedAddOn->description }}</p>
+                        </div>
+                        
+                        <div class="flex flex-col items-end shrink-0 gap-3">
+                            <div class="text-right">
+                                <span class="text-3xl font-black text-white">₹{{ number_format($promotedAddOn->price) }}</span>
+                                <span class="text-[10px] font-bold text-indigo-300 uppercase tracking-widest block">One-time payment</span>
+                            </div>
+                            <a href="{{ route('marketplace.index') }}" class="inline-flex items-center justify-center px-6 py-3 bg-white text-indigo-900 hover:bg-indigo-50 transition-colors rounded-xl text-sm font-black shadow-lg">
+                                View in Store
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             @endif
 
@@ -172,6 +213,47 @@
                 
                 {{-- Left Side: Analytics & History (2 Columns) --}}
                 <div class="lg:col-span-2 space-y-8">
+                    {{-- Batch Profitability (Premium Feature) --}}
+                    <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 p-10 relative overflow-hidden group">
+                        <div class="flex items-center justify-between mb-8">
+                            <div class="flex items-center gap-3">
+                                <div class="w-2 h-8 bg-emerald-500 rounded-full"></div>
+                                <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">Batch Profitability</h3>
+                            </div>
+                            @if(!$institute->isPremium())
+                                <span class="px-4 py-1.5 bg-amber-100 text-amber-700 rounded-xl text-[10px] font-black uppercase tracking-widest border border-amber-200">Premium Only</span>
+                            @endif
+                        </div>
+
+                        @if($institute->isPremium())
+                            <div class="space-y-6">
+                                @forelse($batchProfitability as $bp)
+                                    <div class="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-700">
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-black text-gray-900 dark:text-white truncate">{{ $bp->name }}</p>
+                                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">Revenue: ₹{{ number_format($bp->revenue) }} | Staff: ₹{{ number_format($bp->faculty_cost) }}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <p class="text-sm font-black {{ $bp->profit >= 0 ? 'text-emerald-600' : 'text-rose-600' }}">₹{{ number_format($bp->profit) }}</p>
+                                            <p class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Net Profit</p>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <p class="text-center text-gray-400 py-4 italic text-xs">No financial data available for batches yet.</p>
+                                @endforelse
+                            </div>
+                        @else
+                            <div class="py-12 text-center">
+                                <div class="w-16 h-16 bg-amber-50 dark:bg-amber-900/20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-amber-600">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002-2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                                </div>
+                                <h4 class="text-base font-black text-gray-900 dark:text-white">Unlock Profitability Analytics</h4>
+                                <p class="text-xs text-gray-500 mt-2 max-w-xs mx-auto">Analyze which batches are generating the most revenue after deducting faculty costs.</p>
+                                <a href="{{ route('subscription.index') }}" class="inline-flex mt-6 px-6 py-3 bg-amber-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-amber-200">Upgrade to Premium</a>
+                            </div>
+                        @endif
+                    </div>
+
                     {{-- Analytics Charts Grid --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {{-- Enrollment Trends --}}

@@ -7,6 +7,7 @@ use App\Models\Batch;
 use App\Models\Attendance;
 use App\Models\Fee;
 use App\Models\Announcement;
+use App\Models\AddOn;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -138,6 +139,24 @@ class DashboardController extends Controller
         $convertedLeads = \App\Models\Enquiry::where('status', 'converted')->count();
         $conversionRate = $totalLeads > 0 ? round(($convertedLeads / $totalLeads) * 100) : 0;
 
+        // Batch Profitability (Premium Feature)
+        $batchProfitability = collect();
+        if ($institute->isPremium()) {
+            $batchProfitability = Batch::with(['students.fees'])
+                ->get()
+                ->map(function($batch) {
+                    $revenue = 0;
+                    foreach($batch->students as $student) {
+                        $revenue += $student->fees->sum('paid_amount');
+                    }
+                    $batch->revenue = $revenue;
+                    $batch->profit = $revenue - $batch->faculty_cost;
+                    return $batch;
+                })
+                ->sortByDesc('profit')
+                ->take(5);
+        }
+
         // AI Retention Analysis (At-Risk Students)
         $atRiskStudents = Student::with(['batch', 'attendances', 'attempts'])
             ->get()
@@ -187,7 +206,7 @@ class DashboardController extends Controller
             'todayAttended', 'todayTotal', 'pendingFees', 'collectedFees',
             'recentStudents', 'batches', 'announcements', 'profilePct',
             'chartData', 'revenueData', 'batchPerformance', 'conversionRate', 'leadsToday',
-            'atRiskStudents'
+            'atRiskStudents', 'batchProfitability'
         ));
     }
 

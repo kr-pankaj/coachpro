@@ -58,4 +58,9 @@ class Student extends Model
     {
         return $this->hasMany(QuizAttempt::class);
     }
+
+    public function fees()
+    {
+        return $this->hasMany(Fee::class);
+    }
 }

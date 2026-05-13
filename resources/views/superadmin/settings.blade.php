@@ -116,8 +116,8 @@
                             <span id="toggle-label-v2" class="text-[10px] font-black uppercase tracking-widest {{ ($settings['payments_enabled'] ?? '1') == '1' ? 'text-emerald-600' : 'text-rose-600' }}">
                                 {{ ($settings['payments_enabled'] ?? '1') == '1' ? 'Active' : 'Disabled' }}
                             </span>
+                            <input type="hidden" name="settings[payments_enabled]" value="0">
                             <label class="switch">
-                                <input type="hidden" name="settings[payments_enabled]" value="0">
                                 <input type="checkbox" name="settings[payments_enabled]" value="1" 
                                     {{ ($settings['payments_enabled'] ?? '1') == '1' ? 'checked' : '' }}
                                     onchange="document.getElementById('toggle-label-v2').innerText = this.checked ? 'Active' : 'Disabled'; 
@@ -136,7 +136,7 @@
                 </div>
 
                 {{-- Contact Details --}}
-                <div class="mt-10 config-card relative overflow-hidden mb-20">
+                <div class="mt-10 config-card relative overflow-hidden mb-10">
                     <div class="absolute top-0 left-0 w-2 h-full bg-indigo-500"></div>
                     <div class="flex items-center gap-4 mb-10">
                         <div class="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-900/40 flex items-center justify-center text-indigo-600">
@@ -155,6 +155,13 @@
                             <input type="text" name="settings[support_phone]" value="{{ $settings['support_phone'] ?? '+91 00000 00000' }}" class="input-pill">
                         </div>
                     </div>
+                </div>
+
+                <div class="flex justify-end pb-20">
+                    <button type="submit" class="px-10 py-5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-[2rem] font-black text-sm uppercase tracking-widest flex items-center gap-3 hover:shadow-2xl hover:shadow-indigo-500/30 transition-all hover:-translate-y-1 active:translate-y-0 no-loader">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Save All Platform Settings
+                    </button>
                 </div>
             </form>
         </div>

@@ -54,4 +54,30 @@ class Institute extends Model
     {
         return $this->hasMany(\App\Models\SubscriptionPayment::class)->orderByDesc('created_at');
     }
+
+    public function addOns()
+    {
+        return $this->belongsToMany(AddOn::class, 'institute_add_ons')
+            ->withPivot('purchased_at', 'price_paid', 'razorpay_payment_id')
+            ->withTimestamps();
+    }
+
+    /** Returns true if the institute has purchased a specific add-on */
+    public function hasAddOn(string $slug): bool
+    {
+        return $this->addOns()->where('slug', $slug)->exists();
+    }
+
+    /** Returns true if the institute is on a 6-month or longer plan */
+    public function isPremium(): bool
+    {
+        if ($this->is_lifetime_free) return true;
+        
+        // We consider it premium if their CURRENT or LATEST plan was for 6+ months
+        // and it hasn't expired yet.
+        return $this->payments()
+            ->where('months', '>=', 6)
+            ->where('expires_at', '>=', now())
+            ->exists();
+    }
 }

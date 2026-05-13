@@ -118,7 +118,7 @@
                 // Dynamically build and submit the verification form
                 var form = document.createElement('form');
                 form.method = 'POST';
-                form.action = '{{ route("subscription.verify") }}';
+                form.action = '{{ $callback_url ?? route("subscription.verify") }}';
 
                 var fields = {
                     '_token':                 '{{ csrf_token() }}',

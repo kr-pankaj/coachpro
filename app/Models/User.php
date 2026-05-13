@@ -69,4 +69,11 @@ class User extends Authenticatable
     {
         $this->notify(new \App\Notifications\ResetPasswordNotification($token));
     }
+
+    public function isSuperAdmin() { return $this->role === 'superadmin'; }
+    public function isAdmin() { return $this->role === 'admin'; }
+    public function isTeacher() { return $this->role === 'teacher'; }
+    public function isStudent() { return $this->role === 'student'; }
+    public function isAccountant() { return $this->role === 'accountant'; }
+    public function isReceptionist() { return $this->role === 'receptionist'; }
 }

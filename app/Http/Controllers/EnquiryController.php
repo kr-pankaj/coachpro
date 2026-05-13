@@ -109,4 +109,30 @@ class EnquiryController extends Controller
         $enquiry->delete();
         return redirect()->route('enquiries.index')->with('success', 'Lead removed.');
     }
+
+    public function suggestEmail(\App\Models\Enquiry $enquiry)
+    {
+        $institute = auth()->user()->institute;
+        if (!$institute->isPremium()) {
+            return response()->json(['error' => 'Premium subscription required'], 403);
+        }
+
+        $course = $enquiry->course_interested ?? 'our courses';
+        $firstName = explode(' ', $enquiry->student_name)[0];
+
+        $subject = "Quick update: Your interest in {$course} at {$institute->name}";
+        $body = "Hi {$firstName},\n\n" .
+                "Thank you for reaching out to {$institute->name}. We noticed you were interested in our {$course} program and wanted to provide a bit more information.\n\n" .
+                "Our next batch is scheduled to begin shortly, and we would love to invite you for a complimentary demo session to experience our teaching methodology firsthand.\n\n" .
+                "Do you have a few minutes this week for a quick call to discuss your goals?\n\n" .
+                "Best regards,\n" .
+                "{$institute->name} Team\n" .
+                "{$institute->phone}";
+
+        return response()->json([
+            'subject' => $subject,
+            'body' => $body,
+            'email' => $enquiry->email
+        ]);
+    }
 }

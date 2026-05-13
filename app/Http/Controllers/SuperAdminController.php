@@ -134,4 +134,44 @@ class SuperAdminController extends Controller
 
         return back()->with('success', 'Institute status updated.');
     }
+
+    public function manageAddOns()
+    {
+        if (auth()->user()->role !== 'superadmin') abort(403);
+
+        $addOns = \App\Models\AddOn::withCount('institutes')->get();
+        return view('superadmin.add_ons.index', compact('addOns'));
+    }
+
+    public function storeAddOn(Request $request)
+    {
+        if (auth()->user()->role !== 'superadmin') abort(403);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'required|numeric|min:0',
+            'icon' => 'nullable|string',
+            'category' => 'nullable|string',
+        ]);
+
+        $validated['slug'] = \Illuminate\Support\Str::slug($validated['name']);
+        
+        \App\Models\AddOn::create($validated);
+
+        return back()->with('success', 'Powerup added to marketplace.');
+    }
+
+    public function toggleAddOnPromotion(Request $request, \App\Models\AddOn $addOn)
+    {
+        if (auth()->user()->role !== 'superadmin') abort(403);
+
+        // Reset all others first (only one promoted at a time for banner simplicity)
+        \App\Models\AddOn::where('id', '!=', $addOn->id)->update(['is_promoted' => false]);
+        
+        $addOn->is_promoted = !$addOn->is_promoted;
+        $addOn->save();
+
+        return back()->with('success', 'Marketplace promotion status updated.');
+    }
 }

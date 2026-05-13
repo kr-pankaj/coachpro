@@ -11,7 +11,13 @@ class FeeController extends Controller
      */
     public function index(Request $request)
     {
+        $institute = auth()->user()->institute;
         $query = \App\Models\Fee::with('student');
+
+        // Premium Check: Lifetime financial archiving vs 6-month limit
+        if (!$institute->isPremium()) {
+            $query->where('payment_date', '>=', now()->subMonths(6));
+        }
 
         if ($request->filled('search')) {
             $search = $request->search;

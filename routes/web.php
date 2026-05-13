@@ -78,6 +78,10 @@ Route::middleware(['auth', 'verified', 'superadmin'])->prefix('superadmin')->gro
     // Contact Leads
     Route::get('/contact-leads', [App\Http\Controllers\ContactLeadController::class, 'index'])->name('superadmin.contact-leads.index');
     Route::put('/contact-leads/{contactLead}', [App\Http\Controllers\ContactLeadController::class, 'update'])->name('superadmin.contact-leads.update');
+    // Marketplace Management
+    Route::get('/add-ons', [App\Http\Controllers\SuperAdminController::class, 'manageAddOns'])->name('superadmin.add_ons.index');
+    Route::post('/add-ons', [App\Http\Controllers\SuperAdminController::class, 'storeAddOn'])->name('superadmin.add_ons.store');
+    Route::post('/add-ons/{addOn}/toggle-promotion', [App\Http\Controllers\SuperAdminController::class, 'toggleAddOnPromotion'])->name('superadmin.add_ons.toggle_promotion');
 });
 
 // Global Auth Routes (No Slug needed)
@@ -117,7 +121,8 @@ Route::prefix('{slug}')->group(function () {
             Route::resource('teachers', App\Http\Controllers\TeacherController::class);
             Route::resource('students', App\Http\Controllers\StudentController::class);
             Route::get('students/{student}/id-card', [App\Http\Controllers\StudentController::class, 'generateIdCard'])->name('students.id-card');
-            Route::resource('enquiries', App\Http\Controllers\EnquiryController::class);
+            Route::get('/enquiries/{enquiry}/suggest-email', [App\Http\Controllers\EnquiryController::class, 'suggestEmail'])->name('enquiries.suggest-email');
+        Route::resource('enquiries', App\Http\Controllers\EnquiryController::class);
             Route::resource('attendances', App\Http\Controllers\AttendanceController::class)->only(['index', 'create', 'store']);
             Route::post('/fees/{fee}/payments', [App\Http\Controllers\FeeController::class, 'addPayment'])->name('fees.payments.store');
             Route::resource('fees', App\Http\Controllers\FeeController::class);
@@ -147,6 +152,11 @@ Route::prefix('{slug}')->group(function () {
             Route::post('/subscription/create', [App\Http\Controllers\SubscriptionController::class, 'create'])->name('subscription.create');
             Route::post('/subscription/verify', [App\Http\Controllers\SubscriptionController::class, 'verify'])->name('subscription.verify');
             Route::get('/subscription/invoice/{id}', [App\Http\Controllers\SubscriptionController::class, 'showInvoice'])->name('subscription.invoice');
+
+            // Marketplace (Powerups)
+            Route::get('/marketplace', [App\Http\Controllers\AddOnMarketplaceController::class, 'index'])->name('marketplace.index');
+            Route::post('/marketplace/purchase/{addOn}', [App\Http\Controllers\AddOnMarketplaceController::class, 'purchase'])->name('marketplace.purchase');
+            Route::post('/marketplace/verify', [App\Http\Controllers\AddOnMarketplaceController::class, 'verify'])->name('marketplace.verify');
         });
 
         // Student Only Management
