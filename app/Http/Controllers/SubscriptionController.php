@@ -23,6 +23,13 @@ class SubscriptionController extends Controller
      */
     public function create(Request $request)
     {
+        // 1. GLOBAL SECURITY CHECK
+        $paymentsEnabled = \App\Models\Setting::get('payments_enabled', '1') == '1';
+        if (!$paymentsEnabled) {
+            $msg = \App\Models\Setting::get('payment_disabled_message', 'Online payments are currently paused for system upgrades.');
+            return back()->with('error', $msg);
+        }
+
         $institute = auth()->user()->institute;
         $months = (int) ($request->months ?? 1);
         
@@ -33,9 +40,9 @@ class SubscriptionController extends Controller
         try {
             $api = $this->getApi();
 
-            // Pricing logic from Settings
-            $basePrice = (int) \App\Models\Setting::get('monthly_price', 499);
-            $sixMonthPrice = (int) \App\Models\Setting::get('six_month_price', 2499);
+            // Pricing logic from Command Center
+            $basePrice = (int) \App\Models\Setting::get('subscription_price', 999);
+            $sixMonthPrice = (int) \App\Models\Setting::get('six_month_price', 4999);
             $bulkDiscount = (int) \App\Models\Setting::get('bulk_discount_percentage', 20);
 
             $finalAmount = 0;
