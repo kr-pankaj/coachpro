@@ -43,7 +43,7 @@ class ContactLeadController extends Controller
             \Illuminate\Support\Facades\Log::error('Contact lead user mail failed: ' . $e->getMessage());
         }
 
-        return back()->with('contact_success', 'Thank you, ' . $lead->name . '! We will get back to you within 24 hours.');
+        return redirect()->to(url()->previous() . '#contact')->with('contact_success', 'Thank you, ' . $lead->name . '! We will get back to you within 24 hours.');
     }
 
     // Super Admin: list all leads

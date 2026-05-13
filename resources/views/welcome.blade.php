@@ -50,7 +50,10 @@
 <section class="hero-bg pt-32 pb-20 lg:pt-48 lg:pb-32">
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div class="space-y-8">
-            <div class="section-pill">🚀 Now live — QuonixAI v1.0.6</div>
+            <div class="section-pill">
+                <svg class="w-3.5 h-3.5 text-pink-500" fill="currentColor" viewBox="0 0 20 20"><path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"/></svg>
+                Now live — QuonixAI v1.0.6
+            </div>
             <h1 class="text-5xl lg:text-7xl font-black leading-tight tracking-tight text-gray-900">
                 Run Your Institute<br><span class="text-brand">Like a Pro.</span>
             </h1>
@@ -82,29 +85,82 @@
 <section id="features" class="py-28 bg-white">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
-            <div class="section-pill mx-auto">✨ Everything you need</div>
+            <div class="section-pill mx-auto">
+                <svg class="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clip-rule="evenodd"/></svg>
+                Everything you need
+            </div>
             <h2 class="text-3xl lg:text-5xl font-black text-gray-900 tracking-tight">Powerful features, <span class="text-brand">zero complexity.</span></h2>
             <p class="mt-4 text-gray-500 text-lg max-w-2xl mx-auto">Built specifically for coaching institutes. Every feature is designed to save you time and grow your business.</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @php
             $features = [
-                ['icon'=>'👨‍🎓','title'=>'Student Management','desc'=>'Full student profiles with batch enrollment, status tracking, and contact info. Searchable and filterable at scale.','color'=>'pink'],
-                ['icon'=>'✅','title'=>'Attendance Tracking','desc'=>'Mark attendance in one tap. Parents get instant notifications. View weekly/monthly reports in seconds.','color'=>'amber'],
-                ['icon'=>'💰','title'=>'Fee Management','desc'=>'Track pending and paid fees, generate PDF receipts, and send WhatsApp reminders automatically.','color'=>'green'],
-                ['icon'=>'📚','title'=>'Academic Library','desc'=>'Upload PDFs, share video links, and organize study materials by batch. Always accessible from mobile.','color'=>'blue'],
-                ['icon'=>'📝','title'=>'Online Quizzes','desc'=>'Create MCQ tests with auto-grading and instant results. Students get a beautiful leaderboard view.','color'=>'violet'],
-                ['icon'=>'📊','title'=>'AI-Powered Insights','desc'=>'AI detects at-risk students, suggests follow-up messages for leads, and gives smart retention tips.','color'=>'rose'],
-                ['icon'=>'🌐','title'=>'Branded Portal','desc'=>'Your own URL: ourdomain.com/yourname. Full branding with your logo and custom colors.','color'=>'indigo'],
-                ['icon'=>'📱','title'=>'Mobile First PWA','desc'=>'Works perfectly on any phone. Installable as an app. Designed for on-the-go institute management.','color'=>'cyan'],
-                ['icon'=>'🔒','title'=>'Secure & Isolated','desc'=>'Each institute\'s data is fully isolated. Role-based access for admins, teachers, and students.','color'=>'gray'],
+                [
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />',
+                    'title' => 'Student Management',
+                    'desc' => 'Full student profiles with batch enrollment, status tracking, and contact info. Searchable and filterable at scale.',
+                    'color' => 'pink'
+                ],
+                [
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />',
+                    'title' => 'Attendance Tracking',
+                    'desc' => 'Mark attendance in one tap. Parents get instant notifications. View weekly/monthly reports in seconds.',
+                    'color' => 'amber'
+                ],
+                [
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75-6.75a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75H3.75a.75.75 0 0 1-.75-.75V7.5Z" />',
+                    'title' => 'Fee Management',
+                    'desc' => 'Track pending and paid fees, generate PDF receipts, and send WhatsApp reminders automatically.',
+                    'color' => 'emerald'
+                ],
+                [
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18c-2.305 0-4.408.867-6 2.292m0-14.25v14.25" />',
+                    'title' => 'Academic Library',
+                    'desc' => 'Upload PDFs, share video links, and organize study materials by batch. Always accessible from mobile.',
+                    'color' => 'blue'
+                ],
+                [
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84a51.38 51.38 0 0 0-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443" />',
+                    'title' => 'Online Quizzes',
+                    'desc' => 'Create MCQ tests with auto-grading and instant results. Students get a beautiful leaderboard view.',
+                    'color' => 'violet'
+                ],
+                [
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />',
+                    'title' => 'AI-Powered Insights',
+                    'desc' => 'AI detects at-risk students, suggests follow-up messages for leads, and gives smart retention tips.',
+                    'color' => 'rose'
+                ],
+                [
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582" />',
+                    'title' => 'Branded Portal',
+                    'desc' => 'Your own URL: ourdomain.com/yourname. Full branding with your logo and custom colors.',
+                    'color' => 'indigo'
+                ],
+                [
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />',
+                    'title' => 'Mobile First PWA',
+                    'desc' => 'Works perfectly on any phone. Installable as an app. Designed for on-the-go institute management.',
+                    'color' => 'cyan'
+                ],
+                [
+                    'icon' => '<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />',
+                    'title' => 'Secure & Isolated',
+                    'desc' => 'Each institute\'s data is fully isolated. Role-based access for admins, teachers, and students.',
+                    'color' => 'gray'
+                ],
             ];
             @endphp
             @foreach($features as $f)
-            <div class="feature-card p-7">
-                <div class="text-3xl mb-4">{{ $f['icon'] }}</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">{{ $f['title'] }}</h3>
-                <p class="text-gray-500 text-sm leading-relaxed">{{ $f['desc'] }}</p>
+            <div class="feature-card p-8 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-{{ $f['color'] }}-50 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 transform scale-0 group-hover:scale-100"></div>
+                <div class="w-14 h-14 bg-{{ $f['color'] }}-100 rounded-2xl flex items-center justify-center mb-6 text-{{ $f['color'] }}-600 group-hover:bg-{{ $f['color'] }}-600 group-hover:text-white transition-all duration-300 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" class="w-7 h-7">
+                        {!! $f['icon'] !!}
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3 tracking-tight">{{ $f['title'] }}</h3>
+                <p class="text-gray-500 text-sm leading-relaxed relative z-10">{{ $f['desc'] }}</p>
             </div>
             @endforeach
         </div>
@@ -115,7 +171,10 @@
 <section id="pricing" class="py-28" style="background:linear-gradient(160deg,#fff9f0,#fff0f6);">
     <div class="max-w-7xl mx-auto px-6">
         <div class="text-center mb-16">
-            <div class="section-pill mx-auto">💳 Pricing</div>
+            <div class="section-pill mx-auto">
+                <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                Pricing
+            </div>
             <h2 class="text-3xl lg:text-5xl font-black text-gray-900 tracking-tight">Simple, <span class="text-brand">transparent</span> pricing.</h2>
             <p class="mt-4 text-gray-500 text-lg max-w-2xl mx-auto">Start free. Upgrade when you're ready. No hidden fees, ever.</p>
         </div>
@@ -155,8 +214,9 @@
 
             {{-- 6-Month POPULAR --}}
             <div class="relative rounded-3xl p-8 flex flex-col shadow-2xl text-white pricing-popular" style="box-shadow:0 20px 60px rgba(236,72,153,.35);">
-                <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-white text-pink-600 text-xs font-black uppercase tracking-widest px-5 py-1.5 rounded-full shadow-lg border border-pink-100">
-                    🏆 Most Popular
+                <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-white text-pink-600 text-xs font-black uppercase tracking-widest px-5 py-1.5 rounded-full shadow-lg border border-pink-100 flex items-center gap-1.5">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05l-3.293 3.293a1 1 0 01-1.414 0l-3.293-3.293a1 1 0 01-.285-1.05l1.738-5.42-1.233-.616a1 1 0 01.894-1.79l1.599.8L10 4.323V3a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+                    Most Popular
                 </div>
                 <div class="mb-6 mt-3">
                     <h3 class="text-xl font-black">6-Month Plan</h3>
@@ -215,14 +275,18 @@
 <section id="contact" class="py-28 bg-white">
     <div class="max-w-3xl mx-auto px-6">
         <div class="text-center mb-12">
-            <div class="section-pill mx-auto">📬 Get in Touch</div>
+            <div class="section-pill mx-auto">
+                <svg class="w-3.5 h-3.5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Get in Touch
+            </div>
             <h2 class="text-3xl lg:text-5xl font-black text-gray-900 tracking-tight">Talk to <span class="text-brand">our team.</span></h2>
             <p class="mt-4 text-gray-500 text-lg">Have questions or want a custom plan? Fill out the form and we'll get back to you within 24 hours.</p>
         </div>
 
         @if(session('contact_success'))
-            <div class="mb-8 p-5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-2xl font-semibold text-center text-base">
-                🎉 {{ session('contact_success') }}
+            <div class="mb-8 p-5 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-2xl font-bold text-center text-base flex items-center justify-center gap-2">
+                <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                {{ session('contact_success') }}
             </div>
         @endif
 
