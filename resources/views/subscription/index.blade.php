@@ -79,113 +79,135 @@
             @endif
 
             <!-- Plan Choice -->
+            @php
+                $paymentsEnabled = \App\Models\Setting::get('payments_enabled', '1') == '1';
+                $disabledMessage = \App\Models\Setting::get('payment_disabled_message', 'We are currently upgrading our payment systems. Online payments will resume shortly.');
+            @endphp
+
             @if(!$institute->is_lifetime_free)
-                <div class="bg-white dark:bg-gray-800 rounded-[3rem] shadow-sm p-12" x-data="{ 
-                    customMonths: 7,
-                    monthlyPrice: {{ \App\Models\Setting::get('monthly_price', 499) }},
-                    discount: {{ \App\Models\Setting::get('bulk_discount_percentage', 20) }},
-                    calculatePrice() {
-                        let total = this.customMonths * this.monthlyPrice;
-                        if (this.customMonths > 6) {
-                            return Math.round(total - (total * this.discount / 100));
+                @if($paymentsEnabled)
+                    <div class="bg-white dark:bg-gray-800 rounded-[3rem] shadow-sm p-12" x-data="{ 
+                        customMonths: 7,
+                        monthlyPrice: {{ \App\Models\Setting::get('subscription_price', 999) }},
+                        discount: {{ \App\Models\Setting::get('bulk_discount_percentage', 20) }},
+                        calculatePrice() {
+                            let total = this.customMonths * this.monthlyPrice;
+                            if (this.customMonths > 6) {
+                                return Math.round(total - (total * this.discount / 100));
+                            }
+                            return total;
                         }
-                        return total;
-                    }
-                }">
-                    <div class="text-center mb-12">
-                        <h3 class="text-3xl font-black text-gray-900 dark:text-white mb-3 uppercase tracking-tighter">
-                            {{ ($institute->subscription_expires_at && $institute->subscription_expires_at->isFuture()) ? 'Extend Your Access' : 'Choose Your Growth Plan' }}
-                        </h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">One-time payment for full access. No hidden charges or auto-renewals.</p>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {{-- Monthly Plan --}}
-                        <div class="relative p-8 rounded-[2.5rem] border-2 border-gray-100 dark:border-gray-700 hover:border-indigo-500 transition-all group">
-                            <div class="mb-6">
-                                <span class="text-[10px] font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full uppercase tracking-widest">Flexible</span>
-                                <h4 class="text-2xl font-black mt-4 uppercase tracking-tighter">1 Month</h4>
-                                <div class="flex items-baseline gap-1 mt-2">
-                                    <span class="text-4xl font-black">₹{{ \App\Models\Setting::get('monthly_price', 499) }}</span>
-                                    <span class="text-xs text-gray-400 font-bold uppercase">/mo</span>
-                                </div>
-                            </div>
-                            <ul class="space-y-4 mb-8">
-                                @foreach(['Full platform access', 'All academic tools', 'Unlimited leads', 'Email alerts'] as $feat)
-                                <li class="flex items-center gap-3 text-xs font-bold text-gray-600 dark:text-gray-400">
-                                    <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                                    {{ $feat }}
-                                </li>
-                                @endforeach
-                            </ul>
-                            <form method="POST" action="{{ route('subscription.create') }}">
-                                @csrf
-                                <input type="hidden" name="months" value="1">
-                                <button type="submit" class="w-full py-4 bg-gray-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all">Select Monthly</button>
-                            </form>
+                    }">
+                        <div class="text-center mb-12">
+                            <h3 class="text-3xl font-black text-gray-900 dark:text-white mb-3 uppercase tracking-tighter">
+                                {{ ($institute->subscription_expires_at && $institute->subscription_expires_at->isFuture()) ? 'Extend Your Access' : 'Choose Your Growth Plan' }}
+                            </h3>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">One-time payment for full access. No hidden charges or auto-renewals.</p>
                         </div>
 
-                        {{-- 6 Month Bundle --}}
-                        <div class="relative p-8 rounded-[2.5rem] border-2 border-indigo-500 bg-indigo-50/30 dark:bg-indigo-900/10 shadow-2xl shadow-indigo-100 group">
-                            <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-indigo-600 text-white text-[10px] font-black rounded-full uppercase tracking-widest">Most Popular</div>
-                            <div class="mb-6">
-                                <h4 class="text-2xl font-black mt-4 uppercase tracking-tighter">6 Months</h4>
-                                <div class="flex items-baseline gap-1 mt-2">
-                                    <span class="text-4xl font-black">₹{{ \App\Models\Setting::get('six_month_price', 2499) }}</span>
-                                    <span class="text-xs text-gray-400 font-bold uppercase">bundle</span>
-                                </div>
-                                <p class="text-[10px] text-emerald-600 font-black mt-2 uppercase tracking-widest">Save 15%</p>
-                            </div>
-                            <ul class="space-y-4 mb-8">
-                                @foreach(['Everything in Monthly', 'Extended support', 'System verification', 'Premium Badge'] as $feat)
-                                <li class="flex items-center gap-3 text-xs font-bold text-gray-700 dark:text-gray-300">
-                                    <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
-                                    {{ $feat }}
-                                </li>
-                                @endforeach
-                            </ul>
-                            <form method="POST" action="{{ route('subscription.create') }}">
-                                @csrf
-                                <input type="hidden" name="months" value="6">
-                                <button type="submit" class="w-full py-4 bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:shadow-xl transition-all">Select Bundle</button>
-                            </form>
-                        </div>
-
-                        {{-- Custom Enterprise --}}
-                        <div class="relative p-8 rounded-[2.5rem] border-2 border-gray-100 dark:border-gray-700 hover:border-rose-500 transition-all group">
-                            <div class="mb-6">
-                                <span class="text-[10px] font-black text-rose-600 bg-rose-50 px-3 py-1 rounded-full uppercase tracking-widest">Enterprise</span>
-                                <h4 class="text-2xl font-black mt-4 uppercase tracking-tighter">Custom Duration</h4>
-                                <div class="flex items-baseline gap-1 mt-2">
-                                    <span class="text-4xl font-black" x-text="'₹' + calculatePrice().toLocaleString()">₹---</span>
-                                    <span class="text-[10px] text-gray-400 font-bold uppercase">total</span>
-                                </div>
-                            </div>
-                            
-                            <div class="space-y-6 mb-8">
-                                <div>
-                                    <div class="flex justify-between text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">
-                                        <span>Duration</span>
-                                        <span class="text-rose-600" x-text="customMonths + ' Months'">7 Months</span>
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            {{-- Monthly Plan --}}
+                            <div class="relative p-8 rounded-[2.5rem] border-2 border-gray-100 dark:border-gray-700 hover:border-indigo-500 transition-all group">
+                                <div class="mb-6">
+                                    <span class="text-[10px] font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full uppercase tracking-widest">Flexible</span>
+                                    <h4 class="text-2xl font-black mt-4 uppercase tracking-tighter">1 Month</h4>
+                                    <div class="flex items-baseline gap-1 mt-2">
+                                        <span class="text-4xl font-black">₹{{ \App\Models\Setting::get('subscription_price', 999) }}</span>
+                                        <span class="text-xs text-gray-400 font-bold uppercase">/mo</span>
                                     </div>
-                                    <input type="range" min="2" max="12" x-model="customMonths" class="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-rose-500">
                                 </div>
-                                <div class="p-4 bg-rose-50 rounded-2xl border border-rose-100" x-show="customMonths > 6">
-                                    <p class="text-[10px] font-black text-rose-600 uppercase tracking-widest flex items-center gap-2">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-                                        {{ \App\Models\Setting::get('bulk_discount_percentage', 20) }}% Bulk Discount Applied
-                                    </p>
-                                </div>
+                                <ul class="space-y-4 mb-8">
+                                    @foreach(['Full platform access', 'All academic tools', 'Unlimited leads', 'Email alerts'] as $feat)
+                                    <li class="flex items-center gap-3 text-xs font-bold text-gray-600 dark:text-gray-400">
+                                        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                                        {{ $feat }}
+                                    </li>
+                                    @endforeach
+                                </ul>
+                                <form method="POST" action="{{ route('subscription.create') }}">
+                                    @csrf
+                                    <input type="hidden" name="months" value="1">
+                                    <button type="submit" class="w-full py-4 bg-gray-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all">Select Monthly</button>
+                                </form>
                             </div>
 
-                            <form method="POST" action="{{ route('subscription.create') }}">
-                                @csrf
-                                <input type="hidden" name="months" :value="customMonths">
-                                <button type="submit" class="w-full py-4 bg-gray-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 transition-all">Buy Custom Plan</button>
-                            </form>
+                            {{-- 6 Month Bundle --}}
+                            <div class="relative p-8 rounded-[2.5rem] border-2 border-indigo-500 bg-indigo-50/30 dark:bg-indigo-900/10 shadow-2xl shadow-indigo-100 group">
+                                <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-indigo-600 text-white text-[10px] font-black rounded-full uppercase tracking-widest">Most Popular</div>
+                                <div class="mb-6">
+                                    <h4 class="text-2xl font-black mt-4 uppercase tracking-tighter">6 Months</h4>
+                                    <div class="flex items-baseline gap-1 mt-2">
+                                        <span class="text-4xl font-black">₹{{ (int)\App\Models\Setting::get('subscription_price', 999) * 5 }}</span>
+                                        <span class="text-xs text-gray-400 font-bold uppercase">bundle</span>
+                                    </div>
+                                    <p class="text-[10px] text-emerald-600 font-black mt-2 uppercase tracking-widest">Buy 5 Get 1 Free</p>
+                                </div>
+                                <ul class="space-y-4 mb-8">
+                                    @foreach(['Everything in Monthly', 'Extended support', 'System verification', 'Premium Badge'] as $feat)
+                                    <li class="flex items-center gap-3 text-xs font-bold text-gray-700 dark:text-gray-300">
+                                        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+                                        {{ $feat }}
+                                    </li>
+                                    @endforeach
+                                </ul>
+                                <form method="POST" action="{{ route('subscription.create') }}">
+                                    @csrf
+                                    <input type="hidden" name="months" value="6">
+                                    <button type="submit" class="w-full py-4 bg-indigo-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:shadow-xl transition-all">Select Bundle</button>
+                                </form>
+                            </div>
+
+                            {{-- Custom Enterprise --}}
+                            <div class="relative p-8 rounded-[2.5rem] border-2 border-gray-100 dark:border-gray-700 hover:border-rose-500 transition-all group">
+                                <div class="mb-6">
+                                    <span class="text-[10px] font-black text-rose-600 bg-rose-50 px-3 py-1 rounded-full uppercase tracking-widest">Enterprise</span>
+                                    <h4 class="text-2xl font-black mt-4 uppercase tracking-tighter">Custom Duration</h4>
+                                    <div class="flex items-baseline gap-1 mt-2">
+                                        <span class="text-4xl font-black" x-text="'₹' + calculatePrice().toLocaleString()">₹---</span>
+                                        <span class="text-[10px] text-gray-400 font-bold uppercase">total</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-6 mb-8">
+                                    <div>
+                                        <div class="flex justify-between text-[10px] font-black uppercase tracking-widest text-gray-400 mb-3">
+                                            <span>Duration</span>
+                                            <span class="text-rose-600" x-text="customMonths + ' Months'">7 Months</span>
+                                        </div>
+                                        <input type="range" min="2" max="12" x-model="customMonths" class="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-rose-500">
+                                    </div>
+                                    <div class="p-4 bg-rose-50 rounded-2xl border border-rose-100" x-show="customMonths > 6">
+                                        <p class="text-[10px] font-black text-rose-600 uppercase tracking-widest flex items-center gap-2">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                                            {{ \App\Models\Setting::get('bulk_discount_percentage', 20) }}% Bulk Discount Applied
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <form method="POST" action="{{ route('subscription.create') }}">
+                                    @csrf
+                                    <input type="hidden" name="months" :value="customMonths">
+                                    <button type="submit" class="w-full py-4 bg-gray-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-600 transition-all">Buy Custom Plan</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @else
+                    {{-- Professional Maintenance Message --}}
+                    <div class="bg-white dark:bg-gray-800 rounded-[3rem] shadow-sm p-16 text-center border-2 border-dashed border-gray-100 dark:border-gray-700">
+                        <div class="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                            <svg class="w-10 h-10 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                        </div>
+                        <h3 class="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-tighter mb-4">Payments Temporarily Paused</h3>
+                        <p class="max-w-md mx-auto text-gray-500 dark:text-gray-400 font-medium leading-relaxed">
+                            {{ $disabledMessage }}
+                        </p>
+                        <div class="mt-10 pt-10 border-t border-gray-50 dark:border-gray-700 flex flex-col items-center gap-2">
+                            <span class="text-[10px] font-black text-gray-300 uppercase tracking-widest">Need urgent assistance?</span>
+                            <a href="mailto:{{ \App\Models\Setting::get('support_email', 'support@quonixai.com') }}" class="text-sm font-bold text-indigo-600 hover:text-indigo-700">Contact Platform Support</a>
+                        </div>
+                    </div>
+                @endif
             @endif
 
             {{-- Billing History --}}

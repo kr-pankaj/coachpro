@@ -74,6 +74,7 @@ Route::middleware(['auth', 'verified', 'superadmin'])->prefix('superadmin')->gro
     Route::get('/impersonate/{institute}', [App\Http\Controllers\SuperAdminController::class, 'impersonate'])->name('superadmin.impersonate');
     Route::post('/broadcast', [App\Http\Controllers\SuperAdminController::class, 'broadcast'])->name('superadmin.broadcast');
     Route::post('/settings', [App\Http\Controllers\SuperAdminController::class, 'updateSettings'])->name('superadmin.settings.update');
+    Route::get('/settings', [App\Http\Controllers\SuperAdminController::class, 'settings'])->name('superadmin.settings');
     // Contact Leads
     Route::get('/contact-leads', [App\Http\Controllers\ContactLeadController::class, 'index'])->name('superadmin.contact-leads.index');
     Route::put('/contact-leads/{contactLead}', [App\Http\Controllers\ContactLeadController::class, 'update'])->name('superadmin.contact-leads.update');

@@ -82,6 +82,16 @@ class SuperAdminController extends Controller
         return back()->with('success', 'Global broadcast sent successfully to all institutes.');
     }
 
+    public function settings()
+    {
+        if (auth()->user()->role !== 'superadmin') {
+            abort(403);
+        }
+
+        $settings = \App\Models\Setting::pluck('value', 'key');
+        return view('superadmin.settings', compact('settings'));
+    }
+
     public function updateSettings(Request $request)
     {
         if (auth()->user()->role !== 'superadmin') {
