@@ -41,7 +41,7 @@
                 <span class="input-icon">
                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </span>
-                <input id="email" class="input-field" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" placeholder="you@institute.com" />
+                <input id="email" class="input-field" type="email" name="email" value="{{ old('email', request('email')) }}" required autofocus autocomplete="username" placeholder="you@institute.com" />
             </div>
             @error('email')
                 <p style="color:#dc2626;font-size:0.8rem;margin-top:0.375rem;">{{ $message }}</p>

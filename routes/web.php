@@ -33,7 +33,7 @@ Route::post('/find-institute', function (Illuminate\Http\Request $request) {
     $user = \App\Models\User::where('email', $request->email)->first();
 
     if ($user && $user->institute) {
-        return redirect()->route('login', ['slug' => $user->institute->slug]);
+        return redirect()->route('login', ['slug' => $user->institute->slug, 'email' => $request->email]);
     }
 
     if ($user && $user->role === 'superadmin') {
