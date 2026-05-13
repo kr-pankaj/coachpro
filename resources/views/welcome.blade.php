@@ -56,7 +56,7 @@
         <div class="space-y-8">
             <div class="section-pill">
                 <svg class="w-3.5 h-3.5 text-pink-500" fill="currentColor" viewBox="0 0 20 20"><path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"/></svg>
-                Now live — QuonixAI v1.0.6
+                Now live — QuonixAI Platform
             </div>
             <h1 class="text-5xl lg:text-7xl font-black leading-tight tracking-tight text-gray-900">
                 Run Your Institute<br><span class="text-brand">Like a Pro.</span>
