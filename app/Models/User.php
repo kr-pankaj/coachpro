@@ -12,7 +12,6 @@ class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, \Illuminate\Database\Eloquent\SoftDeletes;
-    use \App\Traits\BelongsToInstitute;
 
     /**
      * The attributes that are mass assignable.

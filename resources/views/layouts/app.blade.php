@@ -8,7 +8,7 @@
         @php
             $institute = request()->get('resolved_institute') ?? (auth()->check() ? auth()->user()->institute : null);
             $pageTitle = $institute ? $institute->name . ' | Portal' : config('app.name', 'QuonixAI');
-            $favicon = ($institute && $institute->logo_url) ? $institute->logo_url : asset('favicon.png');
+            $favicon = ($institute && $institute->logo_url) ? $institute->logo_url : asset('favicon.png') . '?v=2';
         @endphp
 
         <title>{{ $pageTitle }}</title>
