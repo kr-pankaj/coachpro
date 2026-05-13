@@ -37,7 +37,7 @@
 
     <p style="text-align:center;margin-top:1.5rem;font-size:0.875rem;color:#64748b;">
         Remembered your URL? 
-        <a href="{{ route('login.global') }}" style="color:#4f46e5;font-weight:600;text-decoration:none;">Go back</a>
+        <a href="{{ route('welcome') }}" style="color:#4f46e5;font-weight:600;text-decoration:none;">Go back</a>
     </p>
 
     <div style="margin-top:1rem;text-align:center;">
