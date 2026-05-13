@@ -160,6 +160,10 @@
                             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round"/></svg>
                             <span class="text-xs mt-0.5 font-medium">Home</span>
                         </a>
+                        <button onclick="window.installPWA()" class="pwa-install-btn flex-1 flex-col items-center py-2 text-emerald-600 animate-bounce" style="display: none;">
+                            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            <span class="text-[10px] mt-0.5 font-bold uppercase">Install</span>
+                        </button>
                         @foreach($links as [$label, $routePattern, $routeName, $icon])
                         <a href="{{ route($routeName) }}" class="flex-1 flex flex-col items-center py-2 {{ request()->routeIs($routePattern) ? 'text-indigo-600' : 'text-gray-500 hover:text-gray-700' }}">
                             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="{{ $icon }}" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -247,6 +251,28 @@
                     }
                     showLoader();
                 });
+
+                // 3. PWA Installation Handler
+                let deferredPrompt;
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    e.preventDefault();
+                    deferredPrompt = e;
+                    // Show install button in UI
+                    document.querySelectorAll('.pwa-install-btn').forEach(btn => {
+                        btn.style.display = 'flex';
+                    });
+                });
+
+                window.installPWA = function() {
+                    if (!deferredPrompt) return;
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            document.querySelectorAll('.pwa-install-btn').forEach(btn => btn.style.display = 'none');
+                        }
+                        deferredPrompt = null;
+                    });
+                };
             });
 
             // Reset on Back Button / bfcache

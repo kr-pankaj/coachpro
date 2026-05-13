@@ -121,6 +121,13 @@
             });
         </script>
 
+        <div class="px-4 mb-4">
+            <button onclick="window.installPWA()" class="pwa-install-btn w-full items-center gap-3 px-4 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-2xl text-sm font-black shadow-lg shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all no-loader" style="display: none;">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                Install Mobile App
+            </button>
+        </div>
+
         <div class="p-6 shrink-0 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-100 dark:border-gray-800">
             <div class="flex items-center gap-4 mb-6">
                 <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-quonix-purple to-quonix-magenta flex items-center justify-center text-white font-black shadow-lg shadow-quonix-purple/20">

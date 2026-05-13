@@ -407,5 +407,40 @@
     </div>
 </footer>
 
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.querySelectorAll('.pwa-install-btn').forEach(btn => {
+                btn.style.display = 'flex';
+            });
+        });
+
+        window.installPWA = function() {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    document.querySelectorAll('.pwa-install-btn').forEach(btn => btn.style.display = 'none');
+                }
+                deferredPrompt = null;
+            });
+        };
+    </script>
+    
+    {{-- Floating Install Button --}}
+    <button onclick="window.installPWA()" class="pwa-install-btn fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-full font-black text-sm shadow-2xl shadow-indigo-500/40 animate-bounce" style="display: none;">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"/></svg>
+        Install Mobile App
+    </button>
 </body>
 </html>
