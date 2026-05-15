@@ -1,4 +1,7 @@
 <x-app-layout>
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    @endpush
     <x-slot name="header">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>

@@ -108,7 +108,9 @@ Route::prefix('{slug}')->group(function () {
 
     // Student Registration
     Route::get('/student/register', [App\Http\Controllers\StudentRegistrationController::class, 'create'])->name('student.register.portal');
-    Route::post('/student/register', [App\Http\Controllers\StudentRegistrationController::class, 'store'])->name('student.register.store');
+    Route::post('/student/register', [App\Http\Controllers\StudentRegistrationController::class, 'store'])
+        ->name('student.register.store')
+        ->middleware('throttle:3,1');
 
     // Main Institute Management Group
     Route::middleware(['auth', 'verified', 'check.subscription'])->group(function () {
@@ -132,7 +134,9 @@ Route::prefix('{slug}')->group(function () {
             Route::resource('quizzes', App\Http\Controllers\QuizController::class);
             
             // AI Features
-            Route::post('/ai/generate-questions', [App\Http\Controllers\AIController::class, 'generateQuestions'])->name('ai.generate-questions');
+            Route::post('/ai/generate-questions', [App\Http\Controllers\AIController::class, 'generateQuestions'])
+                ->name('ai.generate-questions')
+                ->middleware('throttle:5,1');
         });
 
         // -------------------------------------------------------------
@@ -149,7 +153,9 @@ Route::prefix('{slug}')->group(function () {
         // -------------------------------------------------------------
         Route::middleware(['role:admin,receptionist'])->group(function () {
             Route::resource('enquiries', App\Http\Controllers\EnquiryController::class);
-            Route::get('/ai/enquiries/{enquiry}/followup', [App\Http\Controllers\AIController::class, 'suggestFollowUp'])->name('ai.enquiries.followup');
+            Route::get('/ai/enquiries/{enquiry}/followup', [App\Http\Controllers\AIController::class, 'suggestFollowUp'])
+                ->name('ai.enquiries.followup')
+                ->middleware('throttle:5,1');
             Route::post('/enquiries/{enquiry}/send-email', [App\Http\Controllers\EnquiryController::class, 'sendEmail'])->name('enquiries.send-email');
         });
 
@@ -170,6 +176,13 @@ Route::prefix('{slug}')->group(function () {
             // Settings
             Route::get('/settings', [App\Http\Controllers\InstituteController::class, 'settings'])->name('institute.settings');
             Route::put('/settings', [App\Http\Controllers\InstituteController::class, 'updateSettings'])->name('institute.settings.update');
+
+            // Certificates
+            Route::get('/certificates/settings', [App\Http\Controllers\CertificateController::class, 'settings'])->name('certificates.settings');
+            Route::post('/certificates/settings', [App\Http\Controllers\CertificateController::class, 'updateSettings'])->name('certificates.settings.update');
+            Route::get('/certificates/preview', [App\Http\Controllers\CertificateController::class, 'preview'])->name('certificates.preview');
+            Route::get('/certificates/issue/{student}', [App\Http\Controllers\CertificateController::class, 'issue'])->name('certificates.issue');
+            Route::get('/certificates/download/{issuedCertificate}', [App\Http\Controllers\CertificateController::class, 'download'])->name('certificates.download');
 
             // Subscription
             Route::get('/subscription', [App\Http\Controllers\SubscriptionController::class, 'index'])->name('subscription.index');

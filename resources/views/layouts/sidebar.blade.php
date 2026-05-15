@@ -4,8 +4,14 @@
             <a href="{{ auth()->user()->role === 'superadmin' ? route('superadmin.index') : route('dashboard') }}" class="group">
                 <x-application-logo class="h-16 w-auto transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" />
             </a>
-            <div class="ml-auto">
+            <div class="ml-auto flex flex-col items-end gap-2">
                 <span class="text-[10px] font-black text-quonix-purple bg-quonix-purple/10 dark:bg-quonix-purple/30 px-2 py-0.5 rounded-full uppercase tracking-widest">v{{ config('app.version') }}</span>
+                
+                {{-- Theme Toggle --}}
+                <button id="theme-toggle" class="p-2 rounded-xl bg-gray-50 dark:bg-gray-700/50 text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all border border-gray-100 dark:border-gray-700 shadow-sm">
+                    <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg id="theme-toggle-light-icon" class="hidden w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464a1 1 0 101.414-1.414l-.707-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                </button>
             </div>
         </div>
 
@@ -124,6 +130,9 @@
                             <x-sidebar-link :href="route('subscription.index')" :active="request()->routeIs('subscription.*')" icon="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
                                 {{ __('Bills & Plans') }}
                             </x-sidebar-link>
+                            <x-sidebar-link :href="route('certificates.settings')" :active="request()->routeIs('certificates.*')" icon="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                                {{ __('Certificates') }}
+                            </x-sidebar-link>
                             <x-sidebar-link :href="route('institute.settings')" :active="request()->routeIs('institute.settings')" icon="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924-1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0">
                                 {{ __('Settings') }}
                             </x-sidebar-link>
@@ -142,6 +151,46 @@
                 }
                 sidebar.addEventListener('scroll', function() {
                     localStorage.setItem('sidebarScrollPos', sidebar.scrollTop);
+                });
+
+                // Theme Toggle Logic
+                var themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+                var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+                // Change the icons inside the button based on previous settings
+                if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    themeToggleLightIcon.classList.remove('hidden');
+                } else {
+                    themeToggleDarkIcon.classList.remove('hidden');
+                }
+
+                var themeToggleBtn = document.getElementById('theme-toggle');
+
+                themeToggleBtn.addEventListener('click', function() {
+                    // toggle icons inside button
+                    themeToggleDarkIcon.classList.toggle('hidden');
+                    themeToggleLightIcon.classList.toggle('hidden');
+
+                    // if set via local storage previously
+                    if (localStorage.getItem('theme')) {
+                        if (localStorage.getItem('theme') === 'light') {
+                            document.documentElement.classList.add('dark');
+                            localStorage.setItem('theme', 'dark');
+                        } else {
+                            document.documentElement.classList.remove('dark');
+                            localStorage.setItem('theme', 'light');
+                        }
+
+                    // if NOT set via local storage previously
+                    } else {
+                        if (document.documentElement.classList.contains('dark')) {
+                            document.documentElement.classList.remove('dark');
+                            localStorage.setItem('theme', 'light');
+                        } else {
+                            document.documentElement.classList.add('dark');
+                            localStorage.setItem('theme', 'dark');
+                        }
+                    }
                 });
             });
         </script>

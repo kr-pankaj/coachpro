@@ -5,6 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
+        <script>
+            // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        </script>
+
         @php
             $institute = request()->get('resolved_institute') ?? (auth()->check() ? auth()->user()->institute : null);
             $pageTitle = $institute ? $institute->name . ' | Portal' : config('app.name', 'QuonixAI');
@@ -26,12 +35,8 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-        <!-- Tom Select -->
-        <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
-
-        <!-- ApexCharts -->
-        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <!-- Page Specific Styles -->
+        @stack('styles')
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -223,12 +228,23 @@
                     'Calculating the meaning of life...'
                 ];
 
+                let loaderTimeout;
                 function showLoader() {
-                    loaderText.innerText = messages[Math.floor(Math.random() * messages.length)];
-                    loader.style.display = 'flex';
-                    loader.style.opacity = '0';
-                    document.body.classList.add('loader-active');
-                    setTimeout(() => { loader.style.opacity = '1'; }, 10);
+                    // 250ms delay: If the page loads faster than this, the user never sees the loader.
+                    // This fixes the "flickering" feeling on fast connections.
+                    loaderTimeout = setTimeout(() => {
+                        loaderText.innerText = messages[Math.floor(Math.random() * messages.length)];
+                        loader.style.display = 'flex';
+                        loader.style.opacity = '0';
+                        document.body.classList.add('loader-active');
+                        setTimeout(() => { loader.style.opacity = '1'; }, 10);
+                    }, 250);
+                }
+
+                function hideLoader() {
+                    clearTimeout(loaderTimeout);
+                    loader.style.display = 'none';
+                    document.body.classList.remove('loader-active');
                 }
 
                 // 1. Unified Form Submission (Delegated)
@@ -288,14 +304,13 @@
 
             // Reset on Back Button / bfcache
             window.addEventListener('pageshow', function(event) {
-                const loader = document.getElementById('global-loader');
-                if (loader && (event.persisted || (window.performance && window.performance.navigation.type === 2))) {
-                    loader.style.display = 'none';
-                    document.body.classList.remove('loader-active');
-                    document.querySelectorAll('form').forEach(f => f.removeAttribute('data-submitting'));
-                    document.querySelectorAll('button').forEach(b => b.disabled = false);
-                }
+                hideLoader();
+                document.querySelectorAll('form').forEach(f => f.removeAttribute('data-submitting'));
+                document.querySelectorAll('button').forEach(b => b.disabled = false);
             });
+
+            // Page Specific Scripts
+            @stack('scripts')
         </script>
     </body>
 </html>

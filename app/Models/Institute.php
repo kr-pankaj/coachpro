@@ -80,4 +80,8 @@ class Institute extends Model
             ->where('expires_at', '>=', now())
             ->exists();
     }
+    public function certificateTemplate()
+    {
+        return $this->hasOne(CertificateTemplate::class);
+    }
 }
