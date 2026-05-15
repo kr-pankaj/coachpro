@@ -24,8 +24,30 @@ class DemoDataSeeder extends Seeder
 {
     public function run(): void
     {
-        // 0. Cleanup existing data (optional but good for a fresh start)
-        // Note: migrate:fresh already handles this, so we don't need it here.
+        // 0. Cleanup existing data to avoid duplicate slugs/emails
+        $this->command->warn('Cleaning up existing data for a fresh start...');
+        
+        // Disable foreign key checks for truncation
+        \Illuminate\Support\Facades\Schema::disableForeignKeyConstraints();
+        
+        QuizAttempt::truncate();
+        Quiz::truncate();
+        Attendance::truncate();
+        Fee::truncate();
+        Enquiry::truncate();
+        Student::truncate();
+        StudyMaterial::truncate();
+        Announcement::truncate();
+        Batch::truncate();
+        User::truncate(); // Clean all users
+        Institute::truncate();
+        
+        \Illuminate\Support\Facades\Schema::enableForeignKeyConstraints();
+        
+        // 0b. Call the existing SuperAdminSeeder to re-initialize the master account
+        $this->call(SuperAdminSeeder::class);
+        
+        $this->command->info('Database cleaned and SuperAdmin re-initialized. Starting fresh seed...');
 
         $institutesData = [
             [
@@ -111,7 +133,7 @@ class DemoDataSeeder extends Seeder
                 }
             }
 
-            // 5. Announcements
+            // 5. Announcements (Fresh ones!)
             $announcementTypes = ['urgent', 'update', 'event'];
             foreach ($announcementTypes as $type) {
                 Announcement::create([
@@ -120,7 +142,7 @@ class DemoDataSeeder extends Seeder
                     'content' => "This is a sample {$type} announcement content. Please stay updated with the latest news from the institute.",
                     'type' => $type,
                     'is_active' => true,
-                    'created_at' => now()->subDays(rand(1, 10)),
+                    'created_at' => now()->subDays(rand(0, 3)), // Very recent
                 ]);
             }
 
@@ -133,18 +155,18 @@ class DemoDataSeeder extends Seeder
                     'description' => "Foundational notes for the " . $batch->subject . " course.",
                     'file_url' => 'demo/sample.pdf',
                     'type' => 'notes',
-                    'created_at' => now()->subMonths(2),
+                    'created_at' => now()->subMonths(1),
                 ]);
             }
 
-            // 7. Students (50 per institute)
-            $this->command->comment("  -> Creating 50 students for {$institute->name}...");
-            for ($i = 0; $i < 50; $i++) {
+            // 7. Students (100 per institute - LIVE volume)
+            $this->command->comment("  -> Creating 100 students for {$institute->name}...");
+            for ($i = 0; $i < 100; $i++) {
                 $firstName = $firstNames[array_rand($firstNames)];
                 $lastName = $lastNames[array_rand($lastNames)];
                 $fullName = "{$firstName} {$lastName}";
-                // Ensure some students join in the last 7 days for the chart
-                $joinedAt = ($i < 10) ? now()->subDays(rand(0, 6)) : now()->subMonths(rand(1, 8));
+                // Ensure high volume of students join in the last 7 days for the chart
+                $joinedAt = ($i < 25) ? now()->subDays(rand(0, 6)) : now()->subMonths(rand(1, 8));
 
                 $user = User::create([
                     'name' => $fullName,
@@ -171,12 +193,16 @@ class DemoDataSeeder extends Seeder
                     if ($joinedAt->isAfter($month->endOfMonth())) continue;
 
                     $total = 6500;
-                    // Current month (index 0) might be pending/partial, others likely paid
                     $statusRoll = rand(1, 10);
+                    
+                    // Explicitly make some payments happen TODAY or YESTERDAY
+                    $paymentDate = null;
                     if ($m === 0) {
-                        $paid = ($statusRoll > 7) ? 6500 : (($statusRoll > 4) ? 3000 : 0);
+                        $paid = ($statusRoll > 5) ? 6500 : (($statusRoll > 2) ? 3000 : 0);
+                        if ($paid > 0) $paymentDate = (rand(0, 1) ? now() : now()->subDay());
                     } else {
                         $paid = ($statusRoll > 2) ? 6500 : 0;
+                        if ($paid > 0) $paymentDate = $month->copy()->startOfMonth()->addDays(rand(1, 15));
                     }
                     
                     Fee::create([
@@ -186,15 +212,14 @@ class DemoDataSeeder extends Seeder
                         'paid_amount' => $paid,
                         'due_amount' => $total - $paid,
                         'discount_amount' => 0,
-                        'month_year' => $month->format('F Y'), // Controller expects 'May 2026'
+                        'month_year' => $month->format('F Y'),
                         'status' => ($paid >= $total) ? 'paid' : ($paid > 0 ? 'partial' : 'pending'),
-                        'payment_date' => ($paid > 0) ? $month->copy()->startOfMonth()->addDays(rand(1, 15))->toDateString() : null,
-                        'created_at' => $month,
+                        'payment_date' => $paymentDate ? $paymentDate->toDateString() : null,
+                        'created_at' => $paymentDate ?? $month,
                     ]);
                 }
 
-                // 9. Attendance (Last 90 days)
-                // Note: To keep it fast, we skip Sundays
+                // 9. Attendance (Today Included!)
                 for ($d = 0; $d < 90; $d++) {
                     $date = now()->subDays($d);
                     if ($date->isSunday() || $joinedAt->isAfter($date)) continue;
@@ -204,13 +229,26 @@ class DemoDataSeeder extends Seeder
                         'student_id' => $student->id,
                         'batch_id' => $student->batch_id,
                         'date' => $date->toDateString(),
-                        'status' => (rand(1, 100) > 15) ? 'present' : 'absent', // 15% absenteeism
+                        'status' => (rand(1, 100) > 12) ? 'present' : 'absent', // 12% absenteeism
                     ]);
                 }
             }
 
-            // 10. Quizzes and Attempts
-            foreach ($batches as $batch) {
+            // 10. Quizzes and Attempts (Upcoming Included!)
+            foreach ($batches as $bIdx => $batch) {
+                // Scheduled for TOMORROW
+                if ($bIdx % 2 === 0) {
+                    Quiz::create([
+                        'institute_id' => $institute->id,
+                        'batch_id' => $batch->id,
+                        'title' => "Mid-Term {$batch->subject} Prep",
+                        'total_marks' => 50,
+                        'passing_marks' => 20,
+                        'time_limit_minutes' => 45,
+                        'created_at' => now()->addDay(),
+                    ]);
+                }
+
                 $quiz = Quiz::create([
                     'institute_id' => $institute->id,
                     'batch_id' => $batch->id,
@@ -218,6 +256,7 @@ class DemoDataSeeder extends Seeder
                     'total_marks' => 100,
                     'passing_marks' => 40,
                     'time_limit_minutes' => 60,
+                    'created_at' => now()->subDays(5),
                 ]);
 
                 // Create attempts for students in this batch
@@ -232,28 +271,37 @@ class DemoDataSeeder extends Seeder
                             'total_marks' => 100,
                             'total_questions' => 20,
                             'correct_answers' => ceil($score / 5),
-                            'completed_at' => now()->subDays(rand(1, 20)),
+                            'completed_at' => now()->subDays(rand(0, 4)),
                             'status' => 'completed',
                         ]);
                     }
                 }
             }
 
-            // 11. Leads (Enquiries)
+            // 11. Leads (Enquiries - 10 New today!)
             $leadStatuses = ['new', 'contacted', 'demo_scheduled', 'converted', 'lost'];
-            for ($i = 0; $i < 30; $i++) {
+            for ($i = 0; $i < 40; $i++) {
+                $status = ($i < 10) ? 'new' : $leadStatuses[array_rand($leadStatuses)];
                 Enquiry::create([
                     'institute_id' => $institute->id,
                     'student_name' => $firstNames[array_rand($firstNames)] . ' ' . $lastNames[array_rand($lastNames)],
                     'phone' => '9' . rand(100000000, 999999999),
                     'email' => "lead.{$idx}.{$i}@gmail.com",
-                    'course_interested' => 'IIT-JEE Foundation',
-                    'status' => $leadStatuses[array_rand($leadStatuses)],
-                    'created_at' => now()->subDays(rand(1, 60)),
+                    'course_interested' => 'Competitive Foundation',
+                    'status' => $status,
+                    'created_at' => ($i < 10) ? now() : now()->subDays(rand(1, 60)),
                 ]);
             }
         }
 
-        $this->command->info('ULTIMATE v1.0.6.0 Dataset Seeded Successfully!');
+        $this->command->info('-------------------------------------------------------');
+        $this->command->info('  ✅ ULTIMATE LIVE DATA SEEDED SUCCESSFULLY!');
+        $this->command->info('-------------------------------------------------------');
+        $this->command->warn('  LOGIN CREDENTIALS:');
+        $this->command->line('  - Super Admin: superadmin@quonixai.com (Password: superadmin123)');
+        $this->command->line('  - Admin: admin@quonixai.com (Password: password)');
+        $this->command->line('  - Teacher: physics.0@quonixai.com (Password: password)');
+        $this->command->line('  - Student: ' . User::where('role', 'student')->first()->email . ' (Password: password)');
+        $this->command->info('-------------------------------------------------------');
     }
 }
