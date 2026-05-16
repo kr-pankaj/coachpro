@@ -8,14 +8,18 @@ use Illuminate\Http\Request;
 
 class PortfolioController extends Controller
 {
-    public function show($slug, Student $student)
+    public function show(Student $student)
     {
-        // Ensure student belongs to the institute
-        if ($student->institute->slug !== $slug) {
+        // $slug is consumed by ResolveInstitute middleware, so we don't need it here.
+        // The student model is already loaded via route model binding.
+        
+        $student->load(['batches', 'badges', 'attempts.quiz', 'institute']);
+
+        // Security check: Ensure student belongs to the institute in the URL
+        $resolvedInstitute = request()->get('resolved_institute');
+        if (!$resolvedInstitute || $student->institute_id !== $resolvedInstitute->id) {
             abort(404);
         }
-
-        $student->load(['batches', 'badges', 'attempts.quiz']);
 
         // Stats
         $stats = [
