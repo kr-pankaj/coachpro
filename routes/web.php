@@ -82,7 +82,18 @@ Route::middleware(['auth', 'verified', 'superadmin'])->prefix('superadmin')->gro
     Route::get('/add-ons', [App\Http\Controllers\SuperAdminController::class, 'manageAddOns'])->name('superadmin.add_ons.index');
     Route::post('/add-ons', [App\Http\Controllers\SuperAdminController::class, 'storeAddOn'])->name('superadmin.add_ons.store');
     Route::post('/add-ons/{addOn}/toggle-promotion', [App\Http\Controllers\SuperAdminController::class, 'toggleAddOnPromotion'])->name('superadmin.add_ons.toggle_promotion');
+
+    // Knowledge Base Management
+    Route::resource('kb-categories', App\Http\Controllers\KbCategoryController::class)->names('superadmin.kb-categories');
+    Route::resource('kb-articles', App\Http\Controllers\KbArticleController::class)->names('superadmin.kb-articles');
 });
+
+// Knowledge Base Public Routes
+Route::get('/help', [App\Http\Controllers\KnowledgeBaseController::class, 'index'])->name('kb.index');
+Route::get('/help/search', [App\Http\Controllers\KnowledgeBaseController::class, 'search'])->name('kb.search');
+Route::get('/help/category/{category_slug}', [App\Http\Controllers\KnowledgeBaseController::class, 'category'])->name('kb.category');
+Route::get('/help/article/{article_slug}', [App\Http\Controllers\KnowledgeBaseController::class, 'show'])->name('kb.show');
+Route::post('/help/article/{article}/feedback', [App\Http\Controllers\KnowledgeBaseController::class, 'feedback'])->name('kb.feedback');
 
 // Global Auth Routes (No Slug needed)
 Route::middleware('auth')->group(function () {

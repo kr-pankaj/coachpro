@@ -37,6 +37,7 @@
         <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-gray-500">
             <a href="#features" class="hover:text-pink-600 transition-colors">Features</a>
             <a href="#pricing" class="hover:text-pink-600 transition-colors">Pricing</a>
+            <a href="{{ route('kb.index') }}" class="hover:text-pink-600 transition-colors">Help Center</a>
             <a href="#contact" class="hover:text-pink-600 transition-colors">Contact</a>
         </div>
         <div class="flex items-center gap-3">
@@ -402,6 +403,7 @@
         <div class="flex gap-6 text-sm font-semibold text-gray-400">
             <a href="{{ route('privacy') }}" target="_blank" class="hover:text-pink-500 transition-colors">Privacy</a>
             <a href="{{ route('terms') }}" target="_blank" class="hover:text-pink-500 transition-colors">Terms</a>
+            <a href="{{ route('kb.index') }}" class="hover:text-pink-500 transition-colors">Help Center</a>
             <a href="#contact" class="hover:text-pink-500 transition-colors">Contact</a>
         </div>
     </div>
