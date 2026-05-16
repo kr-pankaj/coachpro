@@ -35,7 +35,7 @@
                     </div>
                     <h3 class="font-black text-gray-900 dark:text-white text-center">{{ $students[1]->name }}</h3>
                     <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">{{ $students[1]->batch?->name }}</p>
-                    <div class="mt-4 px-4 py-2 bg-slate-50 dark:bg-slate-900/50 rounded-xl text-xs font-black text-slate-600">{{ $students[1]->average_percentage }}% Avg</div>
+                    <div class="mt-4 px-4 py-2 bg-slate-50 dark:bg-slate-900/50 rounded-xl text-xs font-black text-slate-600">Level {{ $students[1]->level }} · {{ number_format($students[1]->xp_total) }} XP</div>
                 </div>
 
                 {{-- 1st Place --}}
@@ -50,7 +50,7 @@
                     </div>
                     <h3 class="text-xl font-black text-gray-900 dark:text-white text-center">{{ $students[0]->name }}</h3>
                     <p class="text-xs font-black text-amber-600 uppercase tracking-widest mt-1">{{ $students[0]->batch?->name }}</p>
-                    <div class="mt-4 px-6 py-3 bg-amber-400 text-white rounded-2xl text-sm font-black shadow-lg shadow-amber-200 dark:shadow-none">{{ $students[0]->average_percentage }}% Avg</div>
+                    <div class="mt-4 px-6 py-3 bg-amber-400 text-white rounded-2xl text-sm font-black shadow-lg shadow-amber-200 dark:shadow-none">Level {{ $students[0]->level }} · {{ number_format($students[0]->xp_total) }} XP</div>
                 </div>
 
                 {{-- 3rd Place --}}
@@ -63,7 +63,7 @@
                     </div>
                     <h3 class="font-black text-gray-900 dark:text-white text-center">{{ $students[2]->name }}</h3>
                     <p class="text-[10px] font-black text-orange-400 uppercase tracking-widest mt-1">{{ $students[2]->batch?->name }}</p>
-                    <div class="mt-4 px-4 py-2 bg-orange-50 dark:bg-orange-900/50 rounded-xl text-xs font-black text-orange-600">{{ $students[2]->average_percentage }}% Avg</div>
+                    <div class="mt-4 px-4 py-2 bg-orange-50 dark:bg-orange-900/50 rounded-xl text-xs font-black text-orange-600">Level {{ $students[2]->level }} · {{ number_format($students[2]->xp_total) }} XP</div>
                 </div>
             </div>
             @endif
@@ -76,9 +76,8 @@
                             <th class="px-8 py-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Rank</th>
                             <th class="px-8 py-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Student</th>
                             <th class="px-8 py-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Batch</th>
-                            <th class="px-8 py-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Tests</th>
-                            <th class="px-8 py-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Total Score</th>
-                            <th class="px-8 py-6 text-right text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Avg %</th>
+                            <th class="px-8 py-6 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Level</th>
+                            <th class="px-8 py-6 text-right text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Total XP</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50 dark:divide-gray-700">
@@ -100,17 +99,12 @@
                             <td class="px-8 py-6">
                                 <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ $student->batch?->name ?? 'N/A' }}</span>
                             </td>
-                            <td class="px-8 py-6 text-sm font-bold text-gray-600 dark:text-gray-400">{{ $student->tests_taken }}</td>
-                            <td class="px-8 py-6 text-sm font-bold text-gray-600 dark:text-gray-400">{{ $student->total_score }}/{{ $student->total_possible }}</td>
+                            <td class="px-8 py-6 text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                                <span class="px-2 py-1 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg">Lvl {{ $student->level }}</span>
+                            </td>
                             <td class="px-8 py-6 text-right">
-                                <div class="inline-flex flex-col items-end">
-                                    <span class="text-sm font-black {{ $student->average_percentage >= 75 ? 'text-emerald-600' : ($student->average_percentage >= 40 ? 'text-quonix-purple' : 'text-rose-600') }}">
-                                        {{ $student->average_percentage }}%
-                                    </span>
-                                    <div class="w-24 h-1 bg-gray-100 dark:bg-gray-700 rounded-full mt-2 overflow-hidden">
-                                        <div class="h-full {{ $student->average_percentage >= 75 ? 'bg-emerald-500' : ($student->average_percentage >= 40 ? 'bg-quonix-purple' : 'bg-rose-500') }}" style="width: {{ $student->average_percentage }}%"></div>
-                                    </div>
-                                </div>
+                                <span class="text-sm font-black text-gray-900 dark:text-white">{{ number_format($student->xp_total) }}</span>
+                                <p class="text-[8px] font-bold text-gray-400 uppercase tracking-tighter">{{ $student->tests_taken }} Assessments</p>
                             </td>
                         </tr>
                         @empty

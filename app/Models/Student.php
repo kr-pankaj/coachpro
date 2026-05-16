@@ -15,6 +15,7 @@ class Student extends Model
         'address', 'batch_id', 'joined_date', 'user_id',
         'photo_url', 'notes', 'status',
         'institute_id',
+        'xp_total', 'level', 'current_streak', 'longest_streak', 'last_activity_at'
     ];
 
     /**
@@ -62,5 +63,37 @@ class Student extends Model
     public function fees()
     {
         return $this->hasMany(Fee::class);
+    }
+
+    public function experienceTransactions()
+    {
+        return $this->hasMany(ExperienceTransaction::class);
+    }
+
+    public function badges()
+    {
+        return $this->belongsToMany(Badge::class)->withPivot('earned_at')->withTimestamps();
+    }
+
+    public function currentLevelXp()
+    {
+        return pow($this->level - 1, 2) * 100;
+    }
+
+    public function nextLevelXp()
+    {
+        return pow($this->level, 2) * 100;
+    }
+
+    public function levelProgress()
+    {
+        $currentXp = $this->xp_total;
+        $min = $this->currentLevelXp();
+        $max = $this->nextLevelXp();
+        
+        if ($max == $min) return 100;
+        
+        $pct = (($currentXp - $min) / ($max - $min)) * 100;
+        return min(100, max(0, $pct));
     }
 }

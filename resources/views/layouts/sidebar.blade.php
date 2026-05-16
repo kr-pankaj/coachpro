@@ -53,6 +53,9 @@
                     <x-sidebar-link :href="route('superadmin.kb-articles.index')" :active="request()->routeIs('superadmin.kb-articles.*')" icon="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1M19 20a2 2 0 002-2V8a2 2 0 00-2-2h-5a2 2 0 00-2 2v12a2 2 0 002 2h5z">
                         {{ __('KB Articles') }}
                     </x-sidebar-link>
+                    <x-sidebar-link :href="route('superadmin.badges.index')" :active="request()->routeIs('superadmin.badges.*')" icon="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-2.394 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946 2.394 3.42 3.42 0 010 4.606 3.42 3.42 0 00-1.946 2.394 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-2.394 3.42 3.42 0 010-4.606z">
+                        {{ __('Achievement Badges') }}
+                    </x-sidebar-link>
                 @endif
 
                 {{-- Institute-Specific Links: ONLY show if we are in an institute context --}}

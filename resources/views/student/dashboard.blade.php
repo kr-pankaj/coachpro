@@ -9,20 +9,32 @@
             </div>
             <div class="flex items-center gap-3">
                 @if($streak > 0)
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-[9px] font-black bg-orange-50 text-orange-600 border border-orange-100 uppercase tracking-widest shadow-sm">
-                    <span class="mr-1">🔥</span>
+                <span class="inline-flex items-center px-4 py-2 rounded-2xl text-[10px] font-black bg-orange-50 text-orange-600 border border-orange-100 uppercase tracking-widest shadow-sm animate-pulse">
+                    <span class="mr-1.5 text-xs">🔥</span>
                     {{ $streak }} Day Streak
                 </span>
                 @endif
-                @foreach($badges as $badge)
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-[9px] font-black bg-{{ $badge['color'] }}-50 text-{{ $badge['color'] }}-600 border border-{{ $badge['color'] }}-100 uppercase tracking-widest shadow-sm">
-                    <span class="mr-1">{{ $badge['icon'] }}</span>
-                    {{ $badge['label'] }}
+
+                <span class="inline-flex items-center px-4 py-2 rounded-2xl text-[10px] font-black bg-indigo-50 text-indigo-600 border border-indigo-100 uppercase tracking-widest shadow-sm">
+                    <span class="mr-1.5 text-xs">👑</span>
+                    Level {{ $student->level }}
+                </span>
+
+                @foreach($earnedBadges as $badge)
+                <span class="inline-flex items-center px-4 py-2 rounded-2xl text-[10px] font-black bg-{{ $badge->color }}-50 text-{{ $badge->color }}-600 border border-{{ $badge->color }}-100 uppercase tracking-widest shadow-sm">
+                    <span class="mr-1.5 text-xs">{{ $badge->icon }}</span>
+                    {{ $badge->name }}
                 </span>
                 @endforeach
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black bg-quonix-purple/10 text-quonix-purple border border-quonix-purple/10 uppercase tracking-widest">
+                
+                <span class="hidden md:inline-flex items-center px-4 py-2 rounded-2xl text-[10px] font-black bg-quonix-purple/10 text-quonix-purple border border-quonix-purple/10 uppercase tracking-widest">
                     {{ $student->batch?->name ?? 'Awaiting Batch' }}
                 </span>
+
+                <a href="{{ route('student.portfolio', ['slug' => $resolved_institute->slug, 'student' => $student->id]) }}" target="_blank" class="inline-flex items-center px-4 py-2 rounded-2xl text-[10px] font-black bg-slate-900 text-white uppercase tracking-widest shadow-lg hover:scale-105 transition-all">
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                    Public Profile
+                </a>
             </div>
         </div>
     </x-slot>
@@ -68,16 +80,28 @@
 
                 {{-- Outstanding Fees Card --}}
                 @php $pending = $fees->sum('due_amount'); @endphp
-                <div class="bg-white dark:bg-gray-800 rounded-[2rem] p-7 border border-gray-100 dark:border-gray-700 shadow-sm relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-rose-500/5 rounded-full blur-2xl group-hover:bg-rose-500/10 transition-all"></div>
-                    <div class="flex items-center gap-5 relative z-10">
-                        <div class="w-14 h-14 rounded-2xl flex items-center justify-center {{ $pending > 0 ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600' }}">
-                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                {{-- XP & Level Card (Replacing Outstanding Fees for Students) --}}
+                <div class="bg-gradient-to-br from-indigo-900 via-indigo-950 to-black rounded-[2rem] p-7 border border-white/5 shadow-2xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-quonix-purple/20 rounded-full blur-3xl"></div>
+                    <div class="flex flex-col h-full relative z-10">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <p class="text-[10px] font-black text-indigo-300 uppercase tracking-widest">Experience Points</p>
+                                <h3 class="text-2xl font-black text-white">{{ number_format($student->xp_total) }} XP</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center text-white font-black border border-white/10">
+                                Lvl {{ $student->level }}
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Finance Status</p>
-                            <h3 class="text-2xl font-black text-gray-900 dark:text-white">{{ $pending > 0 ? '₹'.number_format($pending) : 'Settled' }}</h3>
-                            <p class="text-[8px] font-black uppercase tracking-widest {{ $pending > 0 ? 'text-rose-500' : 'text-emerald-500' }} mt-1">{{ $pending > 0 ? 'Payment Overdue' : 'Account in Good Standing' }}</p>
+                        
+                        <div class="mt-auto">
+                            <div class="flex justify-between text-[8px] font-black uppercase text-indigo-400 mb-1.5 tracking-widest">
+                                <span>{{ number_format($student->xp_total - $student->currentLevelXp()) }} / {{ number_format($student->nextLevelXp() - $student->currentLevelXp()) }} to Level {{ $student->level + 1 }}</span>
+                                <span>{{ round($student->levelProgress()) }}%</span>
+                            </div>
+                            <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-quonix-purple to-indigo-400 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.5)]" style="width: {{ $student->levelProgress() }}%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

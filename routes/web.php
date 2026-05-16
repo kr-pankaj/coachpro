@@ -86,6 +86,7 @@ Route::middleware(['auth', 'verified', 'superadmin'])->prefix('superadmin')->gro
     // Knowledge Base Management
     Route::resource('kb-categories', App\Http\Controllers\KbCategoryController::class)->names('superadmin.kb-categories');
     Route::resource('kb-articles', App\Http\Controllers\KbArticleController::class)->names('superadmin.kb-articles');
+    Route::resource('badges', App\Http\Controllers\SuperAdmin\BadgeController::class)->names('superadmin.badges');
 });
 
 // Knowledge Base Public Routes
@@ -114,6 +115,9 @@ Route::middleware('auth')->group(function () {
 
 Route::prefix('{slug}')->group(function () {
     
+    // Student Portfolio (Public)
+    Route::get('/p/{student}', [App\Http\Controllers\PortfolioController::class, 'show'])->name('student.portfolio');
+
     // Auth Routes (Login, Logout, etc.)
     require __DIR__.'/auth.php';
 

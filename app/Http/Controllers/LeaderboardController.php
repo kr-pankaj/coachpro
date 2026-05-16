@@ -18,10 +18,6 @@ class LeaderboardController extends Controller
             ->with('batch')
             ->select('students.*')
             ->addSelect([
-                'total_score' => QuizAttempt::selectRaw('sum(score)')
-                    ->whereColumn('student_id', 'students.id'),
-                'total_possible' => QuizAttempt::selectRaw('sum(total_marks)')
-                    ->whereColumn('student_id', 'students.id'),
                 'tests_taken' => QuizAttempt::selectRaw('count(*)')
                     ->whereColumn('student_id', 'students.id')
             ]);
@@ -30,14 +26,9 @@ class LeaderboardController extends Controller
             $query->where('batch_id', $batchId);
         }
 
-        $students = $query->get()
-            ->filter(fn($s) => $s->tests_taken > 0)
-            ->map(function($s) {
-                $s->average_percentage = $s->total_possible > 0 ? round(($s->total_score / $s->total_possible) * 100, 1) : 0;
-                return $s;
-            })
-            ->sortByDesc('average_percentage')
-            ->values();
+        $students = $query->orderByDesc('xp_total')
+            ->orderByDesc('tests_taken')
+            ->get();
 
         $batches = Batch::all();
 

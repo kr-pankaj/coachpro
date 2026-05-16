@@ -43,7 +43,7 @@ class AttendanceController extends Controller
             ->with('info', 'Select a batch and date below to mark attendance.');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, \App\Services\GamificationService $gamification)
     {
         $validated = $request->validate([
             'batch_id' => 'required|exists:batches,id',
@@ -51,7 +51,7 @@ class AttendanceController extends Controller
             'attendance' => 'required|array',
         ]);
 
-        \Illuminate\Support\Facades\DB::transaction(function () use ($validated) {
+        \Illuminate\Support\Facades\DB::transaction(function () use ($validated, $gamification) {
             foreach ($validated['attendance'] as $student_id => $status) {
                 $attendance = \App\Models\Attendance::updateOrCreate(
                     [
@@ -62,6 +62,13 @@ class AttendanceController extends Controller
                     ],
                     ['status' => $status]
                 );
+
+                if ($status === 'present') {
+                    $student = \App\Models\Student::find($student_id);
+                    if ($student) {
+                        $gamification->awardXp($student, 20, 'Daily Attendance: ' . $validated['date'], $attendance);
+                    }
+                }
 
                 if ($attendance->wasRecentlyCreated || $attendance->wasChanged('status')) {
                     if ($attendance->student && $attendance->student->user) {

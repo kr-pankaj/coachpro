@@ -44,11 +44,9 @@ class DashboardController extends Controller
                 ->whereDoesntHave('attempts', fn($q) => $q->where('student_id', $student->id))
                 ->latest()->take(3)->get();
 
-            // Digital Badges
-            $badges = [];
-            if ($performanceRate >= 90) $badges[] = ['label' => 'Elite Performer', 'icon' => '⭐', 'color' => 'amber'];
-            if ($attendanceRate >= 95) $badges[] = ['label' => 'Perfect Attendance', 'icon' => '🎯', 'color' => 'emerald'];
-            if ($student->attempts()->count() >= 10) $badges[] = ['label' => 'Dedicated Learner', 'icon' => '📚', 'color' => 'indigo'];
+            // Digital Badges & Streak
+            $earnedBadges = $student->badges()->latest()->take(3)->get();
+            $streak = $student->current_streak;
             
             $rank = Student::query()
                 ->select('students.*')
@@ -60,33 +58,10 @@ class DashboardController extends Controller
                 ->get()
                 ->search(fn($s) => $s->id == $student->id);
             
-            if ($rank !== false && $rank < 3) $badges[] = ['label' => 'Top 3 Global', 'icon' => '🏆', 'color' => 'rose'];
-
-            // Learning Streak
-            $streak = 0;
-            $activityDates = array_merge(
-                $attendances->pluck('date')->map(fn($d) => \Carbon\Carbon::parse($d)->toDateString())->toArray(),
-                $student->attempts()->pluck('completed_at')->map(fn($d) => \Carbon\Carbon::parse($d)->toDateString())->toArray()
-            );
-            $activityDates = array_unique($activityDates);
-            rsort($activityDates);
-            
-            if (!empty($activityDates)) {
-                $currentDate = \Carbon\Carbon::parse($activityDates[0]);
-                if ($currentDate->isToday() || $currentDate->isYesterday()) {
-                    $streak = 1;
-                    for ($i = 1; $i < count($activityDates); $i++) {
-                        $prevDate = \Carbon\Carbon::parse($activityDates[$i]);
-                        if ($currentDate->diffInDays($prevDate) == 1) {
-                            $streak++;
-                            $currentDate = $prevDate;
-                        } else {
-                            break;
-                        }
-                    }
-                }
+            if ($rank !== false && $rank < 3) {
+                // TODO: Reward 'Top 3 Global' badge via GamificationService
             }
-            
+
             // Announcements
             $announcements = Announcement::where('institute_id', $student->institute_id)
                 ->where(fn($q) => $q->whereNull('expires_on')->orWhere('expires_on', '>=', today()))
@@ -94,7 +69,7 @@ class DashboardController extends Controller
 
             return view('student.dashboard', compact(
                 'student', 'fees', 'attendances', 
-                'attempts', 'performanceRate', 'attendanceRate', 'upcomingQuizzes', 'badges', 'streak',
+                'attempts', 'performanceRate', 'attendanceRate', 'upcomingQuizzes', 'earnedBadges', 'streak',
                 'announcements'
             ));
         }

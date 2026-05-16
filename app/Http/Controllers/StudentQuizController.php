@@ -44,7 +44,7 @@ class StudentQuizController extends Controller
         return view('student.quizzes.take', compact('quiz', 'attempt'));
     }
 
-    public function submit(Request $request, \App\Models\Quiz $quiz)
+    public function submit(Request $request, \App\Models\Quiz $quiz, \App\Services\GamificationService $gamification)
     {
         $student = \App\Models\Student::where('user_id', auth()->id())->firstOrFail();
         $attempt = \App\Models\QuizAttempt::where('quiz_id', $quiz->id)->where('student_id', $student->id)->whereNull('completed_at')->firstOrFail();
@@ -64,7 +64,16 @@ class StudentQuizController extends Controller
             }
         }
         $attempt->update(['score' => $score, 'total_marks' => $total, 'completed_at' => now()]);
-        return redirect()->route('student.quizzes.result', $attempt)->with('success', 'Quiz submitted!');
+
+        // Award XP
+        $xpToAward = 50; // Base XP for completion
+        if ($score == $total && $total > 0) {
+            $xpToAward += 25; // Perfect score bonus
+        }
+        
+        $gamification->awardXp($student, $xpToAward, 'Quiz Completion: ' . $quiz->title, $attempt);
+
+        return redirect()->route('student.quizzes.result', $attempt)->with('success', 'Quiz submitted! You earned ' . $xpToAward . ' XP!');
     }
 
     public function result(\App\Models\QuizAttempt $attempt)
