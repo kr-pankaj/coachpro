@@ -220,6 +220,10 @@ Route::prefix('{slug}')->group(function () {
             Route::get('/result/{attempt}', [App\Http\Controllers\StudentQuizController::class, 'result'])->name('result');
         });
 
+        // Portfolio Settings
+        Route::get('/portfolio/settings', [App\Http\Controllers\Student\PortfolioSettingsController::class, 'edit'])->name('student.portfolio.settings');
+        Route::post('/portfolio/settings', [App\Http\Controllers\Student\PortfolioSettingsController::class, 'update'])->name('student.portfolio.update');
+
         // Study Materials
         Route::get('/study-materials', [App\Http\Controllers\StudyMaterialController::class, 'index'])->name('study_materials.index');
         Route::post('/study-materials', [App\Http\Controllers\StudyMaterialController::class, 'store'])->name('study_materials.store')->middleware('admin');

@@ -31,7 +31,12 @@
                     {{ $student->batch?->name ?? 'Awaiting Batch' }}
                 </span>
 
-                <a href="{{ route('student.portfolio', ['slug' => $resolved_institute->slug, 'student' => $student->id]) }}" target="_blank" class="inline-flex items-center px-4 py-2 rounded-2xl text-[10px] font-black bg-slate-900 text-white uppercase tracking-widest shadow-lg hover:scale-105 transition-all">
+                <a href="{{ route('student.portfolio.settings') }}" class="inline-flex items-center px-4 py-2 rounded-2xl text-[10px] font-black bg-white text-gray-700 border border-gray-200 uppercase tracking-widest hover:bg-gray-50 transition-all">
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                    Edit Portfolio
+                </a>
+
+                <a href="{{ route('student.portfolio', ['student' => $student->id]) }}" target="_blank" class="inline-flex items-center px-4 py-2 rounded-2xl text-[10px] font-black bg-slate-900 text-white uppercase tracking-widest shadow-lg hover:scale-105 transition-all">
                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
                     Public Profile
                 </a>

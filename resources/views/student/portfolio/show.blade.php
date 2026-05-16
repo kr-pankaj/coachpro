@@ -64,11 +64,24 @@
                     <h1 class="text-4xl md:text-5xl font-black tracking-tight mb-2">
                         {{ $student->name }}
                     </h1>
-                    <p class="text-slate-500 font-medium max-w-lg">
-                        An aspiring learner excelling in <span class="text-indigo-600 font-black">
-                            {{ $student->batches->first()?->name ?? 'Academics' }}
-                        </span>. Ranked #{{ $stats['rank'] }} globally with <span class="font-black text-slate-800">{{ number_format($student->xp_total) }} XP</span>.
+                    <p class="text-slate-500 font-medium max-w-lg mb-6">
+                        {{ $student->bio ?? 'Aspiring professional at ' . $student->institute->name . '. Ranked #' . $stats['rank'] . ' globally.' }}
                     </p>
+                    
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-8">
+                        @if($student->github_url)
+                        <a href="{{ $student->github_url }}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            GitHub
+                        </a>
+                        @endif
+                        @if($student->linkedin_url)
+                        <a href="{{ $student->linkedin_url }}" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-[#0077b5] text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            LinkedIn
+                        </a>
+                        @endif
+                    </div>
                     
                     <div class="flex items-center justify-center md:justify-start gap-3 mt-8">
                         @foreach($student->badges as $badge)
@@ -91,9 +104,10 @@
             {{-- Stats Cards --}}
             <div class="lg:col-span-1 space-y-6">
                 <div class="glass rounded-[2rem] p-8 shadow-xl shadow-slate-200/50">
-                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Performance Index</h3>
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Learning Analytics</h3>
                     
                     <div class="space-y-6">
+                        @if($student->show_attendance_on_portfolio)
                         <div>
                             <div class="flex justify-between text-sm font-black mb-2">
                                 <span>Attendance</span>
@@ -103,14 +117,22 @@
                                 <div class="h-full bg-emerald-500 rounded-full" style="width: {{ $stats['attendance_rate'] }}%"></div>
                             </div>
                         </div>
+                        @endif
                         
                         <div>
                             <div class="flex justify-between text-sm font-black mb-2">
-                                <span>Quiz Avg.</span>
+                                <span>Assessment Avg.</span>
                                 <span class="text-indigo-600">{{ round($stats['avg_score']) }}%</span>
                             </div>
                             <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                                 <div class="h-full bg-indigo-500 rounded-full" style="width: {{ round($stats['avg_score']) }}%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-[10px] font-black mb-2">
+                                <span>Global Rank</span>
+                                <span class="text-rose-600">#{{ $stats['rank'] }}</span>
                             </div>
                         </div>
                     </div>
@@ -139,30 +161,56 @@
             {{-- Main Content --}}
             <div class="lg:col-span-2 space-y-8">
                 
-                {{-- Skill Graph Area --}}
+                {{-- Skills & Expertise --}}
                 <div class="glass rounded-[2.5rem] p-10 shadow-xl shadow-slate-200/50">
-                    <h3 class="text-xl font-black tracking-tight mb-8">Skill Expertise</h3>
+                    <h3 class="text-xl font-black tracking-tight mb-8">Technical Expertise</h3>
                     
+                    <div class="flex flex-wrap gap-3">
+                        @forelse($student->skills ?? [] as $skill)
+                            <span class="px-6 py-3 bg-white border border-slate-100 rounded-2xl text-xs font-black text-slate-700 shadow-sm hover:border-indigo-200 hover:text-indigo-600 transition-all cursor-default">
+                                {{ $skill }}
+                            </span>
+                        @empty
+                            <p class="text-slate-400 italic text-sm">No specific skills listed yet.</p>
+                        @endforelse
+                    </div>
+
                     @if($skills->count())
-                    <div class="space-y-8">
-                        @foreach($skills as $skill)
-                        <div class="group">
-                            <div class="flex justify-between items-center mb-3">
-                                <span class="text-sm font-black text-slate-700 group-hover:text-indigo-600 transition-colors">{{ $skill['name'] }}</span>
-                                <span class="text-xs font-black text-slate-400">{{ $skill['score'] }}% Proficiency</span>
+                    <div class="mt-12 pt-8 border-t border-slate-50">
+                        <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Academic Proficiency (via Assessments)</h4>
+                        <div class="space-y-6">
+                            @foreach($skills as $skill)
+                            <div class="group">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-black text-slate-600">{{ $skill['name'] }}</span>
+                                    <span class="text-[10px] font-black text-slate-400">{{ $skill['score'] }}%</span>
+                                </div>
+                                <div class="w-full h-2 bg-slate-50 rounded-full overflow-hidden">
+                                    <div class="h-full quonix-gradient rounded-full" style="width: {{ $skill['score'] }}%"></div>
+                                </div>
                             </div>
-                            <div class="w-full h-4 bg-slate-50 rounded-2xl p-1 border border-slate-100">
-                                <div class="h-full quonix-gradient rounded-xl shadow-sm transition-all duration-1000" style="width: {{ $skill['score'] }}%"></div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                </div>
+
+                {{-- Notable Achievements --}}
+                @if(is_array($student->notable_achievements) && count($student->notable_achievements))
+                <div class="glass rounded-[2.5rem] p-10 shadow-xl shadow-slate-200/50">
+                    <h3 class="text-xl font-black tracking-tight mb-8">Notable Achievements</h3>
+                    <div class="space-y-4">
+                        @foreach($student->notable_achievements as $achievement)
+                        <div class="flex items-start gap-4 p-5 rounded-3xl bg-emerald-50/30 border border-emerald-100/50">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.286-6.857L1 12l7.714-2.143L11 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
                             </div>
+                            <p class="text-sm font-black text-slate-800 leading-relaxed">{{ $achievement }}</p>
                         </div>
                         @endforeach
                     </div>
-                    @else
-                        <div class="py-12 text-center text-slate-400 italic">
-                            No assessment data available yet to generate skill graph.
-                        </div>
-                    @endif
                 </div>
+                @endif
 
                 {{-- Recent Achievements --}}
                 <div class="glass rounded-[2.5rem] p-10 shadow-xl shadow-slate-200/50">
