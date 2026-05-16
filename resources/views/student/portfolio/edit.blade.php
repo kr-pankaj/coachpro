@@ -58,14 +58,17 @@
 
                         {{-- Settings --}}
                         <div class="pt-6 border-t border-gray-50 dark:border-gray-700">
-                            <label class="flex items-center gap-3 cursor-pointer group">
-                                <div class="relative">
+                            <label class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl cursor-pointer group hover:bg-gray-100 transition-all">
+                                <span class="text-xs font-black text-gray-600 dark:text-gray-400 uppercase tracking-widest">Show Attendance Stats on Public Portfolio</span>
+                                <div class="relative inline-flex items-center">
                                     <input type="hidden" name="show_attendance_on_portfolio" value="0">
-                                    <input type="checkbox" name="show_attendance_on_portfolio" value="1" {{ old('show_attendance_on_portfolio', $student->show_attendance_on_portfolio) ? 'checked' : '' }} class="sr-only peer">
-                                    <div class="w-12 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-600 transition-all after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-6"></div>
+                                    <input type="checkbox" name="show_attendance_on_portfolio" id="show_attendance_on_portfolio" value="1" 
+                                        {{ old('show_attendance_on_portfolio', $student->show_attendance_on_portfolio) ? 'checked' : '' }} 
+                                        class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-indigo-600"></div>
                                 </div>
-                                <span class="text-xs font-black text-gray-600 uppercase tracking-widest">Show Attendance Stats on Public Portfolio</span>
                             </label>
+                            <p class="text-[9px] text-gray-400 mt-2 ml-4">Turn this on if you want to showcase your consistency to employers.</p>
                         </div>
                     </div>
 
