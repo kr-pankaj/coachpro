@@ -138,13 +138,13 @@
                                             <p class="text-[9px] text-gray-400 font-bold uppercase">{{ $attempt->completed_at->format('M d, Y') }}</p>
                                         </td>
                                         <td class="py-5 px-2">
-                                            <span class="text-sm font-black {{ ($attempt->score / $attempt->total_marks) >= 0.75 ? 'text-emerald-600' : 'text-quonix-purple' }}">
+                                            <span class="text-sm font-black {{ ($attempt->total_marks > 0 && ($attempt->score / $attempt->total_marks) >= 0.75) ? 'text-emerald-600' : 'text-quonix-purple' }}">
                                                 {{ $attempt->score }}/{{ $attempt->total_marks }}
                                             </span>
                                         </td>
                                         <td class="py-5 px-2">
-                                            <span class="px-2 py-0.5 text-[8px] font-black uppercase tracking-widest rounded-md {{ ($attempt->score / $attempt->total_marks) >= 0.4 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }}">
-                                                {{ ($attempt->score / $attempt->total_marks) >= 0.4 ? 'Passed' : 'Failed' }}
+                                            <span class="px-2 py-0.5 text-[8px] font-black uppercase tracking-widest rounded-md {{ ($attempt->total_marks > 0 && ($attempt->score / $attempt->total_marks) >= 0.4) ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600' }}">
+                                                {{ ($attempt->total_marks > 0 && ($attempt->score / $attempt->total_marks) >= 0.4) ? 'Passed' : 'Failed' }}
                                             </span>
                                         </td>
                                         <td class="py-5 px-2 text-right">

@@ -53,7 +53,7 @@ class DashboardController extends Controller
             $rank = Student::query()
                 ->select('students.*')
                 ->addSelect([
-                    'avg_pct' => \App\Models\QuizAttempt::selectRaw('avg(score/total_marks)*100')
+                    'avg_pct' => \App\Models\QuizAttempt::selectRaw('avg(score/NULLIF(total_marks, 0))*100')
                         ->whereColumn('student_id', 'students.id')
                 ])
                 ->orderByDesc('avg_pct')
