@@ -1,7 +1,4 @@
 <x-app-layout>
-    @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    @endpush
     <x-slot name="header">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -96,6 +93,30 @@
                 </div>
             </div>
             @endif
+
+            {{-- Today at a Glance --}}
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                @php
+                $todayStats = [
+                    ['label'=>"Today's Attendance",'value'=> ($todayTotal>0 ? round(($todayAttended/$todayTotal)*100) : 0).'%','sub'=>$todayAttended.' present','color'=>'emerald','icon'=>'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'],
+                    ['label'=>'Fees Collected Today','value'=>'₹'.number_format($todayFees),'sub'=>'Cash in today','color'=>'indigo','icon'=>'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
+                    ['label'=>'New Enrollments Today','value'=>$todayEnrollments,'sub'=>'Students joined','color'=>'violet','icon'=>'M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z'],
+                    ['label'=>'New Leads Today','value'=>$todayLeads,'sub'=>$conversionRate.'% conversion','color'=>'amber','icon'=>'M13 10V3L4 14h7v7l9-11h-7z'],
+                ];
+                @endphp
+                @foreach($todayStats as $ts)
+                <div class="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl flex-shrink-0 flex items-center justify-center bg-{{ $ts['color'] }}-50 dark:bg-{{ $ts['color'] }}-900/30 text-{{ $ts['color'] }}-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="{{ $ts['icon'] }}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">{{ $ts['label'] }}</p>
+                        <p class="text-xl font-black text-gray-900 dark:text-white">{{ $ts['value'] }}</p>
+                        <p class="text-[9px] text-gray-400 font-bold">{{ $ts['sub'] }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
 
             {{-- Top Stats & Toolkit Grid --}}
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
@@ -216,60 +237,26 @@
                 
                 {{-- Left Side: Analytics & History (2 Columns) --}}
                 <div class="lg:col-span-2 space-y-8">
-                    {{-- Batch Profitability (Premium Feature) --}}
-                    <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 p-10 relative overflow-hidden group">
-                        <div class="flex items-center justify-between mb-8">
-                            <div class="flex items-center gap-3">
-                                <div class="w-2 h-8 bg-emerald-500 rounded-full"></div>
-                                <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">Batch Profitability</h3>
-                            </div>
-                            @if(!$institute->isPremium())
-                                <span class="px-4 py-1.5 bg-amber-100 text-amber-700 rounded-xl text-[10px] font-black uppercase tracking-widest border border-amber-200">Premium Only</span>
-                            @endif
-                        </div>
-
-                        @if($institute->isPremium())
-                            <div class="space-y-6">
-                                @forelse($batchProfitability as $bp)
-                                    <div class="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 dark:bg-gray-900/30 border border-gray-100 dark:border-gray-700">
-                                        <div class="flex-1 min-w-0">
-                                            <p class="text-sm font-black text-gray-900 dark:text-white truncate">{{ $bp->name }}</p>
-                                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">Revenue: ₹{{ number_format($bp->revenue) }} | Staff: ₹{{ number_format($bp->faculty_cost) }}</p>
-                                        </div>
-                                        <div class="text-right">
-                                            <p class="text-sm font-black {{ $bp->profit >= 0 ? 'text-emerald-600' : 'text-rose-600' }}">₹{{ number_format($bp->profit) }}</p>
-                                            <p class="text-[8px] font-bold text-gray-400 uppercase tracking-widest">Net Profit</p>
-                                        </div>
-                                    </div>
-                                @empty
-                                    <p class="text-center text-gray-400 py-4 italic text-xs">No financial data available for batches yet.</p>
-                                @endforelse
-                            </div>
-                        @else
-                            <div class="py-12 text-center">
-                                <div class="w-16 h-16 bg-amber-50 dark:bg-amber-900/20 rounded-2xl flex items-center justify-center mx-auto mb-4 text-amber-600">
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002-2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
-                                </div>
-                                <h4 class="text-base font-black text-gray-900 dark:text-white">Unlock Profitability Analytics</h4>
-                                <p class="text-xs text-gray-500 mt-2 max-w-xs mx-auto">Analyze which batches are generating the most revenue after deducting faculty costs.</p>
-                                <a href="{{ route('subscription.index') }}" class="inline-flex mt-6 px-6 py-3 bg-amber-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-amber-200">Upgrade to Premium</a>
-                            </div>
-                        @endif
-                    </div>
 
                     {{-- Analytics Charts Grid --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {{-- Enrollment Trends --}}
                         <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 p-10 hover:shadow-2xl transition-all duration-500 relative overflow-hidden group">
                             <div class="absolute top-0 left-0 w-full h-1 bg-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="flex items-center justify-between mb-10">
+                            <div class="flex items-center justify-between mb-6">
                                 <div>
                                     <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">Enrollment Growth</h3>
-                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Real-time Performance</p>
+                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">New students over time</p>
                                 </div>
-                                <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
-                                </div>
+                            </div>
+                            <div class="flex gap-2 mb-6">
+                                @foreach([7=>'7D',30=>'30D',90=>'90D'] as $val=>$lbl)
+                                <a href="?enrollment_range={{ $val }}&revenue_range={{ $revenueRange }}#charts"
+                                   class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all
+                                   {{ $enrollmentRange==$val ? 'bg-indigo-600 text-white shadow' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-indigo-50 hover:text-indigo-600' }}">
+                                    {{ $lbl }}
+                                </a>
+                                @endforeach
                             </div>
                             <div id="enrollmentChart"></div>
                         </div>
@@ -277,14 +264,20 @@
                         {{-- Revenue Trends --}}
                         <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 p-10 hover:shadow-2xl transition-all duration-500 relative overflow-hidden group">
                             <div class="absolute top-0 left-0 w-full h-1 bg-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            <div class="flex items-center justify-between mb-10">
+                            <div class="flex items-center justify-between mb-6">
                                 <div>
                                     <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">Revenue Streams</h3>
                                     <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Collection Analytics</p>
                                 </div>
-                                <div class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[8px] font-black uppercase tracking-widest shadow-sm">
-                                    {{ $conversionRate }}% Conversion
-                                </div>
+                            </div>
+                            <div class="flex gap-2 mb-6">
+                                @foreach([3=>'3M',6=>'6M',12=>'12M'] as $val=>$lbl)
+                                <a href="?enrollment_range={{ $enrollmentRange }}&revenue_range={{ $val }}#charts"
+                                   class="px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all
+                                   {{ $revenueRange==$val ? 'bg-emerald-600 text-white shadow' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-emerald-50 hover:text-emerald-600' }}">
+                                    {{ $lbl }}
+                                </a>
+                                @endforeach
                             </div>
                             <div id="revenueChart"></div>
                         </div>
@@ -389,6 +382,47 @@
 
                 {{-- Right Side: Batches & Announcements (1 Column) --}}
                 <div class="space-y-8">
+
+                    {{-- Fee Collection Ring --}}
+                    <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 p-8">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">Fee Health</h3>
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Live</span>
+                        </div>
+                        <div id="feeDonut"></div>
+                        <div class="grid grid-cols-2 gap-3 mt-3">
+                            <div class="text-center p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl">
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Collected</p>
+                                <p class="text-base font-black text-emerald-600">₹{{ number_format($collectedFees) }}</p>
+                            </div>
+                            <div class="text-center p-3 bg-rose-50 dark:bg-rose-900/20 rounded-2xl">
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest">Pending</p>
+                                <p class="text-base font-black text-rose-600">₹{{ number_format($pendingFees) }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Leads Funnel --}}
+                    <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 p-8">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tighter">Lead Pipeline</h3>
+                            <span class="text-[9px] font-black text-indigo-600">{{ $conversionRate }}% converted</span>
+                        </div>
+                        @php $funnelColors=['new'=>'indigo','contacted'=>'violet','demo_scheduled'=>'amber','converted'=>'emerald','lost'=>'rose']; @endphp
+                        @foreach($leadsFunnel as $stage=>$count)
+                        @php $total = max($totalLeads,1); $pct = round(($count/$total)*100); @endphp
+                        <div class="mb-3">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-[9px] font-black text-gray-500 uppercase tracking-widest">{{ str_replace('_',' ',$stage) }}</span>
+                                <span class="text-[9px] font-black text-gray-700 dark:text-gray-300">{{ $count }}</span>
+                            </div>
+                            <div class="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-{{ $funnelColors[$stage] }}-500 rounded-full transition-all duration-700" style="width:{{ $pct }}%"></div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+
                     {{-- Active Batches --}}
                     <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-sm border border-gray-100 dark:border-gray-700 p-8">
                         <h3 class="text-xl font-black text-gray-900 dark:text-white uppercase tracking-tighter mb-8">Active Batches</h3>
@@ -450,78 +484,57 @@
                 </div>
             </div>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const enrollmentData = {!! json_encode($chartData) !!};
-                    const revenueData = {!! json_encode($revenueData) !!};
-                    
-                    console.log('Enrollment Data:', enrollmentData);
-                    console.log('Revenue Data:', revenueData);
+            <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.54.0/dist/apexcharts.min.js"></script>
+            <script id="charts">
+                window.addEventListener('load', function() {
 
-                    var options = {
-                        series: [{
-                            name: 'New Students',
-                            data: enrollmentData.counts
-                        }],
-                        chart: {
-                            height: 240,
-                            type: 'area',
-                            toolbar: { show: false },
-                            animations: { enabled: true }
-                        },
+                    const enrollmentData = {!! json_encode($chartData) !!};
+                    const revenueData    = {!! json_encode($revenueData) !!};
+                    const collectedFees  = {{ $collectedFees }};
+                    const pendingFees    = {{ $pendingFees }};
+
+                    // ── Enrollment Chart ──────────────────────────────────────────
+                    new ApexCharts(document.querySelector('#enrollmentChart'), {
+                        series: [{ name: 'New Students', data: enrollmentData.counts }],
+                        chart: { height: 220, type: 'area', toolbar: { show: false }, animations: { enabled: true }, background: 'transparent' },
                         colors: ['#4f46e5'],
-                        fill: {
-                            type: 'gradient',
-                            gradient: { shadeIntensity: 1, opacityFrom: 0.3, opacityTo: 0.05 }
-                        },
+                        fill: { type: 'gradient', gradient: { shadeIntensity: 1, opacityFrom: 0.25, opacityTo: 0.02 } },
                         dataLabels: { enabled: false },
                         stroke: { curve: 'smooth', width: 3 },
-                        markers: { size: 4, colors: ['#4f46e5'], strokeWidth: 2, hover: { size: 7 } },
+                        markers: { size: 3, colors: ['#4f46e5'], strokeWidth: 2, hover: { size: 6 } },
                         grid: { show: true, borderColor: '#f1f5f9', strokeDashArray: 4 },
-                        xaxis: {
-                            categories: enrollmentData.days,
-                            labels: { style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 700 } }
-                        },
-                        yaxis: { labels: { style: { colors: '#94a3b8', fontSize: '10px' } } },
+                        xaxis: { categories: enrollmentData.days, labels: { style: { colors: '#94a3b8', fontSize: '9px', fontWeight: 700 }, rotate: -30 }, tickAmount: 7 },
+                        yaxis: { min: 0, labels: { style: { colors: '#94a3b8', fontSize: '10px' } } },
                         tooltip: { theme: 'dark' }
-                    };
+                    }).render();
 
-                    new ApexCharts(document.querySelector("#enrollmentChart"), options).render();
-
-                    // Revenue Chart
-                    var revOptions = {
-                        series: [{
-                            name: 'Revenue',
-                            data: revenueData.amounts
-                        }],
-                        chart: {
-                            height: 240,
-                            type: 'bar',
-                            toolbar: { show: false }
-                        },
-                        colors: ['#6366f1'],
-                        plotOptions: {
-                            bar: {
-                                borderRadius: 8,
-                                columnWidth: '50%',
-                                distributed: true
-                            }
-                        },
+                    // ── Revenue Chart ─────────────────────────────────────────────
+                    new ApexCharts(document.querySelector('#revenueChart'), {
+                        series: [{ name: 'Revenue (₹)', data: revenueData.amounts }],
+                        chart: { height: 220, type: 'bar', toolbar: { show: false }, background: 'transparent' },
+                        colors: ['#10b981','#34d399','#6ee7b7','#a7f3d0','#d1fae5','#ecfdf5','#10b981','#34d399','#6ee7b7','#a7f3d0','#d1fae5','#ecfdf5'],
+                        plotOptions: { bar: { borderRadius: 6, columnWidth: '55%', distributed: true } },
                         dataLabels: { enabled: false },
                         legend: { show: false },
                         grid: { show: true, borderColor: '#f1f5f9', strokeDashArray: 4 },
-                        xaxis: {
-                            categories: revenueData.months,
-                            labels: { style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 700 } }
-                        },
-                        yaxis: { labels: { style: { colors: '#94a3b8', fontSize: '10px' } } },
-                        tooltip: { 
-                            theme: 'dark',
-                            y: { formatter: (val) => '₹' + val.toLocaleString() }
-                        }
-                    };
+                        xaxis: { categories: revenueData.months, labels: { style: { colors: '#94a3b8', fontSize: '10px', fontWeight: 700 } } },
+                        yaxis: { labels: { style: { colors: '#94a3b8', fontSize: '10px' }, formatter: (v) => '₹'+v.toLocaleString('en-IN') } },
+                        tooltip: { theme: 'dark', y: { formatter: (v) => '₹' + v.toLocaleString('en-IN') } }
+                    }).render();
 
-                    new ApexCharts(document.querySelector("#revenueChart"), revOptions).render();
+                    // ── Fee Collection Donut ──────────────────────────────────────
+                    if (document.querySelector('#feeDonut')) {
+                        new ApexCharts(document.querySelector('#feeDonut'), {
+                            series: [collectedFees, pendingFees],
+                            labels: ['Collected', 'Pending'],
+                            chart: { type: 'donut', height: 200, background: 'transparent' },
+                            colors: ['#10b981', '#f43f5e'],
+                            plotOptions: { pie: { donut: { size: '70%', labels: { show: true, total: { show: true, label: 'Collected', formatter: () => '₹'+collectedFees.toLocaleString('en-IN') } } } } },
+                            dataLabels: { enabled: false },
+                            legend: { position: 'bottom', fontSize: '10px' },
+                            tooltip: { y: { formatter: (v) => '₹'+v.toLocaleString('en-IN') } }
+                        }).render();
+                    }
                 });
             </script>
 

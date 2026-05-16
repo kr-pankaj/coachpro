@@ -8,12 +8,13 @@ use App\Models\Attendance;
 use App\Models\Fee;
 use App\Models\Announcement;
 use App\Models\AddOn;
+use App\Models\Enquiry;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if (auth()->user()->role === 'superadmin') {
             return redirect()->route('superadmin.index');
@@ -98,79 +99,84 @@ class DashboardController extends Controller
             ));
         }
 
-        // Admin dashboard
-        $institute    = auth()->user()->institute;
-        $totalStudents = Student::count();
-        $totalBatches  = Batch::count();
+        // ─── ADMIN DASHBOARD ───────────────────────────────────────────────────────
+        $institute   = auth()->user()->institute;
+        $instituteId = $institute->id;
 
-        $todayAttended = Attendance::whereDate('date', today())->where('status', 'present')->count();
-        $todayTotal    = Attendance::whereDate('date', today())->count();
+        // Date-range filter params from request
+        $enrollmentRange = (int) $request->get('enrollment_range', 30); // default 30 days
+        $revenueRange    = (int) $request->get('revenue_range', 6);     // default 6 months
+        // Clamp to allowed values
+        $enrollmentRange = in_array($enrollmentRange, [7, 30, 90]) ? $enrollmentRange : 30;
+        $revenueRange    = in_array($revenueRange, [3, 6, 12]) ? $revenueRange : 6;
 
-        $pendingFees   = Fee::sum('due_amount');
-        $collectedFees = Fee::sum('paid_amount');
+        // ── Scoped KPI Stats ───────────────────────────────────────────────────────
+        $totalStudents = Student::where('institute_id', $instituteId)->count();
+        $totalBatches  = Batch::where('institute_id', $instituteId)->count();
 
-        $recentStudents = Student::with('batch')->latest()->take(5)->get();
-        $batches        = Batch::withCount('students')->get();
+        $todayAttended = Attendance::where('institute_id', $instituteId)->whereDate('date', today())->where('status', 'present')->count();
+        $todayTotal    = Attendance::where('institute_id', $instituteId)->whereDate('date', today())->count();
 
-        $announcements = Announcement::where('institute_id', $institute->id)
+        $pendingFees   = Fee::where('institute_id', $instituteId)->sum('due_amount');
+        $collectedFees = Fee::where('institute_id', $instituteId)->sum('paid_amount');
+
+        // ── Today's Activity Stats ─────────────────────────────────────────────────
+        $todayFees        = Fee::where('institute_id', $instituteId)->whereDate('payment_date', today())->sum('paid_amount');
+        $todayEnrollments = Student::where('institute_id', $instituteId)->whereDate('created_at', today())->count();
+        $todayLeads       = Enquiry::where('institute_id', $instituteId)->whereDate('created_at', today())->count();
+
+        // ── Leads Stats ────────────────────────────────────────────────────────────
+        $totalLeads     = Enquiry::where('institute_id', $instituteId)->count();
+        $leadsToday     = $todayLeads;
+        $convertedLeads = Enquiry::where('institute_id', $instituteId)->where('status', 'converted')->count();
+        $conversionRate = $totalLeads > 0 ? round(($convertedLeads / $totalLeads) * 100) : 0;
+
+        // Leads funnel for pipeline display
+        $leadsFunnel = [
+            'new'            => Enquiry::where('institute_id', $instituteId)->where('status', 'new')->count(),
+            'contacted'      => Enquiry::where('institute_id', $instituteId)->where('status', 'contacted')->count(),
+            'demo_scheduled' => Enquiry::where('institute_id', $instituteId)->where('status', 'demo_scheduled')->count(),
+            'converted'      => $convertedLeads,
+            'lost'           => Enquiry::where('institute_id', $instituteId)->where('status', 'lost')->count(),
+        ];
+
+        // ── Supporting Lists ───────────────────────────────────────────────────────
+        $recentStudents = Student::where('institute_id', $instituteId)->with('batch')->latest()->take(5)->get();
+        $batches        = Batch::where('institute_id', $instituteId)->withCount('students')->get();
+
+        $announcements = Announcement::where('institute_id', $instituteId)
             ->where(fn($q) => $q->whereNull('expires_on')->orWhere('expires_on', '>=', today()))
             ->orderByDesc('created_at')->take(5)->get();
 
-        $profilePct    = $institute->profileCompletion();
+        $profilePct = $institute->profileCompletion();
 
-        // Chart Data: Real Enrollment Growth (Last 7 Days)
-        $chartData = $this->getEnrollmentData();
+        // ── Chart Data ─────────────────────────────────────────────────────────────
+        $chartData   = $this->getEnrollmentData($instituteId, $enrollmentRange);
+        $revenueData = $this->getRevenueData($instituteId, $revenueRange);
 
-        // Revenue Trends (Last 6 Months)
-        $revenueData = $this->getRevenueData();
+        // ── Batch Attendance Performance ───────────────────────────────────────────
+        $batchPerformance = Batch::where('institute_id', $instituteId)
+            ->withCount(['students', 'attendances' => function($q) {
+                $q->where('status', 'present');
+            }])->get()->map(function($batch) {
+                $totalPossible = $batch->students_count * Attendance::where('batch_id', $batch->id)->distinct('date')->count();
+                $batch->attendance_rate = $totalPossible > 0 ? round(($batch->attendances_count / $totalPossible) * 100) : 0;
+                return $batch;
+            });
 
-        // Attendance by Batch
-        $batchPerformance = Batch::withCount(['students', 'attendances' => function($q) {
-            $q->where('status', 'present');
-        }])->get()->map(function($batch) {
-            $totalPossible = $batch->students_count * Attendance::where('batch_id', $batch->id)->distinct('date')->count();
-            $batch->attendance_rate = $totalPossible > 0 ? round(($batch->attendances_count / $totalPossible) * 100) : 0;
-            return $batch;
-        });
-
-        // Lead conversion & Today's Leads
-        $totalLeads = \App\Models\Enquiry::count();
-        $leadsToday = \App\Models\Enquiry::whereDate('created_at', today())->count();
-        $convertedLeads = \App\Models\Enquiry::where('status', 'converted')->count();
-        $conversionRate = $totalLeads > 0 ? round(($convertedLeads / $totalLeads) * 100) : 0;
-
-        // Batch Profitability (Premium Feature)
-        $batchProfitability = collect();
-        if ($institute->isPremium()) {
-            $batchProfitability = Batch::with(['students.fees'])
-                ->get()
-                ->map(function($batch) {
-                    $revenue = 0;
-                    foreach($batch->students as $student) {
-                        $revenue += $student->fees->sum('paid_amount');
-                    }
-                    $batch->revenue = $revenue;
-                    $batch->profit = $revenue - $batch->faculty_cost;
-                    return $batch;
-                })
-                ->sortByDesc('profit')
-                ->take(5);
-        }
-
-        // AI Retention Analysis (At-Risk Students)
-        $atRiskStudents = Student::with(['batch', 'attendances', 'attempts'])
+        // ── AI At-Risk Students ────────────────────────────────────────────────────
+        $atRiskStudents = Student::where('institute_id', $instituteId)
+            ->with(['batch', 'attendances', 'attempts'])
             ->get()
             ->map(function($student) {
                 $riskReasons = [];
                 
-                // 1. Attendance Check (Last 10 records)
                 $recentAttendance = $student->attendances()->latest()->take(10)->get();
                 $absentCount = $recentAttendance->where('status', 'absent')->count();
                 if ($absentCount >= 3) {
                     $riskReasons[] = "Low Attendance ({$absentCount}/10 absent)";
                 }
 
-                // 2. Performance Check (Last 5 attempts)
                 $recentAttempts = $student->attempts()->latest()->take(5)->get();
                 if ($recentAttempts->count() > 0) {
                     $avgScore = $recentAttempts->avg(function($a) {
@@ -181,7 +187,6 @@ class DashboardController extends Controller
                         $riskReasons[] = "Poor Academic Performance (" . round($avgScore) . "%)";
                     }
 
-                    // 3. Trend Check (Declining scores)
                     if ($recentAttempts->count() >= 3) {
                         $scores = $recentAttempts->map(function($a) {
                             return ($a->total_marks > 0) ? $a->score / $a->total_marks : 0;
@@ -194,7 +199,7 @@ class DashboardController extends Controller
                 }
 
                 $student->risk_reasons = $riskReasons;
-                $student->risk_level = count($riskReasons);
+                $student->risk_level   = count($riskReasons);
                 return $student;
             })
             ->filter(fn($s) => $s->risk_level > 0)
@@ -204,49 +209,67 @@ class DashboardController extends Controller
         return view('dashboard', compact(
             'institute', 'totalStudents', 'totalBatches',
             'todayAttended', 'todayTotal', 'pendingFees', 'collectedFees',
+            'todayFees', 'todayEnrollments', 'todayLeads',
             'recentStudents', 'batches', 'announcements', 'profilePct',
             'chartData', 'revenueData', 'batchPerformance', 'conversionRate', 'leadsToday',
-            'atRiskStudents', 'batchProfitability'
+            'atRiskStudents',
+            'enrollmentRange', 'revenueRange',
+            'leadsFunnel', 'totalLeads', 'convertedLeads'
         ));
     }
 
-    private function getEnrollmentData()
+    private function getEnrollmentData(int $instituteId, int $days = 30)
     {
-        $days = [];
+        $labels = [];
         $counts = [];
-        
-        $enrollments = Student::where('created_at', '>=', today()->subDays(6))
+
+        $enrollments = Student::where('institute_id', $instituteId)
+            ->where('created_at', '>=', today()->subDays($days - 1)->startOfDay())
             ->selectRaw('DATE(created_at) as date, count(*) as count')
             ->groupBy('date')
             ->pluck('count', 'date');
 
-        for ($i = 6; $i >= 0; $i--) {
-            $date = Carbon::today()->subDays($i);
+        // Build a complete array for every day in the range
+        for ($i = $days - 1; $i >= 0; $i--) {
+            $date    = Carbon::today()->subDays($i);
             $dateStr = $date->toDateString();
-            $days[] = $date->format('D');
-            $counts[] = $enrollments[$dateStr] ?? 0;
+
+            // Label: show fewer ticks for 90-day range to avoid crowding
+            if ($days <= 7) {
+                $labels[] = $date->format('D');
+            } elseif ($days <= 30) {
+                $labels[] = $date->format('d M');
+            } else {
+                // For 90 days, label every 7th day to avoid crowding
+                $labels[] = ($i % 7 === 0 || $i === $days - 1) ? $date->format('d M') : '';
+            }
+
+            $counts[] = (int) ($enrollments[$dateStr] ?? 0);
         }
-        return ['days' => $days, 'counts' => $counts];
+
+        return ['days' => $labels, 'counts' => $counts];
     }
 
-    private function getRevenueData()
+    private function getRevenueData(int $instituteId, int $months = 6)
     {
-        $months = [];
-        $amounts = [];
+        $monthLabels = [];
+        $amounts     = [];
 
-        $revenues = Fee::where('paid_amount', '>', 0)
-            ->where('created_at', '>=', today()->subMonths(5)->startOfMonth())
+        $revenues = Fee::where('institute_id', $instituteId)
+            ->where('paid_amount', '>', 0)
+            ->where('created_at', '>=', today()->subMonths($months - 1)->startOfMonth())
             ->selectRaw("month_year, sum(paid_amount) as total")
             ->groupBy('month_year')
             ->get()
             ->pluck('total', 'month_year');
 
-        for ($i = 5; $i >= 0; $i--) {
-            $date = Carbon::today()->subMonths($i);
+        for ($i = $months - 1; $i >= 0; $i--) {
+            $date      = Carbon::today()->subMonths($i);
             $monthYear = $date->format('F Y');
-            $months[] = $date->format('M');
-            $amounts[] = (float) ($revenues[$monthYear] ?? 0);
+            $monthLabels[] = $date->format('M \'y');
+            $amounts[]     = (float) ($revenues[$monthYear] ?? 0);
         }
-        return ['months' => $months, 'amounts' => $amounts];
+
+        return ['months' => $monthLabels, 'amounts' => $amounts];
     }
 }

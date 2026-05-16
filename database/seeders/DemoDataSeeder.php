@@ -16,6 +16,7 @@ use App\Models\QuizOption;
 use App\Models\QuizAttempt;
 use App\Models\Announcement;
 use App\Models\StudyMaterial;
+use App\Models\Expense;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -35,6 +36,7 @@ class DemoDataSeeder extends Seeder
         Attendance::truncate();
         Fee::truncate();
         Enquiry::truncate();
+        Expense::truncate();
         Student::truncate();
         StudyMaterial::truncate();
         Announcement::truncate();
@@ -177,15 +179,19 @@ class DemoDataSeeder extends Seeder
                     'created_at' => $joinedAt,
                 ]);
 
+                $batchId = $batches[array_rand($batches)]->id;
                 $student = Student::create([
                     'institute_id' => $institute->id,
                     'user_id' => $user->id,
                     'name' => $fullName,
                     'phone' => '9' . rand(100000000, 999999999),
-                    'batch_id' => $batches[array_rand($batches)]->id,
+                    'batch_id' => $batchId, // Legacy support
                     'joined_date' => $joinedAt->toDateString(),
                     'created_at' => $joinedAt,
                 ]);
+
+                // Create pivot table linkage
+                $student->batches()->attach($batchId, ['joined_at' => $joinedAt]);
 
                 // 8. Historical Fees (6 months)
                 for ($m = 0; $m < 6; $m++) {
@@ -291,6 +297,44 @@ class DemoDataSeeder extends Seeder
                     'status' => $status,
                     'created_at' => ($i < 10) ? now() : now()->subDays(rand(1, 60)),
                 ]);
+            }
+            // 12. Expenses — Salary per batch + Institute overhead
+            foreach ($batches as $bIdx => $batch) {
+                // Teacher salary per batch for last 3 months
+                for ($m = 0; $m < 3; $m++) {
+                    $date = now()->subMonths($m)->endOfMonth();
+                    Expense::create([
+                        'institute_id' => $institute->id,
+                        'batch_id'     => $batch->id,
+                        'title'        => 'Teacher Salary — ' . $batch->name . ' (' . $date->format('M Y') . ')',
+                        'category'     => 'salary',
+                        'amount'       => rand(12000, 22000),
+                        'expense_date' => $date->toDateString(),
+                        'notes'        => 'Monthly faculty payment',
+                        'created_at'   => $date,
+                    ]);
+                }
+            }
+            // Institute-level overhead (rent, electricity, marketing) for last 3 months
+            $overheadExpenses = [
+                ['title' => 'Office Rent', 'category' => 'rent', 'min' => 25000, 'max' => 35000],
+                ['title' => 'Electricity Bill', 'category' => 'utilities', 'min' => 4000, 'max' => 8000],
+                ['title' => 'Digital Marketing', 'category' => 'marketing', 'min' => 8000, 'max' => 15000],
+                ['title' => 'Maintenance & Repairs', 'category' => 'maintenance', 'min' => 2000, 'max' => 6000],
+            ];
+            for ($m = 0; $m < 3; $m++) {
+                $date = now()->subMonths($m)->startOfMonth()->addDays(2);
+                foreach ($overheadExpenses as $oe) {
+                    Expense::create([
+                        'institute_id' => $institute->id,
+                        'batch_id'     => null,
+                        'title'        => $oe['title'] . ' — ' . $date->format('M Y'),
+                        'category'     => $oe['category'],
+                        'amount'       => rand($oe['min'], $oe['max']),
+                        'expense_date' => $date->toDateString(),
+                        'created_at'   => $date,
+                    ]);
+                }
             }
         }
 

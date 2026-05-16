@@ -21,7 +21,9 @@ class AttendanceController extends Controller
         $students   = collect();
         $attendances = [];
         if ($batch_id) {
-            $students    = \App\Models\Student::where('batch_id', $batch_id)->get();
+            $students    = \App\Models\Student::whereHas('batches', function($q) use ($batch_id) {
+                $q->where('batches.id', $batch_id);
+            })->get();
             $attendances = \App\Models\Attendance::where('batch_id', $batch_id)
                             ->whereDate('date', $date)
                             ->get()

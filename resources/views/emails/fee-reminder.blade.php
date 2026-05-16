@@ -1,18 +1,26 @@
 @component('mail::message')
-# Fee Payment Reminder 📋
+# Fee Payment Reminder 💳
 
 Dear **{{ $studentName }}**,
 
-This is a friendly reminder from **{{ $instituteName }}** that your fee for **{{ $monthYear }}** is pending.
+We hope you are enjoying your learning experience at **{{ $instituteName }}**. This is a courtesy reminder regarding your outstanding fee for **{{ $monthYear }}**.
 
 @component('mail::panel')
-**Amount Due: ₹{{ number_format($amount, 2) }}**
-
-Please make the payment at the earliest to avoid any inconvenience.
+### 💰 Outstanding Balance
+**Amount Due: ₹{{ number_format($amount, 0) }}**
 @endcomponent
 
-If you have already paid, please ignore this email or inform the institute admin.
+Timely fee payments allow us to maintain high-quality education standards and facilities for all students. You can view your complete payment history and download receipts in your student portal.
 
-Thanks,
-**{{ $instituteName }}** via QuonixAI
+@component('mail::button', ['url' => config('app.url'), 'color' => 'primary'])
+Access Student Portal
+@endcomponent
+
+*If you have recently made this payment, please disregard this message or share the receipt with the administration office.*
+
+Thank you for being a part of our institute!
+
+Warm regards,  
+**Finance Department**  
+{{ $instituteName }}
 @endcomponent

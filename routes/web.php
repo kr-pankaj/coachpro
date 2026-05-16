@@ -146,6 +146,7 @@ Route::prefix('{slug}')->group(function () {
             Route::resource('fees', App\Http\Controllers\FeeController::class);
             Route::post('/fees/{fee}/payments', [App\Http\Controllers\FeeController::class, 'addPayment'])->name('fees.payments.store');
             Route::get('fees/{fee}/receipt', [App\Http\Controllers\FeeController::class, 'receipt'])->name('fees.receipt');
+            Route::resource('expenses', App\Http\Controllers\ExpenseController::class);
         });
 
         // -------------------------------------------------------------

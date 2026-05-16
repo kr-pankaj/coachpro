@@ -76,6 +76,9 @@
                     <x-responsive-nav-link :href="route('fees.index')" :active="request()->routeIs('fees.*')">
                         {{ __('Fees') }}
                     </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('expenses.index')" :active="request()->routeIs('expenses.*')">
+                        {{ __('Expenses') }}
+                    </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('profile_requests.index')" :active="request()->routeIs('profile_requests.*')">
                         {{ __('Profile Requests') }}
                     </x-responsive-nav-link>
@@ -92,8 +95,20 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    {{ __('Profile Settings') }}
                 </x-responsive-nav-link>
+
+                @if(auth()->user()->role === 'admin')
+                    <x-responsive-nav-link :href="route('institute.settings')" :active="request()->routeIs('institute.settings')">
+                        {{ __('Institute Settings') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('subscription.index')" :active="request()->routeIs('subscription.index')">
+                        {{ __('Bills & Plans') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('certificates.settings')" :active="request()->routeIs('certificates.*')">
+                        {{ __('Certificates') }}
+                    </x-responsive-nav-link>
+                @endif
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">

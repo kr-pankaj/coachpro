@@ -28,15 +28,19 @@ class NewStudentWelcome extends Notification implements ShouldQueue
         $loginUrl = $this->tenantRoute($this->institute, 'login');
 
         return (new MailMessage)
-            ->subject('Welcome to ' . $this->institute->name . ' - Your Student Portal is Ready')
+            ->subject('Welcome to ' . $this->institute->name . ' 🎓')
             ->greeting('Hello ' . $notifiable->name . '!')
-            ->line('Welcome to ' . $this->institute->name . '. We are excited to have you with us!')
-            ->line('Your student portal account has been successfully created. Through this portal, you can access your attendance history, fees records, study materials, and more.')
-            ->line('**Login Portal:** ' . $loginUrl)
-            ->action('Access Your Dashboard', $loginUrl)
-            ->line('**Setting your password:** For security, we have not set a password for you. Please click the button above and use the "Forgot Password" link on the login page to set your account password for the first time.')
-            ->line('If you have any questions, please contact the institute office.')
-            ->line('Welcome aboard!');
+            ->line('Welcome to **' . $this->institute->name . '**. We are excited to support your learning journey!')
+            ->line('Your student portal account is now ready. Through this portal, you can:')
+            ->line('✨ Track your attendance in real-time')
+            ->line('✨ Download study materials and assignments')
+            ->line('✨ View fee history and download receipts')
+            ->line('✨ Participate in online assessments')
+            ->action('Enter Your Student Portal', $loginUrl)
+            ->line('**How to set your password:**')
+            ->line('For your security, we haven\'t set a default password. Please click the button above, click "Forgot Password", and enter your email (**' . $notifiable->email . '**) to set your secure access password.')
+            ->line('We wish you all the best in your studies!')
+            ->salutation('Best Regards,  ' . $this->institute->name);
     }
 
     public function toArray($notifiable): array

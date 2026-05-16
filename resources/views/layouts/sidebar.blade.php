@@ -118,15 +118,15 @@
                             <x-sidebar-link :href="route('fees.index')" :active="request()->routeIs('fees.*')" icon="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z">
                                 {{ __('Finance Hub') }}
                             </x-sidebar-link>
+                            <x-sidebar-link :href="route('expenses.index')" :active="request()->routeIs('expenses.*')" icon="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z">
+                                {{ __('Expenses') }}
+                            </x-sidebar-link>
                         @endif
 
                         @if(auth()->user()->role === 'admin')
                             <div class="pt-8 pb-2 px-4">
                                 <span class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Administration</span>
                             </div>
-                            <x-sidebar-link :href="route('quizzes.index')" :active="request()->routeIs('quizzes.*')" icon="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
-                                {{ __('Assessments') }}
-                            </x-sidebar-link>
                             <x-sidebar-link :href="route('subscription.index')" :active="request()->routeIs('subscription.*')" icon="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z">
                                 {{ __('Bills & Plans') }}
                             </x-sidebar-link>
