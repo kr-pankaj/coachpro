@@ -96,6 +96,9 @@ Route::get('/help/category/{category_slug}', [App\Http\Controllers\KnowledgeBase
 Route::get('/help/article/{article_slug}', [App\Http\Controllers\KnowledgeBaseController::class, 'show'])->name('kb.show');
 Route::post('/help/article/{article}/feedback', [App\Http\Controllers\KnowledgeBaseController::class, 'feedback'])->name('kb.feedback');
 
+// Global Certificate Verification
+Route::get('/verify/{certificate_number?}', [App\Http\Controllers\CertificateVerificationController::class, 'verify'])->name('certificates.public_verify');
+
 // Global Auth Routes (No Slug needed)
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])->name('logout');
@@ -152,6 +155,8 @@ Route::prefix('{slug}')->group(function () {
             Route::post('/ai/generate-questions', [App\Http\Controllers\AIController::class, 'generateQuestions'])
                 ->name('ai.generate-questions')
                 ->middleware('throttle:5,1');
+
+            Route::get('/analytics/engagement', [App\Http\Controllers\Admin\GamificationAnalyticsController.php, 'index'])->name('admin.analytics.engagement');
         });
 
         // -------------------------------------------------------------

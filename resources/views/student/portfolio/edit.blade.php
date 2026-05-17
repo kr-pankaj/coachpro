@@ -42,6 +42,57 @@
                                 class="w-full bg-gray-50 border-transparent rounded-2xl px-6 py-4 text-sm font-bold focus:ring-2 focus:ring-indigo-600 focus:bg-white transition-all">{{ old('notable_achievements', is_array($student->notable_achievements) ? implode(', ', $student->notable_achievements) : '') }}</textarea>
                         </div>
 
+                        {{-- Featured Projects --}}
+                        <div x-data="{ 
+                            projects: {{ json_encode($student->projects ?? []) }},
+                            addProject() {
+                                if (this.projects.length < 3) {
+                                    this.projects.push({ title: '', tech: '', link: '', description: '' });
+                                }
+                            },
+                            removeProject(index) {
+                                this.projects.splice(index, 1);
+                            }
+                        }" class="pt-8 border-t border-gray-50 dark:border-gray-700">
+                            <div class="flex items-center justify-between mb-6">
+                                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Featured Projects (Max 3)</label>
+                                <button type="button" @click="addProject()" x-show="projects.length < 3"
+                                    class="text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:underline">
+                                    + Add Project
+                                </button>
+                            </div>
+
+                            <div class="space-y-6">
+                                <template x-for="(project, index) in projects" :key="index">
+                                    <div class="p-6 bg-gray-50 dark:bg-gray-900/50 rounded-[2rem] border border-gray-100 dark:border-gray-700 relative group">
+                                        <button type="button" @click="removeProject(index)" 
+                                            class="absolute top-4 right-4 text-gray-400 hover:text-rose-600 transition-colors">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/></svg>
+                                        </button>
+                                        
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div class="md:col-span-2">
+                                                <input type="text" :name="'projects['+index+'][title]'" x-model="project.title" placeholder="Project Title"
+                                                    class="w-full bg-white dark:bg-gray-800 border-transparent rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-indigo-600 transition-all">
+                                            </div>
+                                            <div>
+                                                <input type="text" :name="'projects['+index+'][tech]'" x-model="project.tech" placeholder="Tech Stack (e.g. React, Laravel)"
+                                                    class="w-full bg-white dark:bg-gray-800 border-transparent rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-indigo-600 transition-all">
+                                            </div>
+                                            <div>
+                                                <input type="url" :name="'projects['+index+'][link]'" x-model="project.link" placeholder="GitHub/Live Link"
+                                                    class="w-full bg-white dark:bg-gray-800 border-transparent rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-indigo-600 transition-all">
+                                            </div>
+                                            <div class="md:col-span-2">
+                                                <textarea :name="'projects['+index+'][description]'" x-model="project.description" rows="2" placeholder="Brief description of what you built..."
+                                                    class="w-full bg-white dark:bg-gray-800 border-transparent rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-indigo-600 transition-all"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
                         {{-- Social Links --}}
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>

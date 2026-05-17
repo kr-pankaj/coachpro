@@ -25,6 +25,11 @@ class PortfolioSettingsController extends Controller
             'github_url' => 'nullable|url|max:255',
             'linkedin_url' => 'nullable|url|max:255',
             'show_attendance_on_portfolio' => 'boolean',
+            'projects' => 'nullable|array',
+            'projects.*.title' => 'required|string|max:255',
+            'projects.*.tech' => 'nullable|string|max:255',
+            'projects.*.link' => 'nullable|url|max:255',
+            'projects.*.description' => 'nullable|string|max:500',
         ]);
 
         // Convert comma-separated strings to arrays

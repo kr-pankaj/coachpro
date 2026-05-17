@@ -16,12 +16,13 @@ class Student extends Model
         'photo_url', 'notes', 'status',
         'institute_id',
         'xp_total', 'level', 'current_streak', 'longest_streak', 'last_activity_at',
-        'bio', 'skills', 'notable_achievements', 'github_url', 'linkedin_url', 'show_attendance_on_portfolio'
+        'bio', 'skills', 'notable_achievements', 'github_url', 'linkedin_url', 'show_attendance_on_portfolio', 'projects'
     ];
 
     protected $casts = [
         'skills' => 'array',
         'notable_achievements' => 'array',
+        'projects' => 'array',
         'last_activity_at' => 'datetime',
         'show_attendance_on_portfolio' => 'boolean',
     ];
